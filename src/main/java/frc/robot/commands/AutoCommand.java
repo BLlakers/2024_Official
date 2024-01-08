@@ -6,12 +6,12 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrainPID;
 
 
 
-public class AutoCommand extends CommandBase {
+public class AutoCommand extends Command {
   DriveTrainPID m_DriveTrain; // Creates an object DriveTrain
   double leftY; // Creates a Variable for the Left joystick Y position (fake controller)
   double leftX; // Creates a Variable for the Left joystick X position (fake controller)

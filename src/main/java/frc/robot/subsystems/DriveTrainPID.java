@@ -13,7 +13,7 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Represents a swerve drive style drivetrain. */
@@ -69,6 +69,7 @@ public class DriveTrainPID extends SubsystemBase {
         var swerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, robotRotation): new ChassisSpeeds(xSpeed, ySpeed, rot));
 //System.out.println(defenseHoldingMode);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+      
         if (!defenseHoldingMode) {
             m_frontRight.setDesiredState(swerveModuleStates[1]);
             m_frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -83,7 +84,7 @@ public class DriveTrainPID extends SubsystemBase {
         }
 
     }
-    public CommandBase WheelzLock() {
+    public Command WheelzLock() {
     
         return runOnce(
             () -> {
@@ -98,7 +99,7 @@ public class DriveTrainPID extends SubsystemBase {
             }
             });
       }
-      public CommandBase ZeroGyro() {
+      public Command ZeroGyro() {
         // Inline construction of command goes here.
         // Subsystem::RunOnce implicitly requires `this` subsystem.
     
@@ -108,7 +109,7 @@ public class DriveTrainPID extends SubsystemBase {
 
             });
       }
-      public CommandBase toggleFieldRelativeEnable() {
+      public Command toggleFieldRelativeEnable() {
     
         return runOnce(
             () -> {

@@ -37,7 +37,7 @@ public class RobotContainer {
   JoystickButton driverButtonRight = new JoystickButton(driverController, Constants.buttonRight);
   JoystickButton driverButtonLeft = new JoystickButton(driverController, Constants.buttonLeft);
   //JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
-  //JoystickButton driverButtonX = new JoystickButton(driverController, Constants.buttonX);
+  JoystickButton driverButtonX = new JoystickButton(driverController, Constants.buttonX);
   JoystickButton driverButtonRS = new JoystickButton(driverController, Constants.buttonRS);
   JoystickButton driverButtonLS = new JoystickButton(driverController, Constants.buttonLS);
   JoystickButton manipButtonB = new JoystickButton(manipController, Constants.buttonB);
@@ -77,7 +77,7 @@ public class RobotContainer {
     () -> driverController.getLeftX(), () -> driverController.getRightX(), m_DriveTrainPID));
     //limelight allign works on both controllers
     //manipButtonX.whileTrue(new AlignCommand(m_DriveTrain, () -> frc.robot.subsystems.Stuff.angle));
-    //driverButtonX.whileTrue(new AlignCommand(m_DriveTrainPID, () -> frc.robot.subsystems.Stuff.angle));
+    driverButtonX.whileTrue(new AlignCommand(m_DriveTrainPID, () -> frc.robot.subsystems.Stuff.angle));
     //manipButtonB.whileTrue(new AprilAlignCommand(m_DriveTrain, () -> frc.robot.subsystems.Tags.tx2));
     //driverButtonB.whileTrue(new FieldAlignedCommand(m_DriveTrain));
     driverButtonRS.onTrue(m_DriveTrainPID.WheelzLock());

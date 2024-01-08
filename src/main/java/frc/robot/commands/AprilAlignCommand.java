@@ -4,10 +4,10 @@
  * package frc.robot.commands;
  * import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * import java.util.function.DoubleSupplier;
- * import edu.wpi.first.wpilibj2.command.CommandBase;
+ * import edu.wpi.first.wpilibj2.command.Command;
  * import frc.robot.subsystems.DriveTrain;
  * 
- * public class AprilAlignCommand extends CommandBase {
+ * public class AprilAlignCommand extends Command {
  * DriveTrain m_DriveTrain; // Creates an object DriveTrain
  * DoubleSupplier m_tx2;
  * 

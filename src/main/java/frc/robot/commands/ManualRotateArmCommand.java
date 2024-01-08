@@ -1,10 +1,10 @@
 package frc.robot.commands;
-import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
 import java.util.function.DoubleSupplier;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
-public class ManualRotateArmCommand extends CommandBase {
+public class ManualRotateArmCommand extends Command {
   DoubleSupplier m_leftY;
   Arm m_Arm;
 

@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.DoubleSupplier;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrainPID;
 
-public class AlignCommand extends CommandBase {
+public class AlignCommand extends Command {
   DriveTrainPID m_DriveTrain; // Creates an object DriveTrain
   DoubleSupplier m_angle;
 
@@ -38,14 +38,14 @@ public class AlignCommand extends CommandBase {
 
     
     //figuring out which way to drive
-    if (m_angle.getAsDouble() >= 12){
+    if (m_angle.getAsDouble() >= 3){
       //too far to right so it slowly moves to the left
-      move = -0.2;
+      move = -0.1;
     }
 
-    else if (m_angle.getAsDouble() <= 6){
+    else if (m_angle.getAsDouble() <= -3){
       //too far to the left so it slowly moves to the right
-      move = 0.2;
+      move = 0.1;
     }
 
     //fianlly drivinG
@@ -57,7 +57,7 @@ public class AlignCommand extends CommandBase {
     }
     else{
 
-      m_DriveTrain.drive(0, 0, 0, false, false);
+      m_DriveTrain.drive(0, move, 0, false, false);
     }
   }
 
