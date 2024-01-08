@@ -14,10 +14,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.SparkMaxPIDController;
-//import com.revrobotics.CANSparkMax.ControlType; //TODO Was giving us weird error 
-import com.revrobotics.SparkMaxPIDController.AccelStrategy;
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType; //TODO Was giving us weird error 
+import com.revrobotics.SparkPIDController.AccelStrategy;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
@@ -41,7 +41,7 @@ public class SwerveModule extends SubsystemBase {
         public final CANSparkMax m_driveMotor;
         public final CANSparkMax m_turningMotor;
 
-        private final SparkMaxPIDController m_drivePID;
+        private final SparkPIDController m_drivePID;
 
         private final RelativeEncoder m_driveEncoder;
         private final DigitalInput m_TurnEncoderInput;
@@ -68,8 +68,8 @@ public class SwerveModule extends SubsystemBase {
         } */
          public SwerveModule(int driveMotorChannel, int turningMotorChannel, int turnEncoderPWMChannel, double turnOffset) {
             // can spark max motor controller objects
-            m_driveMotor = new CANSparkMax(driveMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
-            m_turningMotor = new CANSparkMax(turningMotorChannel, CANSparkMaxLowLevel.MotorType.kBrushless);
+            m_driveMotor = new CANSparkMax(driveMotorChannel, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+            m_turningMotor = new CANSparkMax(turningMotorChannel, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
             m_driveMotor.setOpenLoopRampRate(0.1);
 
@@ -77,6 +77,9 @@ public class SwerveModule extends SubsystemBase {
             m_drivePID.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
             m_drivePID.setSmartMotionMaxAccel(0.2, 0);
             m_drivePID.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+           // m_drivePID.setReference(0, CANSparkMax
+            
+
 
             //spark max built-in encoder
             m_driveEncoder = m_driveMotor.getEncoder();
