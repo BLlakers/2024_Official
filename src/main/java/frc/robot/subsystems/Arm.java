@@ -16,8 +16,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 //import com.ctre.phoenix.motorcontrol.can.TalonFX;
 // import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+//import com.revrobotics.RelativeEncoder;
+//import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Arm extends SubsystemBase {
 
