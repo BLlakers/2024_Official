@@ -41,7 +41,12 @@ public class DriveTrainPID extends SubsystemBase {
     public SwerveDriveKinematics m_initialStates;
     public SwerveModulePosition[] positions = new SwerveModulePosition[4];
     
-    
+    public Pose2d whereIsJarPose2d() {
+      Pose2d current_pose_meters =  m_odometry.getPoseMeters();
+      Pose2d current_pose_inches = current_pose_meters.times(Constants.MetersToInches);
+      
+      return current_pose_inches;
+    }
     //Constructor
     public DriveTrainPID() {
         m_initialStates = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation,  m_backLeftLocation, m_backRightLocation);
@@ -134,4 +139,14 @@ public class DriveTrainPID extends SubsystemBase {
    /*  public ChassisSpeeds getChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(m_backLeft.getState(), m_frontLeft.getState(), m_backRight.getState(), m_frontRight.getState());
     } */
+    private final SwerveDriveOdometry m_odometry =
+    new SwerveDriveOdometry(
+        m_kinematics,
+        navx.getRotation2d(),
+       positions);
+       public void updateOdometry() {
+        m_odometry.update(
+            navx.getRotation2d(),
+           positions);
+      }
 }

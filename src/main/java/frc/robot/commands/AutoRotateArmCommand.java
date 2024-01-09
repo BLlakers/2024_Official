@@ -33,19 +33,19 @@ public class AutoRotateArmCommand extends Command {
       //m_Arm.armRotationMtr.set(ControlMode.PercentOutput, -1);
       m_Arm.armRotationMtr2.set(-1);
       //m_Arm.armRotationMtr1.set(-1);
-      System.out.println("JGANG$:");
+      //System.out.println("JGANG$:");
       //System.out.println(m_Arm.armRotationMtr2.get());
     } else if (m_Arm.ArmPosition == 2) {
       //targetDegrees = Constants.Positions[1];
       //m_Arm.armRotationMtr.set(ControlMode.PercentOutput, 0);
       m_Arm.armRotationMtr2.set(0);
       //m_Arm.armRotationMtr1.set(0);
-      System.out.println("KKKKKKKKKKKKKKKKKKK");
+      //System.out.println("KKKKKKKKKKKKKKKKKKK");
       //System.out.println(m_Arm.armRotationMtr2.get());
     } else if (m_Arm.ArmPosition == 3) { 
       m_Arm.armRotationMtr2.set(1);
       //m_Arm.armRotationMtr1.set(1);
-      System.out.println("JAJSJSJDJASJD");
+      //System.out.println("JAJSJSJDJASJD");
       //System.out.println(m_Arm.armRotationMtr2.get());
       //m_Arm.armRotationMtr.set(ControlMode.PercentOutput, 1);
     }
@@ -69,7 +69,7 @@ public class AutoRotateArmCommand extends Command {
     //m_Arm.armRotationMtr.set(ControlMode.PercentOutput, 0);
     m_Arm.armRotationMtr1.set(0);
     m_Arm.armRotationMtr2.set(0);
-    System.out.println("??????");
+    //System.out.println("??????");
   }
 
   public boolean isFinished() {

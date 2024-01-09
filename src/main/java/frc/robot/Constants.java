@@ -6,6 +6,8 @@ public final class Constants {
     public static int PDHChannel = 20; // REV Power Distribution Hub
 
     // Arm
+    // 1 meter = 39.3701
+    public static double MetersToInches = 39.3701;
     public static int armMotorChannel1 = 9;
     public static int armMotorChannel2 = 10;
     //public static int armMotor1 = 9;

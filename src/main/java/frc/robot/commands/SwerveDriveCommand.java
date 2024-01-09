@@ -2,6 +2,8 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import com.revrobotics.CANSparkMax;
 
@@ -52,6 +54,9 @@ public class SwerveDriveCommand extends Command {
     Double leftX = m_leftX.getAsDouble();
     Double leftY = m_leftY.getAsDouble();
     Double rightX = m_rightX.getAsDouble();
+    //System.out.println();
+  
+
     // Finds the X Value of the Left Stick on the Controller and Takes Care of
     // Joystick Drift
     if (Math.abs(leftX) < Constants.deadzone) {
@@ -79,7 +84,9 @@ public class SwerveDriveCommand extends Command {
     //Swerve drive uses a different Y and X than expected!
     
     m_DriveTrain.drive(y,x,rot, m_DriveTrain.FieldRelativeEnable, m_DriveTrain.WheelLock);
-     
+    m_DriveTrain.updateOdometry();
+    Pose2d pose = m_DriveTrain.whereIsJarPose2d();
+    System.out.println(pose);
   }
 
   // Called once the command ends or is interrupted.

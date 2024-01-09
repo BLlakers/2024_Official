@@ -26,7 +26,7 @@ public class Stuff extends SubsystemBase {
         double cameraz = tz.getDouble(0.0);
         SmartDashboard.putNumber("Limelight X", camerax);
         SmartDashboard.putNumber("Limelight Y", cameray);
-        System.out.println(cameraz);
+        //System.out.println(cameraz);
 
         // finding if it is within he perfect angles. perfect angles are from 13.5 to
         // 5.7, with 9.6 being perfectly centered
