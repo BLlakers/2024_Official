@@ -15,17 +15,18 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Arm m_Arm;
   String codeVersion = "0.0";
-//commit
+
+  // commit
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    
-    //camera stuff edited at comp
-    //UsbCamera camera = new UsbCamera("cam0", 0);
-    //camera.setFPS(15);
-    //camera.setResolution(480, 320);
+
+    // camera stuff edited at comp
+    // UsbCamera camera = new UsbCamera("cam0", 0);
+    // camera.setFPS(15);
+    // camera.setResolution(480, 320);
     CameraServer.startAutomaticCapture();
-    
+
     SmartDashboard.putString("Code Version", codeVersion);
 
   }
@@ -42,14 +43,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    //System.out.println(m_robotContainer.m_DriveTrainPID.m_frontRight.m_TurnPWMEncoder.getOutput());
+    // System.out.println(m_robotContainer.m_DriveTrainPID.m_frontRight.m_TurnPWMEncoder.getOutput());
   }
 
   @Override
   public void autonomousInit() {
-   // m_robotContainer.m_Arm.ArmPosition = 1;
+    // m_robotContainer.m_Arm.ArmPosition = 1;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-   // m_robotContainer.m_DriveTrain.startYaw = m_robotContainer.m_DriveTrain.getGyroYaw();
+    // m_robotContainer.m_DriveTrain.startYaw =
+    // m_robotContainer.m_DriveTrain.getGyroYaw();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -62,21 +64,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-   //m_robotContainer.m_Arm.ArmPosition = 1;
+    // m_robotContainer.m_Arm.ArmPosition = 1;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-      
+
     }
-    //m_robotContainer.m_DriveTrain.startYaw = m_robotContainer.m_DriveTrain.getGyroYaw();
+    // m_robotContainer.m_DriveTrain.startYaw =
+    // m_robotContainer.m_DriveTrain.getGyroYaw();
 
   }
 
   @Override
   public void teleopPeriodic() {
-    //WP - Was not compiling as of 3/4, to be addressed
-    //cameraTest();
-    //SmartDashboard.putNumber("Start Yaw", m_robotContainer.m_DriveTrain.startYaw);
-  
+    // WP - Was not compiling as of 3/4, to be addressed
+    // cameraTest();
+    // SmartDashboard.putNumber("Start Yaw",
+    // m_robotContainer.m_DriveTrain.startYaw);
+
   }
 
   @Override
@@ -99,5 +103,3 @@ public class Robot extends TimedRobot {
 
   }
 }
-  
-

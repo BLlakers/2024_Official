@@ -11,6 +11,7 @@ import frc.robot.Constants;
 
 import frc.robot.subsystems.DriveTrainPID;
 import frc.robot.RobotContainer;
+
 public class SwerveDriveCommand extends Command {
   DoubleSupplier m_leftY;
   DoubleSupplier m_leftX;
@@ -28,7 +29,8 @@ public class SwerveDriveCommand extends Command {
   // double w3ca;
   // double w4ca;
 
-  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX, DriveTrainPID _dTrain) {
+  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX,
+      DriveTrainPID _dTrain) {
     m_leftY = _leftY;
     m_leftX = _leftX;
     m_rightX = _rightX;
@@ -39,10 +41,12 @@ public class SwerveDriveCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    /*m_DriveTrain.brDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    m_DriveTrain.frDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    m_DriveTrain.blDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    m_DriveTrain.flDrive.setIdleMode(CANSparkMax.IdleMode.kCoast); */
+    /*
+     * m_DriveTrain.brDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
+     * m_DriveTrain.frDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
+     * m_DriveTrain.blDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
+     * m_DriveTrain.flDrive.setIdleMode(CANSparkMax.IdleMode.kCoast);
+     */
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,8 +58,7 @@ public class SwerveDriveCommand extends Command {
     Double leftX = m_leftX.getAsDouble();
     Double leftY = m_leftY.getAsDouble();
     Double rightX = m_rightX.getAsDouble();
-    //System.out.println();
-  
+    // System.out.println();
 
     // Finds the X Value of the Left Stick on the Controller and Takes Care of
     // Joystick Drift
@@ -80,10 +83,10 @@ public class SwerveDriveCommand extends Command {
     } else {
       rot = -rightX;
     }
-    
-    //Swerve drive uses a different Y and X than expected!
-    
-    m_DriveTrain.drive(y,x,rot, m_DriveTrain.FieldRelativeEnable, m_DriveTrain.WheelLock);
+
+    // Swerve drive uses a different Y and X than expected!
+
+    m_DriveTrain.drive(y, x, rot, m_DriveTrain.FieldRelativeEnable, m_DriveTrain.WheelLock);
     m_DriveTrain.updateOdometry();
     Pose2d pose = m_DriveTrain.whereIsJarPose2d();
     System.out.println(pose);

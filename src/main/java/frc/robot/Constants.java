@@ -10,14 +10,13 @@ public final class Constants {
     public static double MetersToInches = 39.3701;
     public static int armMotorChannel1 = 9;
     public static int armMotorChannel2 = 10;
-    //public static int armMotor1 = 9;
-    //public static int armMotor2 = 10;
+    // public static int armMotor1 = 9;
+    // public static int armMotor2 = 10;
     public static double PositionDown = 0;
-    public static double PositionPickup = 30; //69
-   
-    public static double[] Positions = {PositionDown, PositionPickup};
+    public static double PositionPickup = 30; // 69
+
+    public static double[] Positions = { PositionDown, PositionPickup };
     public static double ArmTolerance = 3;
-   
 
     // Controller
     public static int DriverControllerChannel = 0;
@@ -49,6 +48,5 @@ public final class Constants {
     public static double spinTolerance = 4.2;
     public static double length = 0.58;
     public static double width = 0.58;
-   
 
 }

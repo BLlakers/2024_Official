@@ -31,51 +31,46 @@ public class Arm extends SubsystemBase {
   // AnalogPotentiometer pressureTransducer = new AnalogPotentiometer(/* the
   // AnalogIn port*/ 2, scale, offset);
 
-
- 
   // public TalonFX armRotationMtr = new TalonFX(Constants.armMotorChannel);
-  public CANSparkMax armRotationMtr1 = new CANSparkMax(Constants.armMotorChannel1, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-  public CANSparkMax armRotationMtr2 = new CANSparkMax(Constants.armMotorChannel2, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-  
+  public CANSparkMax armRotationMtr1 = new CANSparkMax(Constants.armMotorChannel1,
+      com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+  public CANSparkMax armRotationMtr2 = new CANSparkMax(Constants.armMotorChannel2,
+      com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
- // public int ArmPosition = 2;
+  // public int ArmPosition = 2;
   public TalonFX armRotationMtr = new TalonFX(Constants.armMotorChannel2);
-  //public TalonFX armRotationMtr2 = new TalonFX(Constants.armMotor2);
+  // public TalonFX armRotationMtr2 = new TalonFX(Constants.armMotor2);
   public int ArmPosition = 1;
   public double ArmDegrees = 0;
   // scaled values in psi units
   // double psi = pressureTransducer.get();
-  
 
   // boolean pressureSwitch = phCompressor.getPressureSwitchValue();
   public Arm() {
-    //armRotationMtr1.setInverted(true);
-    //armRotationMtr2.setInverted(true);
-    //armRotationMtr.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    //armRotationMtr.setSelectedSensorPosition(85*120 *2048/360);
-    //RelativeEncoder encoder = armRotationMtr.getEncoder();
-    //double encoderPos = encoder.getPosition();
-  
+    // armRotationMtr1.setInverted(true);
+    // armRotationMtr2.setInverted(true);
+    // armRotationMtr.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    // armRotationMtr.setSelectedSensorPosition(85*120 *2048/360);
+    // RelativeEncoder encoder = armRotationMtr.getEncoder();
+    // double encoderPos = encoder.getPosition();
 
-    //armRotationMtr.setInverted(true);
-    //armRotationMtr.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    //armRotationMtr.setSelectedSensorPosition(85*120 *2048);
-    //System.out.println(armRotationMtr.getSelectedSensorPosition());
-    //RelativeEncoder encoder = armRotationMtr.getEncoder();
-    //double encoderPos = encoder.getPosition();
+    // armRotationMtr.setInverted(true);
+    // armRotationMtr.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    // armRotationMtr.setSelectedSensorPosition(85*120 *2048);
+    // System.out.println(armRotationMtr.getSelectedSensorPosition());
+    // RelativeEncoder encoder = armRotationMtr.getEncoder();
+    // double encoderPos = encoder.getPosition();
 
-  
   }
 
   @Override
 
   public void periodic() {
-   //armRotationMtr1.follow(armRotationMtr2);
-   
+    // armRotationMtr1.follow(armRotationMtr2);
+
     SmartDashboard.putNumber("Arm Position", ArmPosition);
     SmartDashboard.putNumber("Arm Degrees", ArmDegrees);
     String jared = "Jared";
-
 
   }
 
@@ -92,11 +87,9 @@ public class Arm extends SubsystemBase {
           if (ArmPosition == 4) {
             ArmPosition = 3;
           }
-        }
-    );
+        });
   }
 
-  
   public Command LowerArm() {
     return runOnce(
         () -> {
@@ -108,5 +101,4 @@ public class Arm extends SubsystemBase {
         });
   }
 
-  
 }

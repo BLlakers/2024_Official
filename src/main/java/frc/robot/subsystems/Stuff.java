@@ -26,20 +26,18 @@ public class Stuff extends SubsystemBase {
         double cameraz = tz.getDouble(0.0);
         SmartDashboard.putNumber("Limelight X", camerax);
         SmartDashboard.putNumber("Limelight Y", cameray);
-        //System.out.println(cameraz);
+        // System.out.println(cameraz);
 
         // finding if it is within he perfect angles. perfect angles are from 13.5 to
         // 5.7, with 9.6 being perfectly centered
         if (3 >= camerax && -3 <= camerax) {
             isAligned = true;
             angle = 9.6;
-        } 
-        else if(camerax == 0 && cameray == 0){
+        } else if (camerax == 0 && cameray == 0) {
             isAligned = false;
             angle = 9.6;
 
-        }
-        else {
+        } else {
             isAligned = false;
             // finds where the robot should move to in terms of degreese, which i will
             // eventuly translate into motr rpm (example: 1 degree = 0.2 motor rpm) and i
