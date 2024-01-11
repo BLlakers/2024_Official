@@ -58,7 +58,7 @@ public class DriveTrainPID extends SubsystemBase {
 
   public Pose2d GetPose2d() {
     Pose2d current_pose_meters = m_odometry.getPoseMeters();
-    Pose2d current_pose_inches = current_pose_meters.times(Constants.MetersToInches);
+    Pose2d current_pose_inches = (current_pose_meters.times(Constants.MetersToInches));
     return current_pose_inches;
   }
 
@@ -113,7 +113,14 @@ public class DriveTrainPID extends SubsystemBase {
     }
 
   }
-
+@Override
+public void periodic() {
+    Pose2d curentPose = this.GetPose2d();
+  SmartDashboard.putNumber("CurrentPoseX",curentPose.getX());
+  SmartDashboard.putNumber("CurrentPoseY",curentPose.getY());
+  SmartDashboard.putNumber("CurrentPoseRot",curentPose.getRotation().getDegrees());
+    super.periodic();
+}
   public Command WheelzLock() {
 
     return runOnce(

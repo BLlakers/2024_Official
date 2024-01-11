@@ -4,14 +4,19 @@ public final class Constants {
     // Robot
     public static int PHChannel = 30; // REV Pneumatic Hub
     public static int PDHChannel = 20; // REV Power Distribution Hub
-
-    // Arm
-    // 1 meter = 39.3701
+    public static double kWheelDiameterM = .1016; // 4 Inches
+    public static double kWheelCircumference = Math.PI * kWheelDiameterM; //this is in meters
+    // 1 meter = Inches 39.3701
+    //MISC
     public static double MetersToInches = 39.3701;
+    public static double InchesToMeters = 0.0254;
+    public static double encoderCountsPerRev = 4096; 
+    public static double RevPerEncoderCounts = 1/4096;
+    public static double GearRatio = 8.16;
+    public static double driveEncoderConversion = GearRatio * kWheelCircumference;
+    //ARM 
     public static int armMotorChannel1 = 9;
     public static int armMotorChannel2 = 10;
-    // public static int armMotor1 = 9;
-    // public static int armMotor2 = 10;
     public static double PositionDown = 0;
     public static double PositionPickup = 30; // 69
 

@@ -21,8 +21,10 @@ import com.revrobotics.SparkPIDController.AccelStrategy;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /**
  * This is the code to run a single swerve module <br>
@@ -30,11 +32,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * It is called by the Drivetrain subsysem
  */
 public class SwerveModule extends SubsystemBase {
-    private static final double kWheelDiameter = .1016; // 0.1016 M wheel diameter (4"), used to be 4 inches if this
-                                                        // breaks it look here TODO
-    private static final double kInchesToMeters = 0.0254;
-    private static final double kWheelCircumference = Math.PI * kWheelDiameter;
-    private static final double rpmToVelocityScaler = (kWheelCircumference / 6.12) / 60; // SDS Mk3 standard gear ratio
+
+    private static final double rpstoPositionScaler = (Constants.kWheelCircumference / Constants.GearRatio);
+    private static final double rpmToVelocityScaler = (Constants.kWheelCircumference / Constants.GearRatio) / 60;         // SDS Mk3 standard gear ratio WAS 6.12 CHANGE IF STUFF GOES WRONG TODO
                                                                                          // from motor to wheel, divide
                                                                                          // by 60 to go from secs to
                                                                                          // mins
@@ -48,7 +48,7 @@ public class SwerveModule extends SubsystemBase {
     private final SparkPIDController m_drivePID;
 
     private final RelativeEncoder m_driveEncoder;
-    private final RelativeEncoder m_turningEncoder;
+    private final DutyCycleEncoder m_turningEncoder;
     private final DigitalInput m_TurnEncoderInput;
     public final DutyCycle m_TurnPWMEncoder;
     private double turnEncoderOffset;
@@ -77,25 +77,33 @@ public class SwerveModule extends SubsystemBase {
      * kModuleMaxAngularAcceleration));
      * }
      */
-    public SwerveModule(int driveMotorChannel, int turningMotorChannel, int turnEncoderPWMChannel, double turnOffset) {
+    @Override
+    public void periodic() {
+        //m_turningEncoder.getCountsPerRevolution();
+        super.periodic();
+    }
+     public SwerveModule(int driveMotorChannel, int turningMotorChannel, int turnEncoderPWMChannel, double turnOffset) {
         // can spark max motor controller objects
         m_driveMotor = new CANSparkMax(driveMotorChannel, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
         m_turningMotor = new CANSparkMax(turningMotorChannel, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
         m_driveMotor.setOpenLoopRampRate(0.1);
-
+       
         m_drivePID = m_driveMotor.getPIDController();
         m_drivePID.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
         m_drivePID.setSmartMotionMaxAccel(0.2, 0);
         m_drivePID.setReference(0, CANSparkMax.ControlType.kSmartMotion);
         // m_drivePID.setReference(0, CANSparkMax
-        m_turningEncoder = m_turningMotor.getEncoder();
-        m_turningEncoder.setPositionConversionFactor(1/4096);
+        
+        //m_turningEncoder.setPositionConversionFactor(1/4096);
         
         // spark max built-in encoder
         m_driveEncoder = m_driveMotor.getEncoder();
+        m_driveEncoder.setPositionConversionFactor(rpstoPositionScaler*100);
+        
+
         m_driveEncoder.setVelocityConversionFactor(rpmToVelocityScaler);
-        m_driveEncoder.setPositionConversionFactor((1/4096)/(8.14)); // encoder rev per rotation / gear ratio 
+        //m_driveEncoder.setPositionConversionFactor((1/4096)/(8.14)); // encoder rev per rotation / gear ratio 
         // limit power to motors 3/25/23
         // m_driveMotor.setSmartCurrentLimit(30, 40);
         // m_turningMotor.setSmartCurrentLimit(30, 40);
@@ -108,15 +116,19 @@ public class SwerveModule extends SubsystemBase {
         m_TurnEncoderInput = new DigitalInput(turnEncoderPWMChannel);
         m_TurnPWMEncoder = new DutyCycle(m_TurnEncoderInput);
         turnEncoderOffset = turnOffset;
+        m_turningEncoder = new DutyCycleEncoder(m_TurnPWMEncoder);
 
         // Limit the PID Controller's input range between -pi and pi and set the input
         // to be continuous.
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
         encoderBias = m_driveEncoder.getPosition();
+
+        m_driveEncoder.setPosition(0);
+        m_turningEncoder.reset();
     }
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-            m_driveEncoder.getPosition(), new Rotation2d(m_turningEncoder.getPosition()));
+            m_driveEncoder.getPosition(), new Rotation2d(m_turningEncoder.getDistance()));
       }
     /**
      * Returns the current state of the module.

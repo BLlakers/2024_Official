@@ -6,6 +6,7 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrainPID;
 
@@ -41,7 +42,7 @@ public class AutoCommand extends Command {
   @Override
   public void execute() { // Runs multiple times
 
-    leftY = -0.40; // Tells controller to move backwards on the Y axis, was -0.35
+    leftY = -0.20; // Tells controller to move backwards on the Y axis, was -0.35
     leftX = 0.0; // Tells controller not to move
     rightX = 0.0; // Tells controller not to move (No RightY because it doesn't do anything)
     /*
@@ -87,6 +88,8 @@ public class AutoCommand extends Command {
      * m_DriveTrain.drive(0, 0, 0, false, false); // says not to drive
      * } else {
      */
+    Pose2d currentPose = m_DriveTrain.GetPose2d();
+    
 
     if (m_AutoMode == 1) {
       if (Math.abs(m_DriveTrain.m_backRight.m_driveMotor.getEncoder().getPosition()) < 115.0597) { // Drives until the
@@ -102,12 +105,17 @@ public class AutoCommand extends Command {
     }
 
     else if (m_AutoMode == 2) {
-      if (Math.abs(m_DriveTrain.m_backRight.m_driveMotor.getEncoder().getPosition()) < 59.7) { // Drives until the
+      if (Math.abs(m_DriveTrain.m_backRight.m_driveMotor.getEncoder().getPosition()) < 50) { // Drives until the
                                                                                                // encoder is at
         // rotations on the motor. 1 motor
         // rotation = 8.14 wheel rotation (11
         // inches = wheel)
+        currentPose = m_DriveTrain.GetPose2d();
+        System.out.print(currentPose);
         m_DriveTrain.drive(-leftY, leftX, rightX, false, false);
+        currentPose = m_DriveTrain.GetPose2d();
+        System.out.print(currentPose);
+        
       } else {
         m_DriveTrain.drive(0, 0, 0, false, true);
         counter = counter + 1;
