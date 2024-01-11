@@ -88,7 +88,7 @@ public class SwerveDriveCommand extends Command {
 
     m_DriveTrain.drive(y, x, rot, m_DriveTrain.FieldRelativeEnable, m_DriveTrain.WheelLock);
     m_DriveTrain.updateOdometry();
-    Pose2d pose = m_DriveTrain.whereIsJarPose2d();
+    Pose2d pose = m_DriveTrain.GetPose2d();
     System.out.println(pose);
   }
 

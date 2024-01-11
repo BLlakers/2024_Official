@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class SwerveModule extends SubsystemBase {
     private static final double kWheelDiameter = .1016; // 0.1016 M wheel diameter (4"), used to be 4 inches if this
                                                         // breaks it look here TODO
+    private static final double kInchesToMeters = 0.0254;
     private static final double kWheelCircumference = Math.PI * kWheelDiameter;
     private static final double rpmToVelocityScaler = (kWheelCircumference / 6.12) / 60; // SDS Mk3 standard gear ratio
                                                                                          // from motor to wheel, divide
@@ -47,6 +48,7 @@ public class SwerveModule extends SubsystemBase {
     private final SparkPIDController m_drivePID;
 
     private final RelativeEncoder m_driveEncoder;
+    private final RelativeEncoder m_turningEncoder;
     private final DigitalInput m_TurnEncoderInput;
     public final DutyCycle m_TurnPWMEncoder;
     private double turnEncoderOffset;
@@ -87,11 +89,13 @@ public class SwerveModule extends SubsystemBase {
         m_drivePID.setSmartMotionMaxAccel(0.2, 0);
         m_drivePID.setReference(0, CANSparkMax.ControlType.kSmartMotion);
         // m_drivePID.setReference(0, CANSparkMax
-
+        m_turningEncoder = m_turningMotor.getEncoder();
+        m_turningEncoder.setPositionConversionFactor(1/4096);
+        
         // spark max built-in encoder
         m_driveEncoder = m_driveMotor.getEncoder();
         m_driveEncoder.setVelocityConversionFactor(rpmToVelocityScaler);
-
+        m_driveEncoder.setPositionConversionFactor((1/4096)/(8.14)); // encoder rev per rotation / gear ratio 
         // limit power to motors 3/25/23
         // m_driveMotor.setSmartCurrentLimit(30, 40);
         // m_turningMotor.setSmartCurrentLimit(30, 40);
@@ -110,7 +114,10 @@ public class SwerveModule extends SubsystemBase {
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
         encoderBias = m_driveEncoder.getPosition();
     }
-
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(
+            m_driveEncoder.getPosition(), new Rotation2d(m_turningEncoder.getPosition()));
+      }
     /**
      * Returns the current state of the module.
      *
@@ -201,4 +208,5 @@ public class SwerveModule extends SubsystemBase {
         }
         return signedDiff;
     }
+    
 }
