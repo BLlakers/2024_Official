@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-import com.ctre.phoenix6.hardware.TalonFX;
+//import com.ctre.phoenix6.hardware.TalonFX;
 //import com.ctre.phoenix.motorcontrol.can.TalonFX;
 // import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.revrobotics.CANSparkMax;
@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
   
 
  // public int ArmPosition = 2;
-  public TalonFX armRotationMtr = new TalonFX(Constants.armMotorChannel2);
+  //public TalonFX armRotationMtr = new TalonFX(Constants.armMotorChannel2);
   //public TalonFX armRotationMtr2 = new TalonFX(Constants.armMotor2);
   public int ArmPosition = 1;
   public double ArmDegrees = 0;
