@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrainPID;
@@ -17,24 +19,27 @@ import frc.robot.commands.AlignCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
+import frc.robot.subsystems.SwerveModule;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
+
 
 public class RobotContainer {
   DriveTrainPID m_DriveTrainPID = new DriveTrainPID();
   Arm m_Arm = new Arm();
   Stuff m_Stuff = new Stuff();
   Tags m_Tags = new Tags();
+  
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
-  static XboxController manipController = new XboxController(Constants.ManipControllerChannel);
+  XboxController manipController = new XboxController(Constants.ManipControllerChannel);
   JoystickButton driverButtonB = new JoystickButton(driverController, Constants.buttonB);
   JoystickButton manipButtonA = new JoystickButton(manipController, Constants.buttonA);
   JoystickButton driverButtonA = new JoystickButton(driverController, Constants.buttonA);
 
   JoystickButton driverButtonRight = new JoystickButton(driverController, Constants.buttonRight);
   JoystickButton driverButtonLeft = new JoystickButton(driverController, Constants.buttonLeft);
-  // JoystickButton manipButtonX = new JoystickButton(manipController,
+  JoystickButton driverButtonOption = new JoystickButton(driverController, Constants.buttonOptions);
   // Constants.buttonX);
   JoystickButton driverButtonX = new JoystickButton(driverController, Constants.buttonX);
   JoystickButton driverButtonRS = new JoystickButton(driverController, Constants.buttonRS);
@@ -44,7 +49,7 @@ public class RobotContainer {
   JoystickButton manipButtonRight = new JoystickButton(manipController, Constants.buttonRight);
   JoystickButton manipButtonLeft = new JoystickButton(manipController, Constants.buttonLeft);
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
-  public static JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
+   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
 
@@ -94,7 +99,8 @@ public class RobotContainer {
     // manipController.getLeftY(), m_Arm));
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     manipButtonLeft.onTrue(m_Arm.LowerArm()); // starts at 1 (5 deegrees) goes down
-    manipButtonRight.onTrue(m_Arm.RaiseArm()); // starts at 1, when pressed goes up to 2 (82 Deegrees), when pressed
+    manipButtonRight.onTrue(m_Arm.RaiseArm());
+    driverButtonOption.onTrue(m_DriveTrainPID.ResetPose()); // starts at 1, when pressed goes up to 2 (82 Deegrees), when pressed
                                                // again goes up to 3 (85 deegrees)
     // TODO RT Accelerate LT Deaccelerate
 
