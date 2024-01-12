@@ -146,6 +146,11 @@ public class SwerveModule extends SubsystemBase {
                 new Rotation2d(getTurnEncoderRadians()));
     }
 
+    public void resetEncoders(){
+        m_driveEncoder.setPosition(0);
+        m_turningEncoder.reset();
+    }
+
     /**
      * Sets the desired state for the module.
      *
@@ -220,5 +225,6 @@ public class SwerveModule extends SubsystemBase {
         }
         return signedDiff;
     }
+    
     
 }

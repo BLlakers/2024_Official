@@ -147,6 +147,36 @@ public void periodic() {
         });
   }
 
+  public Command ResetPose() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+
+    return runOnce(
+        () -> {
+          // resetModuleEncoders();
+          // navx.reset();
+          // updateOdometry();
+          m_odometry.resetPosition(
+            navx.getRotation2d(),
+            new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+            },
+            new Pose2d());
+        updateOdometry();
+      });
+        
+  }
+
+  public void resetModuleEncoders(){
+    m_frontLeft.resetEncoders();
+    m_frontRight.resetEncoders();
+    m_backLeft.resetEncoders();
+    m_backRight.resetEncoders();
+  }
+
   public Command toggleFieldRelativeEnable() {
 
     return runOnce(
