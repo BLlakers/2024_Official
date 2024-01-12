@@ -17,6 +17,10 @@ public class Stuff extends SubsystemBase {
         // camera stuff, from the documentation
         // the .lime is to look for the network table instance called lime which is the
         // refective tape thing, .april would be the april tag thing
+        //private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        //private NetworkTableEntry tid = getDefault().getTable("limelight").getEntry("tid");
+        //private NetworkTableEntry test = getDefault().getTable("limelight").getEntry("botpose");
+        //private NetworkTableEntry botpose = getDefault().getTable("limelight").getEntry("targetpose_cameraspace");
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
