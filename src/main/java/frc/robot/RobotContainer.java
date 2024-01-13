@@ -19,7 +19,6 @@ import frc.robot.commands.AlignCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
-import frc.robot.subsystems.SwerveModule;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
 
@@ -50,7 +49,7 @@ public class RobotContainer {
   JoystickButton manipButtonLeft = new JoystickButton(manipController, Constants.buttonLeft);
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
-  public static JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
+  JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
 
@@ -100,7 +99,7 @@ public class RobotContainer {
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     manipButtonLeft.onTrue(m_Arm.LowerArm()); // starts at 1 (5 deegrees) goes down
     manipButtonRight.onTrue(m_Arm.RaiseArm());
-    driverButtonOption.onTrue(m_DriveTrainPID.ResetPose()); // starts at 1, when pressed goes up to 2 (82 Deegrees), when pressed
+    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d()); // starts at 1, when pressed goes up to 2 (82 Deegrees), when pressed
                                                // again goes up to 3 (85 deegrees)
     // TODO RT Accelerate LT Deaccelerate
 
