@@ -43,6 +43,7 @@ public class DriveTrainPID extends SubsystemBase {
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation,
       m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
+
   // INITIAL POSITIONS to help define swerve drive odometry. THis was a headache
   public SwerveDriveKinematics m_initialStates;
 
@@ -58,8 +59,8 @@ public class DriveTrainPID extends SubsystemBase {
 
   public Pose2d GetPose2d() {
     Pose2d current_pose_meters = m_odometry.getPoseMeters();
-    Pose2d current_pose_inches = (current_pose_meters.times(Constants.MetersToInches));
-    return current_pose_inches;
+    //Pose2d current_pose_inches = (current_pose_meters.times(Constants.MetersToInches));
+    return current_pose_meters;
   }
 
   // Constructor
@@ -119,6 +120,14 @@ public void periodic() {
   SmartDashboard.putNumber("CurrentPoseX",curentPose.getX());
   SmartDashboard.putNumber("CurrentPoseY",curentPose.getY());
   SmartDashboard.putNumber("CurrentPoseRot",curentPose.getRotation().getDegrees());
+ //  SmartDashboard.putNumber();
+   // SmartDashboard.putNumber();
+     //SmartDashboard.putNumber();
+     // SmartDashboard.putNumber();
+      // SmartDashboard.putNumber();
+       // SmartDashboard.putNumber();
+        // SmartDashboard.putNumber();
+         // SmartDashboard.putNumber();
     super.periodic();
 }
   public Command WheelzLock() {
