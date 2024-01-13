@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.SwerveModule;
 
 //some imports no longer needed but leaving them here untill final version
 
@@ -15,7 +16,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Arm m_Arm;
   String codeVersion = "0.0";
-
+  
   // commit
   @Override
   public void robotInit() {
@@ -44,6 +45,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     // System.out.println(m_robotContainer.m_DriveTrainPID.m_frontRight.m_TurnPWMEncoder.getOutput());
+    //System.out.println(m_robotContainer.m_DriveTrainPID.m_backRight.m_driveEncoder.getPosition());
   }
 
   @Override

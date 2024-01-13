@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 
 public final class Constants {
     // Robot
+    public static double driveEncoderCtsperRev = 6.8;
     public static int PHChannel = 30; // REV Pneumatic Hub
     public static int PDHChannel = 20; // REV Power Distribution Hub
     public static double kWheelDiameterM = Inches.of(4).in(Meters); // 4 Inches

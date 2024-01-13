@@ -47,20 +47,13 @@ public class DriveTrainPID extends SubsystemBase {
   // INITIAL POSITIONS to help define swerve drive odometry. THis was a headache
   public SwerveDriveKinematics m_initialStates;
 
-  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
-      m_kinematics,
-      navx.getRotation2d(),
-      new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_backLeft.getPosition(),
-          m_backRight.getPosition()
-      });
+  private final SwerveDriveOdometry m_odometry;
 
   public Pose2d GetPose2d() {
     Pose2d current_pose_meters = m_odometry.getPoseMeters();
-    //Pose2d current_pose_inches = (current_pose_meters.times(Constants.MetersToInches));
-    return current_pose_meters;
+    Translation2d Translation2d = current_pose_meters.getTranslation().times(Constants.MetersToInches);
+    Pose2d current_pose_inches = new Pose2d(Translation2d, current_pose_meters.getRotation());
+    return current_pose_inches;
   }
 
   // Constructor
@@ -68,6 +61,26 @@ public class DriveTrainPID extends SubsystemBase {
     m_initialStates = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation,
         m_backRightLocation);
 
+    m_odometry =  new SwerveDriveOdometry(
+      m_kinematics,
+     navx.getRotation2d(),
+      GetModulePositions()
+      );
+  }
+
+  public SwerveModulePosition[] GetModulePositions()
+  {
+    SwerveModulePosition frontLeftPosition = new SwerveModulePosition(m_frontLeft.getDifferentState().speedMetersPerSecond, m_frontLeft.getState().angle);
+    SwerveModulePosition frontRightPosition =  new SwerveModulePosition(m_frontRight.getDifferentState().speedMetersPerSecond, m_frontRight.getState().angle);
+    SwerveModulePosition backLeftPosition =  new SwerveModulePosition(m_backLeft.getDifferentState().speedMetersPerSecond, m_backLeft.getState().angle);
+    SwerveModulePosition backRightPosition =  new SwerveModulePosition(m_backRight.getDifferentState().speedMetersPerSecond, m_backRight.getState().angle);
+
+    return new SwerveModulePosition[]{
+      frontLeftPosition,
+      frontRightPosition,   
+      backLeftPosition,
+      backRightPosition
+    };
   }
 
   /**
@@ -116,6 +129,7 @@ public class DriveTrainPID extends SubsystemBase {
   }
 @Override
 public void periodic() {
+  updateOdometry();
     Pose2d curentPose = this.GetPose2d();
   SmartDashboard.putNumber("CurrentPoseX",curentPose.getX());
   SmartDashboard.putNumber("CurrentPoseY",curentPose.getY());
@@ -155,6 +169,17 @@ public void periodic() {
 
         });
   }
+public void resetPose(Pose2d pose2d){
+  m_odometry.resetPosition(navx.getRotation2d(), GetModulePositions(), pose2d);
+
+}
+public Command  resetPose2d() {
+return runOnce(
+        () -> {
+         resetPose(new Pose2d());
+        });
+  }
+
 
   public Command toggleFieldRelativeEnable() {
 
@@ -187,13 +212,7 @@ public void periodic() {
    */
 
   public void updateOdometry() {
-    m_odometry.update(
-        navx.getRotation2d(),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backLeft.getPosition(),
-            m_backRight.getPosition()
-        });
+    m_odometry.update( navx.getRotation2d(),
+       GetModulePositions());
   }
 }

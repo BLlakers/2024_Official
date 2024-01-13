@@ -31,8 +31,8 @@ import frc.robot.Constants;
  */
 public class SwerveModule extends SubsystemBase {
 
-    private static final double rpstoPositionScaler = (Constants.kWheelDiameterM * Constants.NeoEncoderCountsPerRev) / (Constants.GearRatio * (Math.PI * 2));
-    private static final double rpmToVelocityScaler =  rpstoPositionScaler/ 60;         // SDS Mk3 standard gear ratio WAS 6.12 CHANGE IF STUFF GOES WRONG TODO
+    private static final double rpstoPositionScaler = (Constants.kWheelCircumference*Constants.driveEncoderCtsperRev) / (2*Math.PI);// (Constants.kWheelDiameterM * Constants.NeoEncoderCountsPerRev) / (Constants.GearRatio * (Math.PI * 2));
+    private static final double rpmToVelocityScaler =  3 * (Constants.kWheelCircumference / Constants.GearRatio )/ 60;         // SDS Mk3 standard gear ratio WAS 6.12 CHANGE IF STUFF GOES WRONG TODO
                                                                                          // from motor to wheel, divide
                                                                                          // by 60 to go from secs to
                                                                                          // mins
@@ -45,7 +45,7 @@ public class SwerveModule extends SubsystemBase {
 
     private final SparkPIDController m_drivePID;
 
-    private final RelativeEncoder m_driveEncoder;
+    public final RelativeEncoder m_driveEncoder;
     private final DutyCycleEncoder m_turningEncoder;
     private final DigitalInput m_TurnEncoderInput;
     public final DutyCycle m_TurnPWMEncoder;
@@ -126,7 +126,7 @@ public class SwerveModule extends SubsystemBase {
     }
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-            m_driveEncoder.getPosition(), new Rotation2d(m_turningEncoder.getDistance()));
+            m_driveEncoder.getPosition(), new Rotation2d(getTurnEncoderRadians()));
       }
     /**
      * Returns the current state of the module.
