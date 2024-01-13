@@ -1,17 +1,23 @@
 package frc.robot;
 
+import edu.wpi.first.units.*;
+import static edu.wpi.first.units.Units.*;
+
 public final class Constants {
     // Robot
+    public static double driveEncoderCtsperRev = 6.8;
     public static int PHChannel = 30; // REV Pneumatic Hub
     public static int PDHChannel = 20; // REV Power Distribution Hub
-    public static double kWheelDiameterM = .1016; // 4 Inches
+    public static double kWheelDiameterM = Inches.of(4).in(Meters); // 4 Inches
     public static double kWheelCircumference = Math.PI * kWheelDiameterM; //this is in meters
     // 1 meter = Inches 39.3701
+    public static double NeoEncoderCountsPerRev = 42;
+    public static double NeoRevPerEncoderCounts = 1/NeoEncoderCountsPerRev;
     //MISC
-    public static double MetersToInches = 39.3701;
-    public static double InchesToMeters = 0.0254;
-    public static double encoderCountsPerRev = 4096; 
-    public static double RevPerEncoderCounts = 1/4096;
+    public static double MetersToInches = Meters.of(1.0).in(Inches);
+    public static double InchesToMeters = Inches.of(1.0).in(Meters);
+    public static double MagEncoderCountsPerRev = 4096; 
+    public static double MagRevPerEncoderCounts = 1/MagEncoderCountsPerRev;
     public static double GearRatio = 8.16;
     public static double driveEncoderConversion = GearRatio * kWheelCircumference;
     //ARM 

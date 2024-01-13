@@ -88,7 +88,6 @@ public class SwerveDriveCommand extends Command {
     // Swerve drive uses a different Y and X than expected!
 
     m_DriveTrain.drive(y, x, rot, m_DriveTrain.FieldRelativeEnable, m_DriveTrain.WheelLock);
-    m_DriveTrain.updateOdometry();
     Pose2d pose = m_DriveTrain.GetPose2d();
     System.out.println(pose);
   }

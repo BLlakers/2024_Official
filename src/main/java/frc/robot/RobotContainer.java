@@ -49,7 +49,8 @@ public class RobotContainer {
   JoystickButton manipButtonRight = new JoystickButton(manipController, Constants.buttonRight);
   JoystickButton manipButtonLeft = new JoystickButton(manipController, Constants.buttonLeft);
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
-   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
+  JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
+  public static JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
 
@@ -95,8 +96,7 @@ public class RobotContainer {
     driverButtonB.onTrue(m_DriveTrainPID.ZeroGyro());
     driverButtonA.onTrue(m_DriveTrainPID.toggleFieldRelativeEnable());
     // WP - DO NOT UNCOMMENT WITHOUT TALKING TO WARD
-    // manipButtonOptions.whileTrue(new ManualRotateArmCommand(() ->
-    // manipController.getLeftY(), m_Arm));
+     driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     manipButtonLeft.onTrue(m_Arm.LowerArm()); // starts at 1 (5 deegrees) goes down
     manipButtonRight.onTrue(m_Arm.RaiseArm());
