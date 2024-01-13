@@ -25,7 +25,7 @@ public class DriveTrainPID extends SubsystemBase {
                                             // ft/s (max speed of SDS Mk3 with Neo motor)
   public static final double kMaxAngularSpeed = Math.PI / 3; // 1/2 rotation per second
   private final AHRS navx = new AHRS();
-
+  
   private final Translation2d m_frontRightLocation = new Translation2d(0.285, -0.285);
   private final Translation2d m_frontLeftLocation = new Translation2d(0.285, 0.285);
   private final Translation2d m_backLeftLocation = new Translation2d(-0.285, 0.285);
@@ -131,12 +131,13 @@ public class DriveTrainPID extends SubsystemBase {
 public void periodic() {
   updateOdometry();
     Pose2d curentPose = this.GetPose2d();
+    ChassisSpeeds currentChassisSpeeds = this.GetChassisSpeeds();
   SmartDashboard.putNumber("CurrentPoseX",curentPose.getX());
   SmartDashboard.putNumber("CurrentPoseY",curentPose.getY());
   SmartDashboard.putNumber("CurrentPoseRot",curentPose.getRotation().getDegrees());
- //  SmartDashboard.putNumber();
-   // SmartDashboard.putNumber();
-     //SmartDashboard.putNumber();
+  SmartDashboard.putNumber("chassisSpeedsX", currentChassisSpeeds.vxMetersPerSecond);
+  SmartDashboard.putNumber("chassisSpeedsY", currentChassisSpeeds.vyMetersPerSecond);
+  SmartDashboard.putNumber("chassisSpeedsROT", currentChassisSpeeds.omegaRadiansPerSecond);
      // SmartDashboard.putNumber();
       // SmartDashboard.putNumber();
        // SmartDashboard.putNumber();
@@ -172,6 +173,17 @@ public void periodic() {
 public void resetPose(Pose2d pose2d){
   m_odometry.resetPosition(navx.getRotation2d(), GetModulePositions(), pose2d);
 
+}
+public ChassisSpeeds GetChassisSpeeds(){
+  return m_kinematics.toChassisSpeeds(getSwerveModuleStates());
+}
+public SwerveModuleState[] getSwerveModuleStates(){
+  return new SwerveModuleState[] {
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_backLeft.getState(),
+      m_backRight.getState()
+  };
 }
 public Command  resetPose2d() {
 return runOnce(
