@@ -37,8 +37,8 @@ public class SwerveModule extends SubsystemBase {
                                                                                          // by 60 to go from secs to
                                                                                          // mins
     // kWheelCircumference used to be
-    private static final double kModuleMaxAngularVelocity = DriveTrainPID.kMaxAngularSpeed;
-    private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
+    public static final double kModuleMaxAngularVelocity = DriveTrainPID.kMaxAngularSpeed;
+    public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
     public final CANSparkMax m_driveMotor;
     public final CANSparkMax m_turningMotor;
@@ -219,5 +219,8 @@ public class SwerveModule extends SubsystemBase {
         return signedDiff;
     }
     
-    
+    public void stop(){
+        m_driveMotor.set(0);
+        m_turningMotor.set(0);
+    }
 }

@@ -3,7 +3,24 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -19,16 +36,15 @@ import frc.robot.commands.AlignCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
+import frc.robot.subsystems.SwerveModule;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
-
 
 public class RobotContainer {
   DriveTrainPID m_DriveTrainPID = new DriveTrainPID();
   Arm m_Arm = new Arm();
   Stuff m_Stuff = new Stuff();
   Tags m_Tags = new Tags();
-  
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
   XboxController manipController = new XboxController(Constants.ManipControllerChannel);
@@ -95,12 +111,13 @@ public class RobotContainer {
     driverButtonB.onTrue(m_DriveTrainPID.ZeroGyro());
     driverButtonA.onTrue(m_DriveTrainPID.toggleFieldRelativeEnable());
     // WP - DO NOT UNCOMMENT WITHOUT TALKING TO WARD
-     driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
+    driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     manipButtonLeft.onTrue(m_Arm.LowerArm()); // starts at 1 (5 deegrees) goes down
     manipButtonRight.onTrue(m_Arm.RaiseArm());
-    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d()); // starts at 1, when pressed goes up to 2 (82 Deegrees), when pressed
-                                               // again goes up to 3 (85 deegrees)
+    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d()); // starts at 1, when pressed goes up to 2 (82 Deegrees),
+                                                              // when pressed
+    // again goes up to 3 (85 deegrees)
     // TODO RT Accelerate LT Deaccelerate
 
   }
@@ -113,16 +130,30 @@ public class RobotContainer {
 
     SmartDashboard.putData(m_chooser);
 
-    //SmartDashboard.putData(m_DriveTrainPID.GetPose2d().getTranslation());
+    // SmartDashboard.putData(m_DriveTrainPID.GetPose2d().getTranslation());
 
   }
 
   public Command getAutonomousCommand() {
-    Command autoSeq = Commands.sequence(
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig
+    (12.1, 8).setKinematics(Constants.m_kinematics); // we don't know our acceleration 
+   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,new Rotation2d(0)), List.of(new Translation2d(1,0), new Translation2d(1,-1)), new Pose2d(2, -1, Rotation2d.fromDegrees(180)),trajectoryConfig);
+  
+  
+  PIDController xController = new PIDController(1.5, 0, 0);
+  PIDController yController = new PIDController(1.5, 0, 0);
+  ProfiledPIDController thetaController = new ProfiledPIDController(3, 0,0, Constants.kthetaController);
+
+  SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+trajectory, m_DriveTrainPID::GetPose2d, Constants.m_kinematics, xController, yController, thetaController, m_DriveTrainPID::setModuleStates, m_DriveTrainPID);
+
+return new SequentialCommandGroup(new InstantCommand(() -> m_DriveTrainPID.resetOdometry(trajectory.getInitialPose())), new InstantCommand(() -> m_DriveTrainPID.stopModules()));
+
+/*    Command autoSeq = Commands.sequence(
         m_DriveTrainPID.ZeroGyro(),
         Commands.waitSeconds(1.0),
         new AutoCommand(m_DriveTrainPID, m_chooser.getSelected()));
     return autoSeq;
-    // return new AutoCommand(m_DriveTrain);
+    // return new AutoCommand(m_DriveTrain);*/
   }
 }

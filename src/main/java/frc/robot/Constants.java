@@ -1,10 +1,30 @@
 package frc.robot;
 
 import edu.wpi.first.units.*;
+import frc.robot.subsystems.DriveTrainPID;
+
 import static edu.wpi.first.units.Units.*;
+
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.robot.subsystems.DriveTrainPID;
 
 public final class Constants {
     // Robot
+   /* public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+      new PIDConstants(5.0, 0, 0), // Translation constants 
+      new PIDConstants(5.0, 0, 0), // Rotation constants 
+      maxModuleSpeed, 
+      flModuleOffset.getNorm(), // Drive base radius (distance from center to furthest module) 
+      new ReplanningConfig()
+    );*/
+    public static final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(DriveTrainPID.m_frontLeftLocation,
+      DriveTrainPID.m_frontRightLocation, DriveTrainPID.m_backLeftLocation, DriveTrainPID.m_backRightLocation);
+    public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxAngularSpeed,DriveTrainPID.kModuleMaxAngularAcceleration);
     public static double driveEncoderCtsperRev = 6.8;
     public static int PHChannel = 30; // REV Pneumatic Hub
     public static int PDHChannel = 20; // REV Power Distribution Hub

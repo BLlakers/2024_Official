@@ -5,8 +5,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.pathfinding.*;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -15,6 +18,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 /** Represents a swerve drive style drivetrain. */
 
@@ -24,12 +29,13 @@ public class DriveTrainPID extends SubsystemBase {
   public static final double kMaxSpeed = 1; // WP this seemed to work don't know why // 3.68 meters per second or 12.1
                                             // ft/s (max speed of SDS Mk3 with Neo motor)
   public static final double kMaxAngularSpeed = Math.PI / 3; // 1/2 rotation per second
+   public static final double kModuleMaxAngularAcceleration = Math.PI / 3;
   private final AHRS navx = new AHRS();
   
-  private final Translation2d m_frontRightLocation = new Translation2d(0.285, -0.285);
-  private final Translation2d m_frontLeftLocation = new Translation2d(0.285, 0.285);
-  private final Translation2d m_backLeftLocation = new Translation2d(-0.285, 0.285);
-  private final Translation2d m_backRightLocation = new Translation2d(-0.285, -0.285);
+  public final static Translation2d m_frontRightLocation = new Translation2d(0.285, -0.285);
+  public final static Translation2d m_frontLeftLocation = new Translation2d(0.285, 0.285);
+  public final static Translation2d m_backLeftLocation = new Translation2d(-0.285, 0.285);
+  public final static Translation2d m_backRightLocation = new Translation2d(-0.285, -0.285);
 
   // constructor for each swerve module
   public final SwerveModule m_frontRight = new SwerveModule(Constants.frDriveMotorChannel,
@@ -40,15 +46,52 @@ public class DriveTrainPID extends SubsystemBase {
       Constants.blEncoderChannel, 1.1819);
   public final SwerveModule m_backRight = new SwerveModule(Constants.brDriveMotorChannel, Constants.brSteerMotorChannel,
       Constants.brEncoderChannel, 0.9262); // 0.05178
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation,
-      m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+  
 
 
   // INITIAL POSITIONS to help define swerve drive odometry. THis was a headache
   public SwerveDriveKinematics m_initialStates;
 
   private final SwerveDriveOdometry m_odometry;
+ 
+/*AutoBuilder autoBuilder = AutoBuilder.configureHolonomic(
+    this::getPose, 
+    this::resetPose, 
+    this::getSpeeds, 
+    this::driveRobotRelative, 
+    Constants.pathFollowerConfig,
+    () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+    },
+    this
+  );
+
+  // Set up custom logging to add the current path to a field 2d widget
+  /*PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+      () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+      },
+      this
+    );*/
+
+    // Set up custom logging to add the current path to a field 2d widget
+    //PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
   public Pose2d GetPose2d() {
     Pose2d current_pose_meters = m_odometry.getPoseMeters();
     Translation2d Translation2d = current_pose_meters.getTranslation().times(Constants.MetersToInches);
@@ -62,7 +105,7 @@ public class DriveTrainPID extends SubsystemBase {
         m_backRightLocation);
 
     m_odometry =  new SwerveDriveOdometry(
-      m_kinematics,
+      Constants.m_kinematics,
      navx.getRotation2d(),
       GetModulePositions()
       );
@@ -108,25 +151,30 @@ public class DriveTrainPID extends SubsystemBase {
                                                                                   // Rotation2d(navx.getRotation2d().getDegrees()
                                                                                   // + 180) : navx.getRotation2d();
     // SmartDashboard.putNumber ( "inputRotiation", robotRotation.getDegrees());
-    var swerveModuleStates = m_kinematics
-        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, robotRotation)
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
+   var swerveModuleStates = Constants.m_kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, robotRotation): new ChassisSpeeds(xSpeed, ySpeed, rot));
     // System.out.println(defenseHoldingMode);
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    
 
     if (!defenseHoldingMode) {
-      m_frontRight.setDesiredState(swerveModuleStates[1]);
-      m_frontLeft.setDesiredState(swerveModuleStates[0]);
-      m_backLeft.setDesiredState(swerveModuleStates[2]);
-      m_backRight.setDesiredState(swerveModuleStates[3]);
+     setModuleStates(swerveModuleStates);
     } else {
-      m_backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
-      m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
-      m_backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
-      m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
+      WheelLock();
     }
 
   }
+  public void setModuleStates(SwerveModuleState[] swerveModuleStates){
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+     m_frontRight.setDesiredState(swerveModuleStates[1]);
+      m_frontLeft.setDesiredState(swerveModuleStates[0]);
+      m_backLeft.setDesiredState(swerveModuleStates[2]);
+      m_backRight.setDesiredState(swerveModuleStates[3]);
+  }
+public void WheelLock(){
+   m_backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
+      m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
+      m_backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
+      m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
+}
 @Override
 public void periodic() {
   updateOdometry();
@@ -171,11 +219,14 @@ public void periodic() {
         });
   }
 public void resetPose(Pose2d pose2d){
-  m_odometry.resetPosition(navx.getRotation2d(), GetModulePositions(), pose2d);
+  resetOdometry(pose2d);
 
 }
+public void resetOdometry(Pose2d pose2d) {
+  m_odometry.resetPosition(navx.getRotation2d(), GetModulePositions(), pose2d);
+}
 public ChassisSpeeds GetChassisSpeeds(){
-  return m_kinematics.toChassisSpeeds(getSwerveModuleStates());
+  return Constants.m_kinematics.toChassisSpeeds(getSwerveModuleStates());
 }
 public SwerveModuleState[] getSwerveModuleStates(){
   return new SwerveModuleState[] {
@@ -226,5 +277,12 @@ return runOnce(
   public void updateOdometry() {
     m_odometry.update( navx.getRotation2d(),
        GetModulePositions());
+  }
+
+  public void stopModules() {
+    m_frontLeft.stop();
+    m_frontRight.stop();
+     m_backLeft.stop();    
+        m_backRight.stop();
   }
 }
