@@ -5,13 +5,21 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import com.pathplanner.lib.util.PathPlannerLogging;
-//import com.pathplanner.lib.auto.AutoBuilder;
-//import com.pathplanner.lib.pathfinding.*;
+import frc.robot.Constants;
+import com.pathplanner.lib.util.PathPlannerLogging;
+import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.pathfinding.*;
+
+import frc.robot.Constants.ChannelConstants;
 import frc.robot.Constants.ConversionConstants;
 import frc.robot.Constants.MiscConstants;
 import frc.robot.Constants.SwerveAndDriveConstants;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,43 +29,34 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /** Represents a swerve drive style drivetrain. */
 
 public class DriveTrain extends SubsystemBase {
-  public static SwerveDriveOdometry odometry;
 
-  /*AutoBuilder autoBuilder = AutoBuilder.configureHolonomic(
-    this::getPose, 
-    this::resetPose, 
-    this::getSpeeds, 
-    this::driveRobotRelative, 
-    Constants.pathFollowerConfig,
-    () -> {
-        // Boolean supplier that controls when the path will be mirrored for the red alliance
-        // This will flip the path being followed to the red side of the field.
-        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+  public PIDController xController = new PIDController(1, 0, 0);
+  public PIDController yController = new PIDController(1, 0, 0);
+  public ProfiledPIDController m_thetaController = new ProfiledPIDController(1, 0,0, SwerveAndDriveConstants.kChassisthetaContraints);
+  private SwerveDriveOdometry odometry;
+  private final AHRS gyro = new AHRS();
+  private final SwerveModule frontRight = new SwerveModule(ChannelConstants.frDriveMotorChannel,ChannelConstants.frSteerMotorChannel, ChannelConstants.frEncoderChannel, 0.730);
+  private final SwerveModule frontLeft = new SwerveModule(ChannelConstants.flDriveMotorChannel, ChannelConstants.flSteerMotorChannel,ChannelConstants.flEncoderChannel, 0.3359);
+  private final SwerveModule backLeft = new SwerveModule(ChannelConstants.blDriveMotorChannel, ChannelConstants.blSteerMotorChannel,ChannelConstants.blEncoderChannel, 1.1819);
+  private final SwerveModule backRight = new SwerveModule(ChannelConstants.brDriveMotorChannel, ChannelConstants.brSteerMotorChannel,ChannelConstants.brEncoderChannel, 0.9262); // 0.05178
+  public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(SwerveAndDriveConstants.frontLeftLocation, SwerveAndDriveConstants.frontRightLocation, SwerveAndDriveConstants.backLeftLocation, SwerveAndDriveConstants.backRightLocation);
+  public SwerveDriveKinematics initialStates = new SwerveDriveKinematics(SwerveAndDriveConstants.frontLeftLocation, SwerveAndDriveConstants.frontRightLocation, SwerveAndDriveConstants.backLeftLocation, SwerveAndDriveConstants.backRightLocation);
 
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-        }
-        return false;
-    },
-    this
-  );
+
+public boolean flipFieldPose(){
+
+      // Boolean supplier that controls when the path will be mirrored for the red alliance
+      // This will flip the path being followed to the red side of the field.
+      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+  }
 
   // Set up custom logging to add the current path to a field 2d widget
-  /*PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-      () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-      },
-      this
-    );*/
 
     // Set up custom logging to add the current path to a field 2d widget
     //PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
@@ -79,7 +78,16 @@ public class DriveTrain extends SubsystemBase {
    * Creates a Constructor for the Drivetrain Class
    */
   public DriveTrain() {
-    odometry = new SwerveDriveOdometry(SwerveAndDriveConstants.kinematics, SwerveAndDriveConstants.gyro.getRotation2d(), GetModulePositions());
+    odometry = new SwerveDriveOdometry(m_kinematics, gyro.getRotation2d(), GetModulePositions());
+    AutoBuilder.configureHolonomic(
+    this::GetPose2d, 
+    this::resetPose, 
+    this::GetChassisSpeeds, 
+    this::driveChassisSpeeds, 
+    Constants.pathFollowerConfig,
+    this::flipFieldPose,
+    this
+  );
   }
 
 
@@ -88,10 +96,10 @@ public class DriveTrain extends SubsystemBase {
  * @return SwerveModulePositions from all 4 modules
  */
   public SwerveModulePosition[] createModules(){
-    SwerveModulePosition frontLeftPosition = new SwerveModulePosition(SwerveAndDriveConstants.frontLeft.getDifferentState().speedMetersPerSecond, SwerveAndDriveConstants.frontLeft.getState().angle);
-    SwerveModulePosition frontRightPosition =  new SwerveModulePosition(SwerveAndDriveConstants.frontRight.getDifferentState().speedMetersPerSecond, SwerveAndDriveConstants.frontRight.getState().angle);
-    SwerveModulePosition backLeftPosition =  new SwerveModulePosition(SwerveAndDriveConstants.backLeft.getDifferentState().speedMetersPerSecond, SwerveAndDriveConstants.backLeft.getState().angle);
-    SwerveModulePosition backRightPosition =  new SwerveModulePosition(SwerveAndDriveConstants.backRight.getDifferentState().speedMetersPerSecond, SwerveAndDriveConstants.backRight.getState().angle);
+    SwerveModulePosition frontLeftPosition = new SwerveModulePosition(frontLeft.getDifferentState().speedMetersPerSecond, frontLeft.getState().angle);
+    SwerveModulePosition frontRightPosition =  new SwerveModulePosition(frontRight.getDifferentState().speedMetersPerSecond, frontRight.getState().angle);
+    SwerveModulePosition backLeftPosition =  new SwerveModulePosition(backLeft.getDifferentState().speedMetersPerSecond, backLeft.getState().angle);
+    SwerveModulePosition backRightPosition =  new SwerveModulePosition(backRight.getDifferentState().speedMetersPerSecond, backRight.getState().angle);
     return new SwerveModulePosition[]{frontLeftPosition,frontRightPosition,backLeftPosition,backRightPosition};
   }
   
@@ -118,35 +126,36 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("X Speed", xSpeed);
     SmartDashboard.putNumber("Y Speed", ySpeed);
     SmartDashboard.putBoolean("Field Oriented?", fieldRelative);
-    Rotation2d Rotation2d = new Rotation2d(SwerveAndDriveConstants.gyro.getRotation2d().getRadians()); 
-    SwerveModuleState[] SwerveModuleStates = SwerveAndDriveConstants.kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, Rotation2d): new ChassisSpeeds(xSpeed, ySpeed, rotation));
+    Rotation2d Rotation2d = new Rotation2d(gyro.getRotation2d().getRadians()); 
+    SwerveModuleState[] SwerveModuleStates = m_kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, Rotation2d): new ChassisSpeeds(xSpeed, ySpeed, rotation));
     if (!defenseHoldingMode) {
      setModuleStates(SwerveModuleStates);
     } else {
       WheelLock();
     }
   }
+  public void driveChassisSpeeds(ChassisSpeeds chassisSpeeds){
+    drive(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, SwerveAndDriveConstants.FieldRelativeEnable, SwerveAndDriveConstants.WheelLock);
+  }
   /** 
    * Tells our robot to go to its desired position.
   */
   public void setModuleStates(SwerveModuleState[] SwerveModuleStates){
-    SwerveDriveKinematics.desaturateWheelSpeeds(SwerveModuleStates, SwerveAndDriveConstants.kMaxSpeed);
-     SwerveAndDriveConstants.frontRight.setDesiredState(SwerveModuleStates[1]);
-      SwerveAndDriveConstants.frontLeft.setDesiredState(SwerveModuleStates[0]);
-      SwerveAndDriveConstants.backLeft.setDesiredState(SwerveModuleStates[2]);
-      SwerveAndDriveConstants.backRight.setDesiredState(SwerveModuleStates[3]);
+    SwerveDriveKinematics.desaturateWheelSpeeds(SwerveModuleStates, SwerveAndDriveConstants.kChassisMaxSpeed);
+     frontRight.setDesiredState(SwerveModuleStates[1]);
+      frontLeft.setDesiredState(SwerveModuleStates[0]);
+      backLeft.setDesiredState(SwerveModuleStates[2]);
+      backRight.setDesiredState(SwerveModuleStates[3]);
   }
   /**
    * Tells our wheels to point towards the middle of the robot.
    */
   public void WheelLock(){
-      SwerveAndDriveConstants.backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
-      SwerveAndDriveConstants.frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
-      SwerveAndDriveConstants.backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
-      SwerveAndDriveConstants.frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
+      backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
+      frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
+      backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
+      frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
   }
-  
-  @Override
   
   public void periodic() {
   updateOdometry();
@@ -181,7 +190,7 @@ public class DriveTrain extends SubsystemBase {
   public Command ZeroHeading() {
     return runOnce(
       () -> {
-        SwerveAndDriveConstants.gyro.reset();
+       gyro.reset();
       });
   }
 /**
@@ -189,7 +198,7 @@ public class DriveTrain extends SubsystemBase {
  * @param Pose2d
  */
   public void resetPose(Pose2d Pose2d) {
-    odometry.resetPosition(SwerveAndDriveConstants.gyro.getRotation2d(), GetModulePositions(), Pose2d);
+    odometry.resetPosition(gyro.getRotation2d(), GetModulePositions(), Pose2d);
   }
 
 /**
@@ -199,16 +208,16 @@ public class DriveTrain extends SubsystemBase {
    * @return chassis speeds object.
    */
   public ChassisSpeeds GetChassisSpeeds(){
-    return SwerveAndDriveConstants.kinematics.toChassisSpeeds(getSwerveModuleStates());
+    return m_kinematics.toChassisSpeeds(getSwerveModuleStates());
   }
 
   public SwerveModuleState[] getSwerveModuleStates(){
-    return new SwerveModuleState[] {
-      SwerveAndDriveConstants.frontLeft.getState(),
-      SwerveAndDriveConstants.frontRight.getState(),
-      SwerveAndDriveConstants.backLeft.getState(),
-      SwerveAndDriveConstants.backRight.getState()
-    };
+    return new SwerveModuleState[]{
+      frontLeft.getState(),
+      frontRight.getState(),
+      backLeft.getState(),
+      backRight.getState()
+  };
   }
 /**
  * Resets the Position of the robot on the Field.
@@ -244,17 +253,17 @@ public class DriveTrain extends SubsystemBase {
  * Updates our robots Translation2d and Rotation2d.
  */
   public void updateOdometry() {
-    odometry.update(SwerveAndDriveConstants.gyro.getRotation2d(),
+    odometry.update(gyro.getRotation2d(),
        GetModulePositions());
   }
 /**
  * Tells our SwerveModules to stop moving.
  */
   public void stopModules() {
-    SwerveAndDriveConstants.frontLeft.stop();
-    SwerveAndDriveConstants.frontRight.stop();
-    SwerveAndDriveConstants.backLeft.stop();    
-    SwerveAndDriveConstants.backRight.stop();
+    frontLeft.stop();
+    frontRight.stop();
+    backLeft.stop();    
+    backRight.stop();
   }
   
   

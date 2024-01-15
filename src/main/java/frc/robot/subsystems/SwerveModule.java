@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
@@ -28,11 +30,12 @@ public class SwerveModule extends SubsystemBase {
    public final CANSparkMax driveMotor;
    public final CANSparkMax turningMotor;
    private final SparkPIDController drivePID;
+   private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0, SwerveAndDriveConstants.kSwervethetaConstraints);   // Gains are for example purposes only - must be determined for your own robot!
    public final RelativeEncoder driveEncoder;
    private final DutyCycleEncoder turningEncoder;
    private final DigitalInput TurnEncoderInput;
    public final DutyCycle TurnPWMEncoder;
-
+ 
     /**
      * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
      * and turning encoder.
@@ -62,7 +65,7 @@ public class SwerveModule extends SubsystemBase {
         turningEncoder = new DutyCycleEncoder(TurnPWMEncoder);
 
         // Limit the PID Controller's input range between -pi and pi and set the input to be continuous.
-        SwerveAndDriveConstants.m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+        m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
         //SwerveAndDriveConstants.encoderBias = driveEncoder.getPosition(); //Whats the encoder Bias? //TODO
 
         driveEncoder.setPosition(0);
@@ -105,7 +108,7 @@ public class SwerveModule extends SubsystemBase {
         final double signedAngleDifference = closestAngleCalculator(getTurnEncoderRadians(), state.angle.getRadians());
         double rotateMotorPercentPower = signedAngleDifference / (2 * Math.PI); // proportion error control //2
 
-        driveMotor.set((state.speedMetersPerSecond / SwerveAndDriveConstants.kMaxSpeed) * Math.cos(rotateMotorPercentPower));
+        driveMotor.set((state.speedMetersPerSecond / SwerveAndDriveConstants.kSwerveMaxSpeed) * Math.cos(rotateMotorPercentPower));
         turningMotor.set(1.6 * rotateMotorPercentPower);
     }
 

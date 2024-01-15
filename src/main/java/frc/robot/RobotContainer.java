@@ -99,13 +99,14 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig
-    (12.1, 8).setKinematics(SwerveAndDriveConstants.kinematics); // we don't know our acceleration 
+    (12.1, 8).setKinematics(DriveTrain.m_kinematics); // we don't know our acceleration 
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,new Rotation2d(0)), List.of(new Translation2d(1,0), new Translation2d(1,-1)), new Pose2d(2, -1, Rotation2d.fromDegrees(180)),trajectoryConfig);
-    PIDController xController = new PIDController(1.5, 0, 0);
-    PIDController yController = new PIDController(1.5, 0, 0);
-    ProfiledPIDController thetaController = new ProfiledPIDController(3, 0,0, SwerveAndDriveConstants.kthetaController);
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-    trajectory, DriveTrain::GetPose2d, SwerveAndDriveConstants.kinematics, xController, yController, thetaController, DriveTrain::setModuleStates, DriveTrain);
-  return new SequentialCommandGroup(new InstantCommand(() -> DriveTrain.resetPose(trajectory.getInitialPose())), new InstantCommand(() -> DriveTrain.stopModules()));
+    trajectory, DriveTrain::GetPose2d, DriveTrain.m_kinematics, DriveTrain.xController, DriveTrain.yController, DriveTrain.m_thetaController, DriveTrain::setModuleStates, DriveTrain);
+  return new SequentialCommandGroup(
+    new InstantCommand(() -> DriveTrain.resetPose(trajectory.getInitialPose())), 
+    swerveControllerCommand, 
+    new InstantCommand(() -> DriveTrain.stopModules())
+  );
   }
 }

@@ -3,6 +3,10 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -14,17 +18,14 @@ import frc.robot.subsystems.SwerveModule;
 public final class Constants {
     
     // Autonomous stuff for Monday, the 15th of january
-    /*
-     * public static final HolonomicPathFollowerConfig pathFollowerConfig = new
-     * HolonomicPathFollowerConfig(
-     * new PIDConstants(5.0, 0, 0), // Translation constants
-     * new PIDConstants(5.0, 0, 0), // Rotation constants
-     * maxModuleSpeed,
-     * flModuleOffset.getNorm(), // Drive base radius (distance from center to
-     * furthest module)
-     * new ReplanningConfig()
-     * );
-     */
+    
+     public static final HolonomicPathFollowerConfig pathFollowerConfig = new
+      HolonomicPathFollowerConfig(
+      new PIDConstants(1, 0, 0), // Translation constants
+      new PIDConstants(1, 0, 0), // Rotation constants
+      SwerveAndDriveConstants.kChassisMaxSpeed,
+      SwerveAndDriveConstants.frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module)
+      new ReplanningConfig());
 
     public class MiscConstants {
         public static double deadzone = 0.1;
@@ -32,28 +33,24 @@ public final class Constants {
     }
 
     public class SwerveAndDriveConstants {
-        
+        public final static double kSwerveMaxAcceleration = 2 * Math.PI;
+        public final static double kSwerveMaxSpeed = 1;
+        public final static double kChassisMaxSpeed = Math.PI / 3; // 1/2 rotation per second
+        public final static double kChassisMaxAcceleration = Math.PI / 3;
+        public final static TrapezoidProfile.Constraints kSwervethetaConstraints = new TrapezoidProfile.Constraints(kSwerveMaxSpeed, kSwerveMaxAcceleration);
+        public final static TrapezoidProfile.Constraints kChassisthetaContraints = new TrapezoidProfile.Constraints(kChassisMaxSpeed, kChassisMaxAcceleration);
         public static boolean WheelLock = false;
         public static boolean FieldRelativeEnable = true;
-        public static SwerveDriveKinematics initialStates = new SwerveDriveKinematics(SwerveAndDriveConstants.m_frontLeftLocation, SwerveAndDriveConstants.m_frontRightLocation, SwerveAndDriveConstants.m_backLeftLocation, SwerveAndDriveConstants.m_backRightLocation);;
         public static double turnEncoderOffset;
         public static double encoderBias = 0; // encoder stuff for rotation
         public static int turnEncoderPWMChannel;
-        public final static AHRS gyro = new AHRS();
-        public final static Translation2d m_frontRightLocation = new Translation2d(0.285, -0.285);
-        public final static Translation2d m_frontLeftLocation = new Translation2d(0.285, 0.285);
-        public final static Translation2d m_backLeftLocation = new Translation2d(-0.285, 0.285);
-        public final static Translation2d m_backRightLocation = new Translation2d(-0.285, -0.285);
-        public final static SwerveModule frontRight = new SwerveModule(ChannelConstants.frDriveMotorChannel,ChannelConstants.frSteerMotorChannel, ChannelConstants.frEncoderChannel, 0.730);
-        public final static SwerveModule frontLeft = new SwerveModule(ChannelConstants.flDriveMotorChannel, ChannelConstants.flSteerMotorChannel,ChannelConstants.flEncoderChannel, 0.3359);
-        public final static SwerveModule backLeft = new SwerveModule(ChannelConstants.blDriveMotorChannel, ChannelConstants.blSteerMotorChannel,ChannelConstants.blEncoderChannel, 1.1819);
-        public final static SwerveModule backRight = new SwerveModule(ChannelConstants.brDriveMotorChannel, ChannelConstants.brSteerMotorChannel,ChannelConstants.brEncoderChannel, 0.9262); // 0.05178
+        public final static Translation2d frontRightLocation = new Translation2d(0.285, -0.285);
+        public final static Translation2d frontLeftLocation = new Translation2d(0.285, 0.285);
+        public final static Translation2d backLeftLocation = new Translation2d(-0.285, 0.285);
+        public final static Translation2d backRightLocation = new Translation2d(-0.285, -0.285);
         public final static double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared 
-        public final static double kMaxSpeed = 1; // WP this seemed to work don't know why // 3.68 meters per second or 12.1 ft/s (max speed of SDS Mk3 with Neo motor)
-        public final static double kMaxAngularSpeed = Math.PI / 3; // 1/2 rotation per second
-        public final static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
-        public final static TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(kMaxAngularSpeed, kModuleMaxAngularAcceleration);
-        public final static ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0,kthetaController);   // Gains are for example purposes only - must be determined for your own robot!
+         // WP this seemed to work don't know why // 3.68 meters per second or 12.1 ft/s (max speed of SDS Mk3 with Neo motor)
+       
         public final static double rpstoPositionScaler = (RobotConstants.kWheelCircumference * ConversionConstants.driveEncoderCtsperRev) / (2 * Math.PI);// First thought for ratio = (Constants.kWheelDiameterM * Constants.NeoEncoderCountsPerRev) / (Constants.GearRatio * (Math.PI * 2));
         public final static double rpmToVelocityScaler = 3 * (RobotConstants.kWheelCircumference / RobotConstants.GearRatioMK3)/ 60; // SDS Mk3 standard gear ratio from motor to wheel, divide by 60 to go from secs to mins
     }
