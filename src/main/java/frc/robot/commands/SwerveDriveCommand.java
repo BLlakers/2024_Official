@@ -9,18 +9,20 @@ import com.revrobotics.CANSparkMax;
 
 import frc.robot.Constants;
 
-import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.MiscConstants;
+import frc.robot.Constants.SwerveAndDriveConstants;
 
 public class SwerveDriveCommand extends Command {
-  DoubleSupplier m_leftY;
-  DoubleSupplier m_leftX;
-  DoubleSupplier m_rightX;
+  DoubleSupplier leftY;
+  DoubleSupplier leftX;
+  DoubleSupplier rightX;
   // double leftY;
   // double leftX;
   // double rightX;
-  DriveTrainPID m_DriveTrain;
-  RobotContainer m_RobotContainer;
+  DriveTrain DriveTrain;
+  RobotContainer RobotContainer;
   // double x;
   // double y;
   // double rot;
@@ -28,14 +30,22 @@ public class SwerveDriveCommand extends Command {
   // double w2ca;
   // double w3ca;
   // double w4ca;
-
-  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX,
-      DriveTrainPID _dTrain) {
-    m_leftY = _leftY;
-    m_leftX = _leftX;
-    m_rightX = _rightX;
-    m_DriveTrain = _dTrain;
-    addRequirements(m_DriveTrain);
+  /**
+   * Creates a constructor for our SwerveDriveCommand<br>
+   * <br>
+   * This tells the robot to drive
+   * @param leftY
+   * @param leftX
+   * @param rightX
+   * @param DriveTrain
+   */
+  public SwerveDriveCommand(DoubleSupplier leftY, DoubleSupplier leftX, DoubleSupplier rightX,
+    DriveTrain DriveTrain) {
+    this.leftY = leftY;
+    this.leftX = leftX;
+    this.rightX = rightX;
+    this.DriveTrain = DriveTrain;
+    addRequirements(this.DriveTrain);
   }
 
   // Called when the command is initially scheduled.
@@ -55,15 +65,15 @@ public class SwerveDriveCommand extends Command {
     
     Double x;
     Double y;
-    Double rot;
-    Double leftX = m_leftX.getAsDouble();
-    Double leftY = m_leftY.getAsDouble();
-    Double rightX = m_rightX.getAsDouble();
+    Double rotation;
+    Double leftX = this.leftX.getAsDouble();
+    Double leftY = this.leftY.getAsDouble();
+    Double rightX = this.rightX.getAsDouble();
     // System.out.println();
 
     // Finds the X Value of the Left Stick on the Controller and Takes Care of
     // Joystick Drift
-    if (Math.abs(leftX) < Constants.deadzone) {
+    if (Math.abs(leftX) < MiscConstants.deadzone) {
       x = 0.0;
     } else {
       x = -leftX;
@@ -71,7 +81,7 @@ public class SwerveDriveCommand extends Command {
 
     // Finds the Y Value of the Left Stick on the Controller and Takes Care of
     // Joystick Drift
-    if (Math.abs(leftY) < Constants.deadzone) {
+    if (Math.abs(leftY) < MiscConstants.deadzone) {
       y = 0.0;
     } else {
       y = -leftY;
@@ -79,16 +89,16 @@ public class SwerveDriveCommand extends Command {
 
     // Finds the X Value of the Right Stick on the Controller and Takes Care of
     // Joystick Drift
-    if (Math.abs(rightX) < Constants.deadzone) {
-      rot = 0.0;
+    if (Math.abs(rightX) < MiscConstants.deadzone) {
+      rotation = 0.0;
     } else {
-      rot = -rightX;
+      rotation = -rightX;
     }
 
     // Swerve drive uses a different Y and X than expected!
 
-    m_DriveTrain.drive(y, x, rot, m_DriveTrain.FieldRelativeEnable, m_DriveTrain.WheelLock);
-    Pose2d pose = m_DriveTrain.GetPose2d();
+    DriveTrain.drive(y, x, rotation, SwerveAndDriveConstants.FieldRelativeEnable, SwerveAndDriveConstants.WheelLock);
+    Pose2d pose = DriveTrain.GetPose2d();
     System.out.println(pose);
   }
 

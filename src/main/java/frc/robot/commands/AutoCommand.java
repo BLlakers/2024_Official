@@ -8,34 +8,38 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.Constants.SwerveAndDriveConstants;
+import frc.robot.subsystems.DriveTrain;
 
 public class AutoCommand extends Command {
-  DriveTrainPID m_DriveTrain; // Creates an object DriveTrain
+  DriveTrain DriveTrain; // Creates an object DriveTrain
   double leftY; // Creates a Variable for the Left joystick Y position (fake controller)
   double leftX; // Creates a Variable for the Left joystick X position (fake controller)
   double rightX; // Creates a Variable for the right joystick X position (fake controller)
   double counter; // Creates a Variable that counts the amount of time we keep the shooter on
-  int m_AutoMode; // If AutoMode = 1 then run routine 1, if AutoMode = to 2 then run 2, if
-                  // AutoMode equal to 3 run routine 3, otherwise don't run.
+  int AutoMode; // If AutoMode = 1 then run routine 1, if AutoMode = to 2 then run 2, if AutoMode equal to 3 run routine 3, otherwise don't run.
 
-  public AutoCommand(DriveTrainPID m_DriveTrain, int m_AutoMode) { // Creates a contrusctor for auto command (How things
-                                                                   // get
-    // set up)
-    this.m_DriveTrain = m_DriveTrain;
-    this.m_AutoMode = m_AutoMode;
-    addRequirements(this.m_DriveTrain);
+  /**
+   * Creates a constructor for our AutoCommand
+   * @param DriveTrain
+   * @param AutoMode
+   * @deprecated
+   */
+  public AutoCommand(DriveTrain DriveTrain, int AutoMode) {
+    this.DriveTrain = DriveTrain;
+    this.AutoMode = AutoMode;
+    addRequirements(this.DriveTrain);
   }
 
   @Override
   public void initialize() { // Runs once at the beginning of the command
-    m_DriveTrain.m_backRight.m_driveMotor.getEncoder().setPosition(0); // Sets the position of the encoder
-    m_DriveTrain.m_frontRight.m_driveMotor.getEncoder().setPosition(0);
-    m_DriveTrain.m_backLeft.m_driveMotor.getEncoder().setPosition(0);
-    m_DriveTrain.m_frontLeft.m_driveMotor.getEncoder().setPosition(0);
+    SwerveAndDriveConstants.backRight.driveMotor.getEncoder().setPosition(0); // Sets the position of the encoder
+    SwerveAndDriveConstants.frontRight.driveMotor.getEncoder().setPosition(0);
+    SwerveAndDriveConstants.backLeft.driveMotor.getEncoder().setPosition(0);
+    SwerveAndDriveConstants.frontLeft.driveMotor.getEncoder().setPosition(0);
     counter = 0; // Sets counter = 0
 
-    m_DriveTrain.drive(0, 0, 0, false, false);
+    DriveTrain.drive(0, 0, 0, false, false);
 
   }
 
@@ -88,48 +92,48 @@ public class AutoCommand extends Command {
      * m_DriveTrain.drive(0, 0, 0, false, false); // says not to drive
      * } else {
      */
-    Pose2d currentPose = m_DriveTrain.GetPose2d();
+    Pose2d currentPose = DriveTrain.GetPose2d();
     
 
-    if (m_AutoMode == 1) {
-      if (Math.abs(m_DriveTrain.m_backRight.m_driveMotor.getEncoder().getPosition()) < 115.0597) { // Drives until the
+    if (AutoMode == 1) {
+      if (Math.abs(SwerveAndDriveConstants.backRight.driveMotor.getEncoder().getPosition()) < 115.0597) { // Drives until the
                                                                                                    // encoder is at
         // rotations on the motor. 1 motor
         // rotation = 8.14 wheel rotation
         // 115.0597
-        m_DriveTrain.drive(-leftY, leftX, rightX, false, false);
+        DriveTrain.drive(-leftY, leftX, rightX, false, false);
       } else {
-        m_DriveTrain.drive(0, 0, 0, false, false);
+        DriveTrain.drive(0, 0, 0, false, false);
         counter = counter + 1;
       }
     }
 
-    else if (m_AutoMode == 2) {
-      if (Math.abs(m_DriveTrain.m_backRight.m_driveMotor.getEncoder().getPosition()) < 50) { // Drives until the
+    else if (AutoMode == 2) {
+      if (Math.abs(SwerveAndDriveConstants.backRight.driveMotor.getEncoder().getPosition()) < 50) { // Drives until the
                                                                                                // encoder is at
         // rotations on the motor. 1 motor
         // rotation = 8.14 wheel rotation (11
         // inches = wheel)
-        currentPose = m_DriveTrain.GetPose2d();
+        currentPose = DriveTrain.GetPose2d();
         System.out.print(currentPose);
-        m_DriveTrain.drive(-leftY, leftX, rightX, false, false);
-        currentPose = m_DriveTrain.GetPose2d();
+        DriveTrain.drive(-leftY, leftX, rightX, false, false);
+        currentPose = DriveTrain.GetPose2d();
         System.out.print(currentPose);
         
       } else {
-        m_DriveTrain.drive(0, 0, 0, false, true);
+        DriveTrain.drive(0, 0, 0, false, true);
         counter = counter + 1;
       }
     }
 
-    else if (m_AutoMode == 3) {
-      if (Math.abs(m_DriveTrain.m_backRight.m_driveMotor.getEncoder().getPosition()) < 125.0597) { // Drives until the
+    else if (AutoMode == 3) {
+      if (Math.abs(SwerveAndDriveConstants.backRight.driveMotor.getEncoder().getPosition()) < 125.0597) { // Drives until the
                                                                                                    // encoder is at
         // rotations on the motor. 1 motor
         // rotation = 8.14 wheel rotation
-        m_DriveTrain.drive(-leftY, leftX, rightX, false, false);
+        DriveTrain.drive(-leftY, leftX, rightX, false, false);
       } else {
-        m_DriveTrain.drive(0, 0, 0, false, false);
+        DriveTrain.drive(0, 0, 0, false, false);
         counter = counter + 1;
       }
     }
@@ -138,7 +142,7 @@ public class AutoCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    m_DriveTrain.drive(0, 0, 0, false, true);
+    DriveTrain.drive(0, 0, 0, false, true);
   }
 
   @Override

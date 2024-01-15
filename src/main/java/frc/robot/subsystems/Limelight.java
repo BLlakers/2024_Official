@@ -6,7 +6,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Stuff extends SubsystemBase {
+public class Limelight extends SubsystemBase {
     // these are global-ish
     public static Double angle = 0.0;
     public Double aligncamera;

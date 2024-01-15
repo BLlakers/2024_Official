@@ -6,7 +6,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Tags extends SubsystemBase {
+public class LimelightTags extends SubsystemBase {
     boolean distance;
     public static Double tx2 = 0.0;
 
