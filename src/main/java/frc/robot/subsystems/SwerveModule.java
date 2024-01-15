@@ -4,18 +4,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType; //TODO Was giving us weird error 
 import com.revrobotics.SparkPIDController.AccelStrategy;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -23,8 +16,6 @@ import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.MiscConstants;
 import frc.robot.Constants.SwerveAndDriveConstants;
 /**
  * This is where our Swerve Functions and electrical objects pertaining to the DriveTrain are created. <br>
@@ -72,7 +63,7 @@ public class SwerveModule extends SubsystemBase {
 
         // Limit the PID Controller's input range between -pi and pi and set the input to be continuous.
         SwerveAndDriveConstants.m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-        SwerveAndDriveConstants.encoderBias = driveEncoder.getPosition();
+        //SwerveAndDriveConstants.encoderBias = driveEncoder.getPosition(); //Whats the encoder Bias? //TODO
 
         driveEncoder.setPosition(0);
         turningEncoder.reset();
@@ -90,9 +81,12 @@ public class SwerveModule extends SubsystemBase {
         // the getVelocity() function normally returns RPM but is scaled in the
         // SwerveModule constructor to return actual wheel speed
         return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getTurnEncoderRadians()));
-    }
-
-    public SwerveModuleState getDifferentState() { // TIMES 60 TO CONVERRT FROM MINUTES TO SECONDS
+    } 
+/**
+ * Gets a distance of where a module wants to get to. 
+ * @return a SwerveModuleState
+ */
+    public SwerveModuleState getDifferentState() {
         return new SwerveModuleState((driveEncoder.getPosition() - SwerveAndDriveConstants.encoderBias) * SwerveAndDriveConstants.rpmToVelocityScaler * 60,
                 new Rotation2d(getTurnEncoderRadians()));
     }

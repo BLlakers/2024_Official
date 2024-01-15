@@ -1,16 +1,8 @@
 package frc.robot.commands;
-
-// import java.io.Serial;
-import java.util.function.DoubleSupplier;
-// import javax.swing.text.Position;
-
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.SwerveAndDriveConstants;
 import frc.robot.subsystems.DriveTrain;
-
 public class AutoCommand extends Command {
   DriveTrain DriveTrain; // Creates an object DriveTrain
   double leftY; // Creates a Variable for the Left joystick Y position (fake controller)

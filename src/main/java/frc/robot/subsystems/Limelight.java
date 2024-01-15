@@ -24,10 +24,10 @@ public class Limelight extends SubsystemBase {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
-        NetworkTableEntry tz = table.getEntry("tz");
+        //NetworkTableEntry tz = table.getEntry("tz");
         double camerax = tx.getDouble(0.0);
         double cameray = ty.getDouble(0.0);
-        double cameraz = tz.getDouble(0.0);
+        //double cameraz = tz.getDouble(0.0);
         SmartDashboard.putNumber("Limelight X", camerax);
         SmartDashboard.putNumber("Limelight Y", cameray);
         // System.out.println(cameraz);

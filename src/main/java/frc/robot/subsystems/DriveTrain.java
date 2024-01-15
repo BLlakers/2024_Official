@@ -5,15 +5,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.pathfinding.*;
-import com.kauailabs.navx.frc.AHRS;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.ChannelConstants;
+//import com.pathplanner.lib.util.PathPlannerLogging;
+//import com.pathplanner.lib.auto.AutoBuilder;
+//import com.pathplanner.lib.pathfinding.*;
 import frc.robot.Constants.ConversionConstants;
 import frc.robot.Constants.MiscConstants;
 import frc.robot.Constants.SwerveAndDriveConstants;
@@ -22,8 +17,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PathPlannerLogging;
 
 /** Represents a swerve drive style drivetrain. */
 
@@ -86,7 +79,7 @@ public class DriveTrain extends SubsystemBase {
    * Creates a Constructor for the Drivetrain Class
    */
   public DriveTrain() {
-    odometry = new SwerveDriveOdometry(SwerveAndDriveConstants.kinematics, SwerveAndDriveConstants.navx.getRotation2d(), GetModulePositions());
+    odometry = new SwerveDriveOdometry(SwerveAndDriveConstants.kinematics, SwerveAndDriveConstants.gyro.getRotation2d(), GetModulePositions());
   }
 
 
@@ -118,21 +111,24 @@ public class DriveTrain extends SubsystemBase {
    * @param ySpeed        Speed of the robot in the y direction (sideways).
    * @param rotation          Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
-   * @param defenseHoldingMode Whether we are wheel-locked or not
+   * @param defenseHoldingMode Whether we are wheel-locked or not.
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rotation, boolean fieldRelative, boolean defenseHoldingMode) {
     SmartDashboard.putNumber("X Speed", xSpeed);
     SmartDashboard.putNumber("Y Speed", ySpeed);
     SmartDashboard.putBoolean("Field Oriented?", fieldRelative);
-    Rotation2d robotRotation = new Rotation2d(SwerveAndDriveConstants.navx.getRotation2d().getRadians()); 
-    SwerveModuleState[] swerveModuleStates = SwerveAndDriveConstants.kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, robotRotation): new ChassisSpeeds(xSpeed, ySpeed, rotation));
+    Rotation2d Rotation2d = new Rotation2d(SwerveAndDriveConstants.gyro.getRotation2d().getRadians()); 
+    SwerveModuleState[] SwerveModuleStates = SwerveAndDriveConstants.kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, Rotation2d): new ChassisSpeeds(xSpeed, ySpeed, rotation));
     if (!defenseHoldingMode) {
-     setModuleStates(swerveModuleStates);
+     setModuleStates(SwerveModuleStates);
     } else {
       WheelLock();
     }
   }
+  /** 
+   * Tells our robot to go to its desired position.
+  */
   public void setModuleStates(SwerveModuleState[] SwerveModuleStates){
     SwerveDriveKinematics.desaturateWheelSpeeds(SwerveModuleStates, SwerveAndDriveConstants.kMaxSpeed);
      SwerveAndDriveConstants.frontRight.setDesiredState(SwerveModuleStates[1]);
@@ -140,6 +136,9 @@ public class DriveTrain extends SubsystemBase {
       SwerveAndDriveConstants.backLeft.setDesiredState(SwerveModuleStates[2]);
       SwerveAndDriveConstants.backRight.setDesiredState(SwerveModuleStates[3]);
   }
+  /**
+   * Tells our wheels to point towards the middle of the robot.
+   */
   public void WheelLock(){
       SwerveAndDriveConstants.backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
       SwerveAndDriveConstants.frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
@@ -151,14 +150,14 @@ public class DriveTrain extends SubsystemBase {
   
   public void periodic() {
   updateOdometry();
-  Pose2d curentPose = this.GetPose2d();
-  ChassisSpeeds currentChassisSpeeds = this.GetChassisSpeeds();
-  SmartDashboard.putNumber("CurrentPoseX",curentPose.getX());
-  SmartDashboard.putNumber("CurrentPoseY",curentPose.getY());
-  SmartDashboard.putNumber("CurrentPoseRot",curentPose.getRotation().getDegrees());
-  SmartDashboard.putNumber("chassisSpeedsX", currentChassisSpeeds.vxMetersPerSecond);
-  SmartDashboard.putNumber("chassisSpeedsY", currentChassisSpeeds.vyMetersPerSecond);
-  SmartDashboard.putNumber("chassisSpeedsROT", currentChassisSpeeds.omegaRadiansPerSecond);
+  Pose2d Pose2d = this.GetPose2d();
+  ChassisSpeeds ChassisSpeeds = this.GetChassisSpeeds();
+  SmartDashboard.putNumber("CurrentPoseX", Pose2d.getX());
+  SmartDashboard.putNumber("CurrentPoseY", Pose2d.getY());
+  SmartDashboard.putNumber("CurrentPoseRot", Pose2d.getRotation().getDegrees());
+  SmartDashboard.putNumber("chassisSpeedsX", ChassisSpeeds.vxMetersPerSecond);
+  SmartDashboard.putNumber("chassisSpeedsY", ChassisSpeeds.vyMetersPerSecond);
+  SmartDashboard.putNumber("chassisSpeedsROT", ChassisSpeeds.omegaRadiansPerSecond);
   super.periodic();
   }
   /**
@@ -177,27 +176,27 @@ public class DriveTrain extends SubsystemBase {
         });
   }
 /**
- * Resets the Heading (or Direction) of the gyro
+ * Resets the heading (or position) of the gyro.
  */
   public Command ZeroHeading() {
     return runOnce(
       () -> {
-        SwerveAndDriveConstants.navx.reset();
+        SwerveAndDriveConstants.gyro.reset();
       });
   }
 /**
- * Resets the Position of the robot on the Field
- * @param pose2d
+ * Resets the position of the robot on the Field.
+ * @param Pose2d
  */
-  public void resetPose(Pose2d pose2d) {
-    odometry.resetPosition(SwerveAndDriveConstants.navx.getRotation2d(), GetModulePositions(), pose2d);
+  public void resetPose(Pose2d Pose2d) {
+    odometry.resetPosition(SwerveAndDriveConstants.gyro.getRotation2d(), GetModulePositions(), Pose2d);
   }
 
 /**
    * 
-   * Converts raw module states into chassis speeds
+   * Converts raw module states into chassis speeds.
    * 
-   * @return chassis speeds object
+   * @return chassis speeds object.
    */
   public ChassisSpeeds GetChassisSpeeds(){
     return SwerveAndDriveConstants.kinematics.toChassisSpeeds(getSwerveModuleStates());
@@ -211,7 +210,9 @@ public class DriveTrain extends SubsystemBase {
       SwerveAndDriveConstants.backRight.getState()
     };
   }
-
+/**
+ * Resets the Position of the robot on the Field.
+ */
   public Command resetPose2d() {
     return runOnce(
       () -> {
@@ -219,7 +220,9 @@ public class DriveTrain extends SubsystemBase {
       });
   }
 
-
+/**
+ * Toggles whether we are in Field Relative mode or not.
+ */
   public Command toggleFieldRelativeEnable() {
 
     return runOnce(
@@ -237,18 +240,16 @@ public class DriveTrain extends SubsystemBase {
         });
   }
 
-  /**
-   * 
-   * Converts raw module states into chassis speeds
-   * 
-   * @return chassis speeds object
-   */
-
+/**
+ * Updates our robots Translation2d and Rotation2d.
+ */
   public void updateOdometry() {
-    odometry.update(SwerveAndDriveConstants.navx.getRotation2d(),
+    odometry.update(SwerveAndDriveConstants.gyro.getRotation2d(),
        GetModulePositions());
   }
-
+/**
+ * Tells our SwerveModules to stop moving.
+ */
   public void stopModules() {
     SwerveAndDriveConstants.frontLeft.stop();
     SwerveAndDriveConstants.frontRight.stop();
@@ -257,7 +258,7 @@ public class DriveTrain extends SubsystemBase {
   }
   
   
-  
+
 
 
 

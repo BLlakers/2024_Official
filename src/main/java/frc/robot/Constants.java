@@ -2,21 +2,11 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
-
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycle;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.SwerveModule;
 /**
  * This is where all variables created outside of functions or Constructors are held.
@@ -49,7 +39,7 @@ public final class Constants {
         public static double turnEncoderOffset;
         public static double encoderBias = 0; // encoder stuff for rotation
         public static int turnEncoderPWMChannel;
-        public final static AHRS navx = new AHRS();
+        public final static AHRS gyro = new AHRS();
         public final static Translation2d m_frontRightLocation = new Translation2d(0.285, -0.285);
         public final static Translation2d m_frontLeftLocation = new Translation2d(0.285, 0.285);
         public final static Translation2d m_backLeftLocation = new Translation2d(-0.285, 0.285);

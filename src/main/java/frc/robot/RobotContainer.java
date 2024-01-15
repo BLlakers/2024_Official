@@ -2,10 +2,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
@@ -16,11 +13,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -28,14 +23,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.commands.AutoCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.SwerveAndDriveConstants;
 import frc.robot.commands.AlignCommand;
 import frc.robot.subsystems.LimelightTags;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.SwerveModule;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
 
@@ -50,8 +43,8 @@ public class RobotContainer {
   JoystickButton manipButtonA = new JoystickButton(manipController, ButtonConstants.buttonA);
   JoystickButton driverButtonA = new JoystickButton(driverController, ButtonConstants.buttonA);
 
-  JoystickButton driverButtonRight = new JoystickButton(driverController, ButtonConstants.buttonRight);
-  JoystickButton driverButtonLeft = new JoystickButton(driverController, ButtonConstants.buttonLeft);
+  JoystickButton driverButtonRB = new JoystickButton(driverController, ButtonConstants.buttonRight);
+  JoystickButton driverButtonLB = new JoystickButton(driverController, ButtonConstants.buttonLeft);
   JoystickButton driverButtonOption = new JoystickButton(driverController, ButtonConstants.buttonOptions);
   // Constants.buttonX);
   JoystickButton driverButtonX = new JoystickButton(driverController, ButtonConstants.buttonX);
@@ -59,8 +52,8 @@ public class RobotContainer {
   JoystickButton driverButtonLS = new JoystickButton(driverController, ButtonConstants.buttonLS);
   JoystickButton manipButtonB = new JoystickButton(manipController, ButtonConstants.buttonB);
   JoystickButton manipButtonY = new JoystickButton(manipController, ButtonConstants.buttonY);
-  JoystickButton manipButtonRight = new JoystickButton(manipController, ButtonConstants.buttonRight);
-  JoystickButton manipButtonLeft = new JoystickButton(manipController, ButtonConstants.buttonLeft);
+  JoystickButton manipButtonRB = new JoystickButton(manipController, ButtonConstants.buttonRight);
+  JoystickButton manipButtonLB = new JoystickButton(manipController, ButtonConstants.buttonLeft);
   JoystickButton manipButtonOptions = new JoystickButton(manipController, ButtonConstants.buttonOptions);
   JoystickButton driverButtonOptions = new JoystickButton(driverController, ButtonConstants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, ButtonConstants.buttonRS);
@@ -93,9 +86,8 @@ public class RobotContainer {
     driverButtonB.onTrue(DriveTrain.ZeroHeading()); // When the "B" button on the driver controller is clicked, it Reset's our gyro (will be renamed)
     driverButtonA.onTrue(DriveTrain.toggleFieldRelativeEnable()); // When the "A" button on the driver controller is clicked, it turns off field relative mode (might get rid of TODO)
     driverButtonOptions.onTrue(DriveTrain.resetPose2d()); // When the Options Button on the driver controller is clicked, it resets our robots position
-    manipButtonLeft.onTrue(DriveTrain.LowerArm()); // when LeftBumper pressed on the manipulating controller, it raises our armPosition (renamed variable soon)
-    manipButtonRight.onTrue(DriveTrain.RaiseArm()); // when RightBumper pressed on the manipulating controller, it lowers our armPosition (renamed variable soon)
-    driverButtonOption.onTrue(DriveTrain.resetPose2d());
+    manipButtonLB.onTrue(DriveTrain.LowerArm()); // when LeftBumper pressed on the manipulating controller, it raises our armPosition (renamed variable soon)
+    manipButtonRB.onTrue(DriveTrain.RaiseArm()); // when RightBumper pressed on the manipulating controller, it lowers our armPosition (renamed variable soon)
   }
 
   private void configureShuffleboard() {
