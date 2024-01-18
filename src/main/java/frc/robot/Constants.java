@@ -14,14 +14,15 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.subsystems.DriveTrainPID;
 
 public final class Constants {
+
     // Robot
-   /* public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+    public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(5.0, 0, 0), // Translation constants 
       new PIDConstants(5.0, 0, 0), // Rotation constants 
-      maxModuleSpeed, 
-      flModuleOffset.getNorm(), // Drive base radius (distance from center to furthest module) 
+      DriveTrainPID.kMaxSpeed, 
+      DriveTrainPID.m_frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
-    );*/
+    );
     public static final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(DriveTrainPID.m_frontLeftLocation,
       DriveTrainPID.m_frontRightLocation, DriveTrainPID.m_backLeftLocation, DriveTrainPID.m_backRightLocation);
     public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxAngularSpeed,DriveTrainPID.kModuleMaxAngularAcceleration);
