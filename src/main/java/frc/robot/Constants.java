@@ -17,9 +17,9 @@ public final class Constants {
 
     // Robot
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(5.0, 0, 0), // Translation constants 
-      new PIDConstants(5.0, 0, 0), // Rotation constants 
-      DriveTrainPID.kMaxSpeed, 
+      new PIDConstants(.3, 0, 0), // Translation constants 
+      new PIDConstants(.3, 0, 0), // Rotation constants 
+      0.1, 
       DriveTrainPID.m_frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );

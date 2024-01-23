@@ -95,9 +95,10 @@ public class DriveTrainPID extends SubsystemBase {
     //PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
   public Pose2d GetPose2d() {
     Pose2d current_pose_meters = m_odometry.getPoseMeters();
-    Translation2d Translation2d = current_pose_meters.getTranslation().times(Constants.MetersToInches);
+    /*Translation2d Translation2d = current_pose_meters.getTranslation().times(Constants.MetersToInches);
     Pose2d current_pose_inches = new Pose2d(Translation2d, current_pose_meters.getRotation());
-    return current_pose_inches;
+    return current_pose_inches;*/
+    return current_pose_meters;
   }
 
   // Constructor
