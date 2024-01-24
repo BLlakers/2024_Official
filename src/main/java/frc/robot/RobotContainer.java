@@ -72,10 +72,19 @@ public class RobotContainer {
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
+  private final SendableChooser<Command> autoChooser;
+
 
   public RobotContainer() {
     configureShuffleboard();
     configureBindings();
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -139,32 +148,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-   /*  TrajectoryConfig trajectoryConfig = new TrajectoryConfig
-    (12.1, 8).setKinematics(Constants.m_kinematics); // we don't know our acceleration 
-   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,new Rotation2d(0)), List.of(new Translation2d(1,0), new Translation2d(1,-1)), new Pose2d(2, -1, Rotation2d.fromDegrees(180)),trajectoryConfig);
-  
-  
-  PIDController xController = new PIDController(1.5, 0, 0);
-  PIDController yController = new PIDController(1.5, 0, 0);
-  ProfiledPIDController thetaController = new ProfiledPIDController(3, 0,0, Constants.kthetaController);
+    //loads New Auto auto file
+       //return new PathPlannerAuto("New Auto");
+      return autoChooser.getSelected();
 
-  SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-trajectory, m_DriveTrainPID::GetPose2d, Constants.m_kinematics, xController, yController, thetaController, m_DriveTrainPID::setModuleStates, m_DriveTrainPID);
-
-return new SequentialCommandGroup(new InstantCommand(() -> m_DriveTrainPID.resetOdometry(trajectory.getInitialPose())), swerveControllerCommand, new InstantCommand(() -> m_DriveTrainPID.stopModules()));
-*/
-/*    Command autoSeq = Commands.sequence(
-        m_DriveTrainPID.ZeroGyro(),
-        Commands.waitSeconds(1.0),
-        new AutoCommand(m_DriveTrainPID, m_chooser.getSelected()));
-    return autoSeq;
-    // return new AutoCommand(m_DriveTrain);*/
-
- // Load the path you want to follow using its name in the GUI
-      //   PathPlannerPath path = PathPlannerPath.fromPathFile("Example Path");
-
-      //   // Create a path following command using AutoBuilder. This will also trigger event markers.
-      //  AutoBuilder.followPath(path).schedule();
-       return new PathPlannerAuto("New Auto");
   }
 }
