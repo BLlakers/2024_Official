@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import java.util.List;
 
@@ -177,7 +178,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     //loads New Auto auto file
        //return new PathPlannerAuto("New Auto");
-      return autoChooser.getSelected();
+      return new SequentialCommandGroup( 
+        m_DriveTrainPID.resetPose2d(new Pose2d(1.00, 5.00, new Rotation2d(0))),
+        new WaitCommand(3.0),
+       autoChooser.getSelected()
+      );
 
   }
 }
