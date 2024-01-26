@@ -1,6 +1,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.lang.reflect.Array;
+
+import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.DoubleArrayTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -24,13 +29,22 @@ public class Stuff extends SubsystemBase {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
-        NetworkTableEntry tz = table.getEntry("tz");
+        DoubleArrayTopic test = table.getDoubleArrayTopic("botpose");
         double camerax = tx.getDouble(0.0);
         double cameray = ty.getDouble(0.0);
-        double cameraz = tz.getDouble(0.0);
+        String test1 = test.DoubleArrayEntry(new double[2]);
         SmartDashboard.putNumber("Limelight X", camerax);
         SmartDashboard.putNumber("Limelight Y", cameray);
-        // System.out.println(cameraz);
+        System.out.println(test1);
+
+        //testing
+        //DoubleArraySubscriber posesub = table.getDoubleArrayTopic("botpose");
+        //double[] result = posesub.get();
+        //System.out.println(result);
+
+
+
+
 
         // finding if it is within he perfect angles. perfect angles are from 13.5 to
         // 5.7, with 9.6 being perfectly centered
