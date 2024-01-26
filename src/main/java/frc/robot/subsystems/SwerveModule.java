@@ -127,6 +127,7 @@ public class SwerveModule extends SubsystemBase {
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
             m_driveEncoder.getPosition(), new Rotation2d(getTurnEncoderRadians()));
+
       }
     /**
      * Returns the current state of the module.
