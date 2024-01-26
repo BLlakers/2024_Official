@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -77,8 +78,7 @@ public class RobotContainer {
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
   private final SendableChooser<Command> autoChooser;
   private final Field2d field;
-
-
+  List<Pose2d> currentPath = new ArrayList<Pose2d>();
 
   public RobotContainer() {
     configureShuffleboard();
@@ -90,26 +90,28 @@ public class RobotContainer {
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-          field = new Field2d();
-        SmartDashboard.putData("Field", field);
+        field = new Field2d();
+      SmartDashboard.putData("Field", field);
 
-        // Logging callback for current robot pose
-        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.setRobotPose(m_DriveTrainPID.GetPose2d());
-        });
+      // Logging callback for current robot pose
+      PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+          // Do whatever you want with the pose here
+          field.setRobotPose(pose);
+      });
 
-        // Logging callback for target robot pose
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.getObject("target pose").setPose(m_DriveTrainPID.GetPose2d());
-        });
 
-        // Logging callback for the active path, this is sent as a list of poses
-        PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            // Do whatever you want with the poses here
-            field.getObject("path").setPoses(m_DriveTrainPID.GetPose2d());
-        });
+      // Logging callback for target robot pose
+      PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+          // Do whatever you want with the pose here
+          field.getObject("target pose").setPose(pose);
+      });
+
+
+      // Logging callback for the active path, this is sent as a list of poses
+      PathPlannerLogging.setLogActivePathCallback((poses) -> {
+          // Do whatever you want with the poses here
+          field.getObject("path").setPoses(poses);
+      });
   }
   public void periodic(){
     field.setRobotPose(m_DriveTrainPID.GetPose2d());

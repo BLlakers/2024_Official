@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.*;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
@@ -222,6 +223,8 @@ public class DriveTrainPID extends SubsystemBase {
     SmartDashboard.putNumber("chassisSpeedsX", currentChassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("chassisSpeedsY", currentChassisSpeeds.vyMetersPerSecond);
     SmartDashboard.putNumber("chassisSpeedsROT", currentChassisSpeeds.omegaRadiansPerSecond);
+    PathPlannerLogging.logCurrentPose(curentPose);
+    PathPlannerLogging.logActivePath(PathPlannerPath.fromPathFile("Forward Path"));
     // SmartDashboard.putNumber();
     // SmartDashboard.putNumber();
     // SmartDashboard.putNumber();
