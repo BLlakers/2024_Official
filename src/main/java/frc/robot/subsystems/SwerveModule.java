@@ -11,6 +11,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel;
@@ -74,6 +76,13 @@ public class SwerveModule extends SubsystemBase {
     @Override
     public void periodic() {
         // m_turningEncoder.getCountsPerRevolution();
+        double turnEncVal =  Units.radiansToDegrees(m_turningEncoder.getDistance());
+        double driveEncPos = m_driveEncoder.getPosition();
+        double driveEncVel = m_driveEncoder.getVelocity();
+
+        SmartDashboard.putNumber("Robot/Swerve/Turn Encoder/ID: " + m_turningMotor.getDeviceId(), turnEncVal);
+        SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Pos" , driveEncPos);
+        SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Vel" , driveEncVel);
         super.periodic();
     }
 
@@ -99,9 +108,9 @@ public class SwerveModule extends SubsystemBase {
         
         // PWM encoder from CTRE mag encoders
         m_turningEncoder = new DutyCycleEncoder(turnEncoderPWMChannel);
+        m_turningEncoder.reset();
         m_turningEncoder.setPositionOffset(turnOffset);
         m_turningEncoder.setDistancePerRotation(2 * Math.PI); // radians ?
-        m_turningEncoder.reset();
 
         // Limit the PID Controller's input range between -pi and pi and set the input
         // to be continuous.

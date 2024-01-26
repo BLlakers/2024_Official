@@ -64,8 +64,8 @@ public final class Constants {
     public static double deadzone = 0.1;
 
     // Drive Train
-    public static int blSteerMotorChannel = 2;
     public static int blDriveMotorChannel = 1;
+    public static int blSteerMotorChannel = 2;
     public static int flDriveMotorChannel = 4;
     public static int flSteerMotorChannel = 3;
     public static int frSteerMotorChannel = 5;

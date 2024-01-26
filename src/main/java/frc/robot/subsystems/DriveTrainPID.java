@@ -52,13 +52,13 @@ public class DriveTrainPID extends SubsystemBase {
 
   // constructor for each swerve module
   public final SwerveModule m_frontRight = new SwerveModule(Constants.frDriveMotorChannel,
-      Constants.frSteerMotorChannel, Constants.frEncoderChannel, 0.730);
+      Constants.frSteerMotorChannel, Constants.frEncoderChannel, 0.259);
   public final SwerveModule m_frontLeft = new SwerveModule(Constants.flDriveMotorChannel, Constants.flSteerMotorChannel,
-      Constants.flEncoderChannel, 0.3359);
+      Constants.flEncoderChannel, 0.115);
   public final SwerveModule m_backLeft = new SwerveModule(Constants.blDriveMotorChannel, Constants.blSteerMotorChannel,
       Constants.blEncoderChannel, 1.1819);
   public final SwerveModule m_backRight = new SwerveModule(Constants.brDriveMotorChannel, Constants.brSteerMotorChannel,
-      Constants.brEncoderChannel, 0.9262); // 0.05178
+      Constants.brEncoderChannel, 0.625);
 
   // INITIAL POSITIONS to help define swerve drive odometry. THis was a headache
   public SwerveDriveKinematics m_initialStates;
@@ -207,6 +207,8 @@ public class DriveTrainPID extends SubsystemBase {
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds X", currentChassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Y", currentChassisSpeeds.vyMetersPerSecond);
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Rot", Units.radiansToDegrees(currentChassisSpeeds.omegaRadiansPerSecond));
+
+    SmartDashboard.putNumber("Robot/Odometry/navx/Rotation", navx.getRotation2d().getDegrees());
     
     super.periodic();
   }
