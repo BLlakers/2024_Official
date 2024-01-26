@@ -35,7 +35,7 @@ public class AutoCommand extends Command {
     m_DriveTrain.m_frontLeft.m_driveMotor.getEncoder().setPosition(0);
     counter = 0; // Sets counter = 0
 
-    m_DriveTrain.drive(0, 0, 0, false, false);
+    m_DriveTrain.drive(0, 0, 0);
 
   }
 
@@ -88,7 +88,7 @@ public class AutoCommand extends Command {
      * m_DriveTrain.drive(0, 0, 0, false, false); // says not to drive
      * } else {
      */
-    Pose2d currentPose = m_DriveTrain.GetPose2d();
+    Pose2d currentPose = m_DriveTrain.getPose2d();
     
 
     if (m_AutoMode == 1) {
@@ -97,9 +97,9 @@ public class AutoCommand extends Command {
         // rotations on the motor. 1 motor
         // rotation = 8.14 wheel rotation
         // 115.0597
-        m_DriveTrain.drive(-leftY, leftX, rightX, false, false);
+        m_DriveTrain.drive(-leftY, leftX, rightX);
       } else {
-        m_DriveTrain.drive(0, 0, 0, false, false);
+        m_DriveTrain.drive(0, 0, 0);
         counter = counter + 1;
       }
     }
@@ -110,14 +110,14 @@ public class AutoCommand extends Command {
         // rotations on the motor. 1 motor
         // rotation = 8.14 wheel rotation (11
         // inches = wheel)
-        currentPose = m_DriveTrain.GetPose2d();
+        currentPose = m_DriveTrain.getPose2d();
         System.out.print(currentPose);
-        m_DriveTrain.drive(-leftY, leftX, rightX, false, false);
-        currentPose = m_DriveTrain.GetPose2d();
+        m_DriveTrain.drive(-leftY, leftX, rightX);
+        currentPose = m_DriveTrain.getPose2d();
         System.out.print(currentPose);
         
       } else {
-        m_DriveTrain.drive(0, 0, 0, false, true);
+        m_DriveTrain.drive(0, 0, 0);
         counter = counter + 1;
       }
     }
@@ -127,9 +127,9 @@ public class AutoCommand extends Command {
                                                                                                    // encoder is at
         // rotations on the motor. 1 motor
         // rotation = 8.14 wheel rotation
-        m_DriveTrain.drive(-leftY, leftX, rightX, false, false);
+        m_DriveTrain.drive(-leftY, leftX, rightX);
       } else {
-        m_DriveTrain.drive(0, 0, 0, false, false);
+        m_DriveTrain.drive(0, 0, 0);
         counter = counter + 1;
       }
     }
@@ -138,7 +138,8 @@ public class AutoCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    m_DriveTrain.drive(0, 0, 0, false, true);
+    m_DriveTrain.WheelLock();
+    m_DriveTrain.drive(0, 0, 0);
   }
 
   @Override

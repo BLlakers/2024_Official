@@ -23,8 +23,7 @@ public final class Constants {
       DriveTrainPID.m_frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );
-    public static final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(DriveTrainPID.m_frontLeftLocation,
-      DriveTrainPID.m_frontRightLocation, DriveTrainPID.m_backLeftLocation, DriveTrainPID.m_backRightLocation);
+    
     public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxAngularSpeed,DriveTrainPID.kModuleMaxAngularAcceleration);
     public static double driveEncoderCtsperRev = 6.8;
     public static int PHChannel = 30; // REV Pneumatic Hub
