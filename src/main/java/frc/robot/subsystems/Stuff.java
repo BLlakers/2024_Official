@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.lang.reflect.Array;
+
 
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleArrayTopic;
@@ -16,6 +16,16 @@ public class Stuff extends SubsystemBase {
     public static Double angle = 0.0;
     public Double aligncamera;
     public boolean isAligned;
+    public DoubleArraySubscriber zstuff;
+    private Double heightfromfloor = 7.5;
+    private Double targetheightfromfloor = 1.0; //changes with field design
+
+    public void robotInit(){
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        zstuff = table.getDoubleArrayTopic("targetpose_cameraspace").subscribe(new double[] {});
+    }
+
+    
 
     @Override
     public void periodic() {
@@ -26,16 +36,22 @@ public class Stuff extends SubsystemBase {
         //private NetworkTableEntry tid = getDefault().getTable("limelight").getEntry("tid");
         //private NetworkTableEntry test = getDefault().getTable("limelight").getEntry("botpose");
         //private NetworkTableEntry botpose = getDefault().getTable("limelight").getEntry("targetpose_cameraspace");
+        
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
-        DoubleArrayTopic test = table.getDoubleArrayTopic("botpose");
         double camerax = tx.getDouble(0.0);
         double cameray = ty.getDouble(0.0);
-        String test1 = test.DoubleArrayEntry(new double[2]);
-        SmartDashboard.putNumber("Limelight X", camerax);
-        SmartDashboard.putNumber("Limelight Y", cameray);
-        System.out.println(test1);
+        
+        //jank distance method
+        double angleradians = cameray * (3.14159/180.0);
+        double jankdistance = (heightfromfloor - targetheightfromfloor) / Math.tan(angleradians) + 10;
+        System.out.println(jankdistance);
+
+        //double[] s = zstuff.get();
+        //SmartDashboard.putNumber("Limelight X", camerax);
+        //SmartDashboard.putNumber("Limelight Y", cameray);
+        //System.out.println(test1);
 
         //testing
         //DoubleArraySubscriber posesub = table.getDoubleArrayTopic("botpose");
