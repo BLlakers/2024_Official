@@ -38,7 +38,7 @@ public class SwerveModule extends SubsystemBase {
     private static final double kVelocityConversionFactor = kPositionConversionFactor / 60;
 
     // kWheelCircumference used to be
-    public static final double kDriveMaxSpeed = 1.0;
+    public static final double kDriveMaxSpeed = Units.feetToMeters(12.5);
     public static final double kModuleMaxAngularVelocity = DriveTrainPID.kMaxAngularSpeed;
     public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
@@ -80,7 +80,7 @@ public class SwerveModule extends SubsystemBase {
         double driveEncPos = m_driveEncoder.getPosition();
         double driveEncVel = m_driveEncoder.getVelocity();
 
-        SmartDashboard.putNumber("Robot/Swerve/Turn Encoder/ID: " + m_turningMotor.getDeviceId(), turnEncVal);
+        SmartDashboard.putNumber("Robot/Swerve/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/Angle", turnEncVal);
         SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Pos" , driveEncPos);
         SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Vel" , driveEncVel);
         super.periodic();
@@ -160,8 +160,14 @@ public class SwerveModule extends SubsystemBase {
         );
         double rotateMotorPercentPower = signedAngleDifference / (2 * Math.PI); // proportion error control //2
 
-        m_driveMotor.set(optimizedState.speedMetersPerSecond / kDriveMaxSpeed);
-        m_turningMotor.set(1.6 * rotateMotorPercentPower);
+        double driveMotorPercentPower = optimizedState.speedMetersPerSecond / kDriveMaxSpeed;
+        double turnMotorPercentPower = 1.6 * rotateMotorPercentPower;
+
+        SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/DrivePercent", driveMotorPercentPower);
+        SmartDashboard.putNumber("Robot/Swerve/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/DrivePercent", turnMotorPercentPower);
+
+        m_driveMotor.set(driveMotorPercentPower);
+        m_turningMotor.set(turnMotorPercentPower);
     }
 
     /**

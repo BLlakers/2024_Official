@@ -38,7 +38,7 @@ public class DriveTrainPID extends SubsystemBase {
 
   public boolean m_WheelLock = false;
   public boolean m_FieldRelativeEnable = true;
-  public static final double kMaxSpeed = 3.68; // WP this seemed to work don't know why // 3.68 meters per second or
+  public static final double kMaxSpeed = Units.feetToMeters(12.4); // WP this seemed to work don't know why // 3.68 meters per second or
                                                // 12.1
   // ft/s (max speed of SDS Mk3 with Neo motor)
   public static final double kMaxAngularSpeed = Math.PI / 3; // 1/2 rotation per second
