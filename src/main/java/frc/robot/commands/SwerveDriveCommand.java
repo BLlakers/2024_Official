@@ -89,7 +89,7 @@ public class SwerveDriveCommand extends Command {
 
     m_DriveTrain.drive(y * DriveTrainPID.kMaxSpeed, x * DriveTrainPID.kMaxSpeed, rot);
     Pose2d pose = m_DriveTrain.getPose2d();
-    System.out.println(pose);
+    //System.out.println(pose);
   }
 
   // Called once the command ends or is interrupted.

@@ -48,7 +48,7 @@ public class SwerveModule extends SubsystemBase {
     private final SparkPIDController m_drivePID;
 
     public final RelativeEncoder m_driveEncoder;
-    private final DutyCycleEncoder m_turningEncoder;
+    public final DutyCycleEncoder m_turningEncoder;
 
 
     // Gains are for example purposes only - must be determined for your own robot!
@@ -117,11 +117,6 @@ public class SwerveModule extends SubsystemBase {
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     }
-    public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(
-            m_driveEncoder.getPosition(), new Rotation2d(getTurnEncoderRadians()));
-
-      }
     /**
      * Returns the current state of the module.
      *
