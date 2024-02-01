@@ -1,14 +1,17 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
-
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleArrayTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.TimestampedDouble;
+import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Stuff extends SubsystemBase {
@@ -20,9 +23,15 @@ public class Stuff extends SubsystemBase {
     private Double heightfromfloor = 7.5;
     private Double targetheightfromfloor = 1.0; //changes with field design
 
-    public void robotInit(){
+    public Stuff()
+    {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        zstuff = table.getDoubleArrayTopic("targetpose_cameraspace").subscribe(new double[] {});
+        zstuff = table.getDoubleArrayTopic("targetpose_cameraspace").subscribe(new double[] {0, 0, 0, 0, 0, 0});
+        
+    }
+
+    public void robotInit(){
+        
     }
 
     
@@ -40,6 +49,7 @@ public class Stuff extends SubsystemBase {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
+        NetworkTableEntry tid = table.getEntry("tid");
         double camerax = tx.getDouble(0.0);
         double cameray = ty.getDouble(0.0);
         
@@ -58,9 +68,25 @@ public class Stuff extends SubsystemBase {
         //double[] result = posesub.get();
         //System.out.println(result);
 
+        TimestampedDoubleArray poseArray =  zstuff.getAtomic(); // (x, y, z, rotx, roty, rotz)
+        Translation3d poseTranslation = new Translation3d(
+            poseArray.value[0],  // x
+            poseArray.value[1],  // y
+            poseArray.value[2] // z
+        );
+        
+        Rotation3d poseOrientation = new Rotation3d(
+            poseArray.value[3], // roll = rotx
+            poseArray.value[4], // pitch = roty
+            poseArray.value[5] // yaw = rotz
+        );
 
-
-
+        Pose3d aprilTagPose = new Pose3d(poseTranslation, poseOrientation);
+        int aprilTagId = (int) tid.getInteger(-1);
+        AprilTag aprilTag = new AprilTag(
+            aprilTagId,
+            aprilTagPose
+        );
 
         // finding if it is within he perfect angles. perfect angles are from 13.5 to
         // 5.7, with 9.6 being perfectly centered
@@ -82,5 +108,10 @@ public class Stuff extends SubsystemBase {
         }
         SmartDashboard.putNumber("subsystemangle", angle);
         SmartDashboard.putBoolean("Aligned?", isAligned);
+
+        SmartDashboard.putNumber("AprilTag/tagID", aprilTag.ID);
+        SmartDashboard.putNumber("AprilTag/pose/X", aprilTag.pose.getX());
+        SmartDashboard.putNumber("AprilTag/pose/Y", aprilTag.pose.getY());
+        SmartDashboard.putNumber("AprilTag/pose/Z", aprilTag.pose.getZ());
     }
 }
