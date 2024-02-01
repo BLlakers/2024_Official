@@ -33,13 +33,15 @@ public final class Constants {
     // 1 meter = Inches 39.3701
     public static double NeoEncoderCountsPerRev = 42;
     public static double NeoRevPerEncoderCounts = 1/NeoEncoderCountsPerRev;
+    public static double NeoMaxSpeedRPM = 5820;
     //MISC
     public static double MetersToInches = Meters.of(1.0).in(Inches);
     public static double InchesToMeters = Inches.of(1.0).in(Meters);
     public static double MagEncoderCountsPerRev = 4096; 
     public static double MagRevPerEncoderCounts = 1/MagEncoderCountsPerRev;
-    public static double GearRatio = 8.14;
-    public static double driveEncoderConversion = GearRatio * kWheelCircumference;
+    public static double DriveGearRatio = 8.14;
+    public static double TurnGearRatio = 12.8;
+    public static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
     //ARM 
     public static int armMotorChannel1 = 9;
     public static int armMotorChannel2 = 10;

@@ -34,7 +34,7 @@ import frc.robot.Constants;
  */
 public class SwerveModule extends SubsystemBase {
 
-    private static final double kPositionConversionFactor = (Constants.kWheelDiameterM * Math.PI) / Constants.GearRatio;
+    private static final double kPositionConversionFactor = (Constants.kWheelDiameterM * Math.PI) / Constants.DriveGearRatio;
     private static final double kVelocityConversionFactor = kPositionConversionFactor / 60;
 
     // kWheelCircumference used to be
