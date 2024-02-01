@@ -38,7 +38,7 @@ public final class Constants {
     public static double InchesToMeters = Inches.of(1.0).in(Meters);
     public static double MagEncoderCountsPerRev = 4096; 
     public static double MagRevPerEncoderCounts = 1/MagEncoderCountsPerRev;
-    public static double GearRatio = 8.16;
+    public static double GearRatio = 8.14;
     public static double driveEncoderConversion = GearRatio * kWheelCircumference;
     //ARM 
     public static int armMotorChannel1 = 9;
