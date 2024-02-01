@@ -148,9 +148,24 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //loads New Auto auto file
-       //return new PathPlannerAuto("New Auto");
-      return autoChooser.getSelected();
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(12.1, 8).setKinematics(m_DriveTrainPID.m_kinematics); // we don't know our acceleration 
+   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,new Rotation2d(0)), List.of(new Translation2d(1,0), new Translation2d(1,-1)), new Pose2d(2, -1, Rotation2d.fromDegrees(180)),trajectoryConfig);
+  
+  
+  PIDController xController = new PIDController(1.5, 0, 0);
+  PIDController yController = new PIDController(1.5, 0, 0);
+  ProfiledPIDController thetaController = new ProfiledPIDController(3, 0,0, Constants.kthetaController);
 
+  SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+trajectory, m_DriveTrainPID::getPose2d, m_DriveTrainPID.m_kinematics, xController, yController, thetaController, m_DriveTrainPID::setModuleStates, m_DriveTrainPID);
+
+return new SequentialCommandGroup(new InstantCommand(() -> m_DriveTrainPID.resetOdometry(trajectory.getInitialPose())), swerveControllerCommand, new InstantCommand(() -> m_DriveTrainPID.stopModules()));
+
+/*    Command autoSeq = Commands.sequence(
+        m_DriveTrainPID.ZeroGyro(),
+        Commands.waitSeconds(1.0),
+        new AutoCommand(m_DriveTrainPID, m_chooser.getSelected()));
+    return autoSeq;
+    // return new AutoCommand(m_DriveTrain);*/
   }
 }
