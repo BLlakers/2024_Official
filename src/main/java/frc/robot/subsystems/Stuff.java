@@ -23,6 +23,8 @@ public class Stuff extends SubsystemBase {
     private Double heightfromfloor = 7.5;
     private Double targetheightfromfloor = 1.0; //changes with field design
 
+    private AprilTag m_currentAprilTag = new AprilTag(-1, null);
+
     public Stuff()
     {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -83,10 +85,11 @@ public class Stuff extends SubsystemBase {
 
         Pose3d aprilTagPose = new Pose3d(poseTranslation, poseOrientation);
         int aprilTagId = (int) tid.getInteger(-1);
-        AprilTag aprilTag = new AprilTag(
+        m_currentAprilTag = new AprilTag(
             aprilTagId,
             aprilTagPose
         );
+        
 
         // finding if it is within he perfect angles. perfect angles are from 13.5 to
         // 5.7, with 9.6 being perfectly centered
@@ -109,9 +112,12 @@ public class Stuff extends SubsystemBase {
         SmartDashboard.putNumber("subsystemangle", angle);
         SmartDashboard.putBoolean("Aligned?", isAligned);
 
-        SmartDashboard.putNumber("AprilTag/tagID", aprilTag.ID);
-        SmartDashboard.putNumber("AprilTag/pose/X", aprilTag.pose.getX());
-        SmartDashboard.putNumber("AprilTag/pose/Y", aprilTag.pose.getY());
-        SmartDashboard.putNumber("AprilTag/pose/Z", aprilTag.pose.getZ());
+        SmartDashboard.putNumber("AprilTag/tagID",  m_currentAprilTag.ID);
+        SmartDashboard.putNumber("AprilTag/pose/X", m_currentAprilTag.pose.getX());
+        SmartDashboard.putNumber("AprilTag/pose/Y", m_currentAprilTag.pose.getY());
+        SmartDashboard.putNumber("AprilTag/pose/Z", m_currentAprilTag.pose.getZ());
+    }
+    public AprilTag getCurrenAprilTag(){
+        return m_currentAprilTag;
     }
 }
