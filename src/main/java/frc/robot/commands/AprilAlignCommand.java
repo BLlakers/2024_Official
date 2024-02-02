@@ -59,8 +59,10 @@ public class AprilAlignCommand extends Command {
     }
 
   @Override
+  
   public void execute() {
     Pose2d robotPose = m_drivetrain.getPose2d();
+    System.out.println("Pose Supplier is " + m_aprilTagProvider.get());
     AprilTag aprilTag  = m_aprilTagProvider.get();
     if (aprilTag.ID > 0) { // is valid if > 0
       // Find the tag we want to chase
@@ -104,8 +106,9 @@ public class AprilAlignCommand extends Command {
 
     m_drivetrain.driveChassisSpeeds(
       ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+    
   }
-
+ 
     @Override
     public void end(boolean interrupted) {
         m_drivetrain.stopModules();

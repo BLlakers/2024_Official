@@ -37,6 +37,7 @@ import frc.robot.commands.ManualRotateArmCommand;
 import frc.robot.commands.AutoRotateArmCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.AlignCommand;
+import frc.robot.commands.AprilAlignCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
@@ -110,7 +111,7 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
+   //driverButtonLeft.whileTrue(new AprilAlignCommand(frc.robot.subsystems.Stuff.));
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(), m_DriveTrainPID));
     // limelight allign works on both controllers
