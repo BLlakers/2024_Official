@@ -111,7 +111,7 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-   //driverButtonLeft.whileTrue(new AprilAlignCommand(frc.robot.subsystems.Stuff.));
+   driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(), m_DriveTrainPID));
     // limelight allign works on both controllers

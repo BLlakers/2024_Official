@@ -117,7 +117,7 @@ public class Stuff extends SubsystemBase {
         SmartDashboard.putNumber("AprilTag/pose/Y", m_currentAprilTag.pose.getY());
         SmartDashboard.putNumber("AprilTag/pose/Z", m_currentAprilTag.pose.getZ());
     }
-    public AprilTag getCurrenAprilTag(){
+    public AprilTag getCurrentAprilTag(){
         return m_currentAprilTag;
     }
 }
