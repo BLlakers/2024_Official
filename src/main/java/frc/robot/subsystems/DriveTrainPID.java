@@ -37,8 +37,12 @@ public class DriveTrainPID extends SubsystemBase {
   public ProfiledPIDController m_thetaController = new ProfiledPIDController(1, 0, 0,
       new TrapezoidProfile.Constraints(kMaxAngularSpeed, kModuleMaxAngularAcceleration));
 
-  public SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(DriveTrainPID.m_frontLeftLocation,
-      DriveTrainPID.m_frontRightLocation, DriveTrainPID.m_backLeftLocation, DriveTrainPID.m_backRightLocation);
+  public SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+    Constants.SMFrontLeftLocation,
+    Constants.SMFrontRightLocation, 
+    Constants.SMBackLeftLocation, 
+    Constants.SMBackRightLocation
+  );
 
   public boolean m_WheelLock = false;
   public boolean m_FieldRelativeEnable = true;
@@ -46,14 +50,10 @@ public class DriveTrainPID extends SubsystemBase {
                                                                    // meters per second or
   // 12.1
   // ft/s (max speed of SDS Mk3 with Neo motor)
-  public static final double kMaxAngularSpeed = Math.PI / 3; // 1/2 rotation per second
+  public static final double kMaxAngularSpeed = Units.rotationsPerMinuteToRadiansPerSecond(Constants.NeoMaxSpeedRPM / Constants.TurnGearRatio); // 1/2 rotation per second
+  public static final double kMaxTurnAngularSpeed = kMaxSpeed / Constants.SMBackLeftLocation.getNorm(); // 1/2 rotation per second
   public static final double kModuleMaxAngularAcceleration = Math.PI / 3;
   private final AHRS navx = new AHRS();
-
-  public final static Translation2d m_frontRightLocation = new Translation2d(0.285, -0.285);
-  public final static Translation2d m_frontLeftLocation = new Translation2d(0.285, 0.285);
-  public final static Translation2d m_backLeftLocation = new Translation2d(-0.285, 0.285);
-  public final static Translation2d m_backRightLocation = new Translation2d(-0.285, -0.285);
 
   // constructor for each swerve module
   public final SwerveModule m_frontRight;
@@ -128,8 +128,8 @@ public class DriveTrainPID extends SubsystemBase {
           return false;
         },
         this);
-    m_initialStates = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation,
-        m_backRightLocation);
+    m_initialStates = new SwerveDriveKinematics(Constants.SMFrontLeftLocation,Constants.SMFrontRightLocation,Constants.SMBackLeftLocation,
+       Constants.SMBackRightLocation);
 
     double flTurnOffset = 0, frTurnOffset = 0, blTurnOffset = 0, brTurnOffset = 0;
     if (Constants.defaultRobotVersion == RobotVersion.v2023) {

@@ -10,18 +10,24 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.subsystems.DriveTrainPID;
 
 public final class Constants {
 
+  public final static Translation2d SMFrontRightLocation = new Translation2d(0.285, -0.285);
+  public final static Translation2d SMFrontLeftLocation = new Translation2d(0.285, 0.285);
+  public final static Translation2d SMBackLeftLocation = new Translation2d(-0.285, 0.285);
+  public final static Translation2d SMBackRightLocation = new Translation2d(-0.285, -0.285);
+
     // Robot
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(5.0, 0, 0), // Translation constants 
       new PIDConstants(5.0, 0, 0), // Rotation constants 
       DriveTrainPID.kMaxSpeed, 
-      DriveTrainPID.m_frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
+      SMFrontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );
     
@@ -67,10 +73,10 @@ public final class Constants {
     public static double deadzone = 0.1;
 
     // Drive Train
-    public static int blDriveMotorChannel = 1;
-    public static int blSteerMotorChannel = 2;
-    public static int flDriveMotorChannel = 4;
-    public static int flSteerMotorChannel = 3;
+    public static int blDriveMotorChannel = 2;
+    public static int blSteerMotorChannel = 1;
+    public static int flDriveMotorChannel = 3;
+    public static int flSteerMotorChannel = 4;
     public static int frSteerMotorChannel = 5;
     public static int frDriveMotorChannel = 6;
     public static int brDriveMotorChannel = 7;
