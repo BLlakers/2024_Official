@@ -26,7 +26,9 @@ public class AprilAlignCommand extends Command {
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(8, 8);
 
     private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(1, 0),
-            Rotation2d.fromDegrees(180.0));
+            Rotation2d.fromDegrees(180));
+
+    private static final double kdriveMaxDriveSpeed = 0.1; // meters per second
 
     private final DriveTrainPID m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
@@ -59,34 +61,36 @@ public class AprilAlignCommand extends Command {
     }
 
   @Override
-  
   public void execute() {
+    // Grab the current states: april tag in view and the current robot pose
     Pose2d robotPose = m_drivetrain.getPose2d();
     System.out.println("Pose Supplier is " + m_aprilTagProvider.get());
     AprilTag aprilTag  = m_aprilTagProvider.get();
-    if (aprilTag.ID > 0) { // is valid if > 0
-      // Find the tag we want to chase
-        Pose3d camToTarget = aprilTag.pose;
-        Transform2d transform = new Transform2d(
-            camToTarget.getTranslation().toTranslation2d(),
-            camToTarget.getRotation().toRotation2d());
-            
-            // Transform the robot's pose to find the tag's pose
-            Transform3d robotToCamera3d = Constants.CAMERA_TO_ROBOT.inverse();
-            Transform2d robotToCamera2d = new Transform2d(robotToCamera3d.getTranslation().toTranslation2d(),
-            robotToCamera3d.getRotation().toRotation2d());
-            Pose2d cameraPose = robotPose.transformBy(robotToCamera2d);
-            Pose2d targetPose = cameraPose.transformBy(transform);
-            
-            // Transform the tag's pose to set our goal
-            goalPose = targetPose.transformBy(TAG_TO_GOAL);
+    if (aprilTag.ID <= 0) { // is valid if > 0: we update our current estimate of where the april tag is relative to the robot
+      m_drivetrain.stopModules();
+      return;
+    }
+    // Find the tag we want to chase
+    Pose3d camToTarget = aprilTag.pose;
+    Transform2d transform = new Transform2d(
+        camToTarget.getTranslation().toTranslation2d(),
+        camToTarget.getRotation().toRotation2d());
+    
+    // Transform the robot's pose to find the tag's pose
+    Transform3d robotToCamera3d = Constants.CAMERA_TO_ROBOT.inverse();
+    Transform2d robotToCamera2d = new Transform2d(robotToCamera3d.getTranslation().toTranslation2d(),
+    robotToCamera3d.getRotation().toRotation2d());
+    Pose2d cameraPose = robotPose.transformBy(robotToCamera2d);
+    Pose2d targetPose = cameraPose.transformBy(transform);
+    
+    // Transform the tag's pose to set our goal
+    goalPose = targetPose.transformBy(TAG_TO_GOAL);
 
-        if (null != goalPose) {
-          // Drive
-          xController.setGoal(goalPose.getX());
-          yController.setGoal(goalPose.getY());
-          omegaController.setGoal(goalPose.getRotation().getRadians());
-        }
+    if (null != goalPose) {
+      // Drive
+      xController.setGoal(goalPose.getX());
+      yController.setGoal(goalPose.getY());
+      omegaController.setGoal(goalPose.getRotation().getRadians());
     }
     
     double xSpeed = xController.calculate(robotPose.getX());
@@ -103,6 +107,9 @@ public class AprilAlignCommand extends Command {
     if (omegaController.atGoal()) {
       omegaSpeed = 0;
     }
+
+    xSpeed = Math.min(xSpeed, kdriveMaxDriveSpeed);
+    ySpeed = Math.min(ySpeed, kdriveMaxDriveSpeed);
 
     m_drivetrain.driveChassisSpeeds(
       ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
