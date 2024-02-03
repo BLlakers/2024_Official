@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.units.*;
+import frc.robot.Other.RobotVersion;
 import frc.robot.subsystems.DriveTrainPID;
 
 import static edu.wpi.first.units.Units.*;
@@ -80,5 +81,31 @@ public final class Constants {
     public static double spinTolerance = 4.2;
     public static double length = 0.58;
     public static double width = 0.58;
+
+    public abstract class RobotVersionConstants {
+      public static final double flTurnEncoderOffset = 0;
+      public static final double frTurnEncoderOffset = 0;
+      public static final double blTurnEncoderOffset = 0;
+      public static final double brTurnEncoderOffset = 0;    
+    }
+
+    public class RobotVersion2023 extends RobotVersionConstants
+    {
+      public static final double flTurnEncoderOffset = 0.3359;
+      public static final double frTurnEncoderOffset = 0.730;
+      public static final double blTurnEncoderOffset = 1.1819;
+      public static final double brTurnEncoderOffset = 0.9262;
+    } 
+
+     public class RobotVersion2024 extends RobotVersionConstants
+    {
+      public static final double flTurnEncoderOffset = 0.6168;
+      public static final double frTurnEncoderOffset = 0.777;
+      public static final double blTurnEncoderOffset = 0.519;
+      public static final double brTurnEncoderOffset = 0.625;
+    } 
+
+    public static final RobotVersion defaultRobotVersion = RobotVersion.v2023;
+
 
 }
