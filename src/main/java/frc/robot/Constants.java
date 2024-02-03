@@ -100,7 +100,7 @@ public final class Constants {
     {
       public static final double flTurnEncoderOffset = 0.3359;
       public static final double frTurnEncoderOffset = 0.730;
-      public static final double blTurnEncoderOffset = 1.1819;
+      public static final double blTurnEncoderOffset = .184;
       public static final double brTurnEncoderOffset = 0.9262;
     } 
 
@@ -112,7 +112,7 @@ public final class Constants {
       public static final double brTurnEncoderOffset = 0.625;
     } 
 
-    public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
+    public static final RobotVersion defaultRobotVersion = RobotVersion.v2023;
 
 
 }
