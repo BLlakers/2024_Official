@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.units.*;
+import frc.robot.Other.RobotVersion;
 import frc.robot.subsystems.DriveTrainPID;
 
 import static edu.wpi.first.units.Units.*;
@@ -11,18 +12,24 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.subsystems.DriveTrainPID;
 
 public final class Constants {
 
+  public final static Translation2d SMFrontRightLocation = new Translation2d(0.285, -0.285);
+  public final static Translation2d SMFrontLeftLocation = new Translation2d(0.285, 0.285);
+  public final static Translation2d SMBackLeftLocation = new Translation2d(-0.285, 0.285);
+  public final static Translation2d SMBackRightLocation = new Translation2d(-0.285, -0.285);
+
     // Robot
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(.3, 0, 0), // Translation constants 
-      new PIDConstants(.3, 0, 0), // Rotation constants 
-      0.1, 
-      DriveTrainPID.m_frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
+      new PIDConstants(5.0, 0, 0), // Translation constants 
+      new PIDConstants(5.0, 0, 0), // Rotation constants 
+      DriveTrainPID.kMaxSpeed, 
+      SMFrontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );
 
@@ -74,10 +81,10 @@ public final class Constants {
     public static double deadzone = 0.1;
 
     // Drive Train
-    public static int blDriveMotorChannel = 1;
-    public static int blSteerMotorChannel = 2;
-    public static int flDriveMotorChannel = 4;
-    public static int flSteerMotorChannel = 3;
+    public static int blDriveMotorChannel = 2;
+    public static int blSteerMotorChannel = 1;
+    public static int flDriveMotorChannel = 3;
+    public static int flSteerMotorChannel = 4;
     public static int frSteerMotorChannel = 5;
     public static int frDriveMotorChannel = 6;
     public static int brDriveMotorChannel = 7;
@@ -89,5 +96,31 @@ public final class Constants {
     public static double spinTolerance = 4.2;
     public static double length = 0.58;
     public static double width = 0.58;
+
+    public abstract class RobotVersionConstants {
+      public static final double flTurnEncoderOffset = 0;
+      public static final double frTurnEncoderOffset = 0;
+      public static final double blTurnEncoderOffset = 0;
+      public static final double brTurnEncoderOffset = 0;    
+    }
+
+    public class RobotVersion2023 extends RobotVersionConstants
+    {
+      public static final double flTurnEncoderOffset = 0.3359;
+      public static final double frTurnEncoderOffset = 0.730;
+      public static final double blTurnEncoderOffset = 1.1819;
+      public static final double brTurnEncoderOffset = 0.9262;
+    } 
+
+     public class RobotVersion2024 extends RobotVersionConstants
+    {
+      public static final double flTurnEncoderOffset = 0.6168;
+      public static final double frTurnEncoderOffset = 0.777;
+      public static final double blTurnEncoderOffset = 0.519;
+      public static final double brTurnEncoderOffset = 0.625;
+    } 
+
+    public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
+
 
 }

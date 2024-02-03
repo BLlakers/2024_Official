@@ -13,6 +13,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.RobotVersion2023;
+import frc.robot.Constants.RobotVersionConstants;
+import frc.robot.Other.RobotVersion;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -33,35 +37,29 @@ public class DriveTrainPID extends SubsystemBase {
   public ProfiledPIDController m_thetaController = new ProfiledPIDController(1, 0, 0,
       new TrapezoidProfile.Constraints(kMaxAngularSpeed, kModuleMaxAngularAcceleration));
 
-  public SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(DriveTrainPID.m_frontLeftLocation,
-      DriveTrainPID.m_frontRightLocation, DriveTrainPID.m_backLeftLocation, DriveTrainPID.m_backRightLocation);
+  public SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+    Constants.SMFrontLeftLocation,
+    Constants.SMFrontRightLocation, 
+    Constants.SMBackLeftLocation, 
+    Constants.SMBackRightLocation
+  );
 
   public boolean m_WheelLock = false;
   public boolean m_FieldRelativeEnable = true;
-  public static final double kMaxSpeed = Units.feetToMeters(12.4); // WP this seemed to work don't know why // 3.68 meters per second or
-                                               // 12.1
+  public static final double kMaxSpeed = Units.feetToMeters(12.4); // WP this seemed to work don't know why // 3.68
+                                                                   // meters per second or
+  // 12.1
   // ft/s (max speed of SDS Mk3 with Neo motor)
-  public static final double kMaxAngularSpeed = Math.PI / 3; // 1/2 rotation per second
+  public static final double kMaxAngularSpeed = Units.rotationsPerMinuteToRadiansPerSecond(Constants.NeoMaxSpeedRPM / Constants.TurnGearRatio); // 1/2 rotation per second
+  public static final double kMaxTurnAngularSpeed = kMaxSpeed / Constants.SMBackLeftLocation.getNorm(); // 1/2 rotation per second
   public static final double kModuleMaxAngularAcceleration = Math.PI / 3;
   private final AHRS navx = new AHRS();
 
-  public final static Translation2d m_frontRightLocation = new Translation2d(0.285, -0.285);
-  public final static Translation2d m_frontLeftLocation = new Translation2d(0.285, 0.285);
-  public final static Translation2d m_backLeftLocation = new Translation2d(-0.285, 0.285);
-  public final static Translation2d m_backRightLocation = new Translation2d(-0.285, -0.285);
-
   // constructor for each swerve module
-  public final SwerveModule m_frontRight = new SwerveModule(Constants.frDriveMotorChannel,
-      Constants.frSteerMotorChannel, Constants.frEncoderChannel, .777 );
-  public final SwerveModule m_frontLeft = new SwerveModule(Constants.flDriveMotorChannel, Constants.flSteerMotorChannel,
-      Constants.flEncoderChannel, .6168);
-  public final SwerveModule m_backLeft = new SwerveModule(Constants.blDriveMotorChannel, Constants.blSteerMotorChannel,
-      Constants.blEncoderChannel, .519 );
-  public final SwerveModule m_backRight = new SwerveModule(Constants.brDriveMotorChannel, Constants.brSteerMotorChannel,
-      Constants.brEncoderChannel, .625); // 0.05178
-      //0.9262
-
-
+  public final SwerveModule m_frontRight;
+  public final SwerveModule m_frontLeft;
+  public final SwerveModule m_backLeft;
+  public final SwerveModule m_backRight;
 
   // INITIAL POSITIONS to help define swerve drive odometry. THis was a headache
   public SwerveDriveKinematics m_initialStates;
@@ -105,12 +103,12 @@ public class DriveTrainPID extends SubsystemBase {
   // field.getObject("path").setPoses(poses));
   public Pose2d getPose2d() {
     Pose2d current_pose_meters = m_odometry.getPoseMeters();
-    
+
     return current_pose_meters;
   }
 
   // Constructor
-  public DriveTrainPID() {
+  public DriveTrainPID(RobotVersion version) {
     AutoBuilder.configureHolonomic(
         this::getPose2d,
         this::resetPose,
@@ -130,13 +128,48 @@ public class DriveTrainPID extends SubsystemBase {
           return false;
         },
         this);
-    m_initialStates = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation,
-        m_backRightLocation);
+    m_initialStates = new SwerveDriveKinematics(Constants.SMFrontLeftLocation,Constants.SMFrontRightLocation,Constants.SMBackLeftLocation,
+       Constants.SMBackRightLocation);
+
+    double flTurnOffset = 0, frTurnOffset = 0, blTurnOffset = 0, brTurnOffset = 0;
+    if (Constants.defaultRobotVersion == RobotVersion.v2023) {
+      flTurnOffset = Constants.RobotVersion2023.flTurnEncoderOffset;
+      frTurnOffset = Constants.RobotVersion2023.frTurnEncoderOffset;
+      blTurnOffset = Constants.RobotVersion2023.blTurnEncoderOffset;
+      brTurnOffset = Constants.RobotVersion2023.brTurnEncoderOffset;
+    } else if (Constants.defaultRobotVersion == RobotVersion.v2024) {
+      flTurnOffset = Constants.RobotVersion2024.flTurnEncoderOffset;
+      frTurnOffset = Constants.RobotVersion2024.frTurnEncoderOffset;
+      blTurnOffset = Constants.RobotVersion2024.blTurnEncoderOffset;
+      brTurnOffset = Constants.RobotVersion2024.brTurnEncoderOffset;
+    }
+
+    m_frontRight = new SwerveModule(
+        Constants.frDriveMotorChannel,
+        Constants.frSteerMotorChannel,
+        Constants.frEncoderChannel,
+        frTurnOffset);
+    m_frontLeft = new SwerveModule(
+        Constants.flDriveMotorChannel,
+        Constants.flSteerMotorChannel,
+        Constants.flEncoderChannel,
+        flTurnOffset);
+    m_backLeft = new SwerveModule(
+        Constants.blDriveMotorChannel,
+        Constants.blSteerMotorChannel,
+        Constants.blEncoderChannel,
+        blTurnOffset);
+    m_backRight = new SwerveModule(
+        Constants.brDriveMotorChannel,
+        Constants.brSteerMotorChannel,
+        Constants.brEncoderChannel,
+        brTurnOffset); // 0.05178
 
     m_odometry = new SwerveDriveOdometry(
-        m_kinematics,
+        this.m_kinematics,
         navx.getRotation2d(),
         getSwerveModulePositions());
+
   }
 
   public SwerveModulePosition[] getSwerveModulePositions() {
@@ -209,10 +242,11 @@ public class DriveTrainPID extends SubsystemBase {
     SmartDashboard.putNumber("Robot/Odometry/Pose Rot", currentPose.getRotation().getDegrees());
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds X", currentChassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Y", currentChassisSpeeds.vyMetersPerSecond);
-    SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Rot", Units.radiansToDegrees(currentChassisSpeeds.omegaRadiansPerSecond));
+    SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Rot",
+        Units.radiansToDegrees(currentChassisSpeeds.omegaRadiansPerSecond));
 
     SmartDashboard.putNumber("Robot/Odometry/navx/Rotation", navx.getRotation2d().getDegrees());
-    
+
     super.periodic();
   }
 
@@ -297,7 +331,6 @@ public class DriveTrainPID extends SubsystemBase {
           }
         });
   }
-
 
   public void updateOdometry() {
     m_odometry.update(
