@@ -10,22 +10,27 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.subsystems.DriveTrainPID;
 
 public final class Constants {
 
+  public final static Translation2d SMFrontRightLocation = new Translation2d(0.285, -0.285);
+  public final static Translation2d SMFrontLeftLocation = new Translation2d(0.285, 0.285);
+  public final static Translation2d SMBackLeftLocation = new Translation2d(-0.285, 0.285);
+  public final static Translation2d SMBackRightLocation = new Translation2d(-0.285, -0.285);
+
     // Robot
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(5.0, 0, 0), // Translation constants 
       new PIDConstants(5.0, 0, 0), // Rotation constants 
       DriveTrainPID.kMaxSpeed, 
-      DriveTrainPID.m_frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
+      SMFrontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );
-    public static final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(DriveTrainPID.m_frontLeftLocation,
-      DriveTrainPID.m_frontRightLocation, DriveTrainPID.m_backLeftLocation, DriveTrainPID.m_backRightLocation);
+    
     public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxAngularSpeed,DriveTrainPID.kModuleMaxAngularAcceleration);
     public static double driveEncoderCtsperRev = 6.8;
     public static int PHChannel = 30; // REV Pneumatic Hub
@@ -35,13 +40,15 @@ public final class Constants {
     // 1 meter = Inches 39.3701
     public static double NeoEncoderCountsPerRev = 42;
     public static double NeoRevPerEncoderCounts = 1/NeoEncoderCountsPerRev;
+    public static double NeoMaxSpeedRPM = 5820;
     //MISC
     public static double MetersToInches = Meters.of(1.0).in(Inches);
     public static double InchesToMeters = Inches.of(1.0).in(Meters);
     public static double MagEncoderCountsPerRev = 4096; 
     public static double MagRevPerEncoderCounts = 1/MagEncoderCountsPerRev;
-    public static double GearRatio = 8.16;
-    public static double driveEncoderConversion = GearRatio * kWheelCircumference;
+    public static double DriveGearRatio = 8.14;
+    public static double TurnGearRatio = 12.8;
+    public static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
     //ARM 
     public static int armMotorChannel1 = 9;
     public static int armMotorChannel2 = 10;
@@ -66,8 +73,8 @@ public final class Constants {
     public static double deadzone = 0.1;
 
     // Drive Train
-    public static int blSteerMotorChannel = 1;
     public static int blDriveMotorChannel = 2;
+    public static int blSteerMotorChannel = 1;
     public static int flDriveMotorChannel = 3;
     public static int flSteerMotorChannel = 4;
     public static int frSteerMotorChannel = 5;
@@ -105,7 +112,7 @@ public final class Constants {
       public static final double brTurnEncoderOffset = 0.625;
     } 
 
-    public static final RobotVersion defaultRobotVersion = RobotVersion.v2023;
+    public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
 
 
 }
