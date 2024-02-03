@@ -244,7 +244,10 @@ public class DriveTrainPID extends SubsystemBase {
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Y", currentChassisSpeeds.vyMetersPerSecond);
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Rot",
         Units.radiansToDegrees(currentChassisSpeeds.omegaRadiansPerSecond));
-
+    SmartDashboard.putNumber("2023 Back right encoder pos", m_backRight.m_turningEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("2023 Front right encoder pos", m_frontRight.m_turningEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("2023 Back Left encoder pos", m_backLeft.m_turningEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("2023 Front Left encoder pos", m_frontLeft.m_turningEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Robot/Odometry/navx/Rotation", navx.getRotation2d().getDegrees());
 
     super.periodic();
