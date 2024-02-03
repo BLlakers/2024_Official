@@ -13,6 +13,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.RobotVersion2023;
+import frc.robot.Constants.RobotVersionConstants;
+import frc.robot.Other.RobotVersion;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -51,16 +55,11 @@ public class DriveTrainPID extends SubsystemBase {
   public final static Translation2d m_backRightLocation = new Translation2d(-0.285, -0.285);
 
   // constructor for each swerve module
-  public final SwerveModule m_frontRight = new SwerveModule(Constants.frDriveMotorChannel,
-      Constants.frSteerMotorChannel, Constants.frEncoderChannel, .777 );
-  public final SwerveModule m_frontLeft = new SwerveModule(Constants.flDriveMotorChannel, Constants.flSteerMotorChannel,
-      Constants.flEncoderChannel, .6168);
-  public final SwerveModule m_backLeft = new SwerveModule(Constants.blDriveMotorChannel, Constants.blSteerMotorChannel,
-      Constants.blEncoderChannel, .519 );
-  public final SwerveModule m_backRight = new SwerveModule(Constants.brDriveMotorChannel, Constants.brSteerMotorChannel,
-      Constants.brEncoderChannel, .625); // 0.05178
-      //0.9262
-
+  public final SwerveModule m_frontRight;
+  public final SwerveModule m_frontLeft;
+  public final SwerveModule m_backLeft;
+  public final SwerveModule m_backRight;
+  
 
 
   // INITIAL POSITIONS to help define swerve drive odometry. THis was a headache
@@ -110,7 +109,7 @@ public class DriveTrainPID extends SubsystemBase {
   }
 
   // Constructor
-  public DriveTrainPID() {
+  public DriveTrainPID(RobotVersion version) {
     AutoBuilder.configureHolonomic(
         this::getPose2d,
         this::resetPose,
@@ -133,10 +132,53 @@ public class DriveTrainPID extends SubsystemBase {
     m_initialStates = new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation,
         m_backRightLocation);
 
-    m_odometry = new SwerveDriveOdometry(
-        m_kinematics,
-        navx.getRotation2d(),
-        getSwerveModulePositions());
+    m_odometry =  new SwerveDriveOdometry(
+      Constants.m_kinematics,
+     navx.getRotation2d(),
+      GetModulePositions()
+      );
+
+    double flTurnOffset= 0, frTurnOffset = 0, blTurnOffset = 0, brTurnOffset = 0;
+    if (Constants.defaultRobotVersion == RobotVersion.v2023)
+    {
+      flTurnOffset = Constants.RobotVersion2023.flTurnEncoderOffset;
+      frTurnOffset = Constants.RobotVersion2023.frTurnEncoderOffset;
+      blTurnOffset = Constants.RobotVersion2023.blTurnEncoderOffset;
+      brTurnOffset = Constants.RobotVersion2023.brTurnEncoderOffset;
+    }
+    else if (Constants.defaultRobotVersion == RobotVersion.v2024)
+    {
+      flTurnOffset = Constants.RobotVersion2024.flTurnEncoderOffset;
+      frTurnOffset = Constants.RobotVersion2024.frTurnEncoderOffset;
+      blTurnOffset = Constants.RobotVersion2024.blTurnEncoderOffset;
+      brTurnOffset = Constants.RobotVersion2024.brTurnEncoderOffset;
+    }
+
+    m_frontRight = new SwerveModule(
+      Constants.frDriveMotorChannel,
+      Constants.frSteerMotorChannel, 
+      Constants.frEncoderChannel, 
+      frTurnOffset
+    );
+    m_frontLeft = new SwerveModule(
+      Constants.flDriveMotorChannel, 
+      Constants.flSteerMotorChannel,
+      Constants.flEncoderChannel, 
+      flTurnOffset
+    );
+    m_backLeft = new SwerveModule(
+      Constants.blDriveMotorChannel, 
+      Constants.blSteerMotorChannel,
+      Constants.blEncoderChannel, 
+      blTurnOffset
+    );
+    m_backRight = new SwerveModule(
+      Constants.brDriveMotorChannel, 
+      Constants.brSteerMotorChannel,
+      Constants.brEncoderChannel, 
+      brTurnOffset    
+    ); // 0.05178
+
   }
 
   public SwerveModulePosition[] getSwerveModulePositions() {

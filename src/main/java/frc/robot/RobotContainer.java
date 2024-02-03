@@ -32,6 +32,8 @@ import frc.robot.commands.AutoCommand;
 import frc.robot.commands.ManualRotateArmCommand;
 import frc.robot.commands.AutoRotateArmCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.Constants.RobotVersionConstants;
+import frc.robot.Other.RobotVersion;
 import frc.robot.commands.AlignCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
@@ -41,7 +43,7 @@ import frc.robot.subsystems.SwerveModule;
 //import frc.robot.commands.AprilAlignCommand;
 
 public class RobotContainer {
-  DriveTrainPID m_DriveTrainPID = new DriveTrainPID();
+  DriveTrainPID m_DriveTrainPID = new DriveTrainPID(Constants.defaultRobotVersion);
   Arm m_Arm = new Arm();
   Stuff m_Stuff = new Stuff();
   Tags m_Tags = new Tags();
