@@ -44,7 +44,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    System.out.println(m_robotContainer.m_DriveTrainPID.m_frontRight.m_turningEncoder.getAbsolutePosition());
     //System.out.println(m_robotContainer.m_DriveTrainPID.m_backRight.m_driveEncoder.getPosition());
   }
 
@@ -78,7 +77,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    System.out.println(m_robotContainer.m_DriveTrainPID.m_backRight.m_turningEncoder.getAbsolutePosition());
     //System.out.println(m_robotContainer.m_DriveTrainPID.m_frontRight.m_turningEncoder.getAbsolutePosition());
    
     // WP - Was not compiling as of 3/4, to be addressed
