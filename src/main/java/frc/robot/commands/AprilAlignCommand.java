@@ -15,15 +15,19 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrainPID;
 
+// TODO DO 1 PID AT A TIME !!!!!
+// WHAT I MEAN IS DO ROTATION, Y, then X.
 public class AprilAlignCommand extends Command {
-
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 2);
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 2);
-    private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(8, 8);
+  public static double ConstraintsConstant = 1; 
+  public static double PIDConstant = 16; 
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxSpeed, DriveTrainPID.kMaxSpeed/2); //TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxSpeed, DriveTrainPID.kMaxSpeed/2); // TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxTurnAngularSpeed, DriveTrainPID.kMaxTurnAngularSpeed/2); // TODO DO 1 PID AT A TIME !!!!!
 
     private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(1, 0),
             Rotation2d.fromDegrees(180));
@@ -33,9 +37,9 @@ public class AprilAlignCommand extends Command {
     private final DriveTrainPID m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(4, 0, 0, X_CONSTRAINTS);
-    private final ProfiledPIDController yController = new ProfiledPIDController(4, 0, 0, Y_CONSTRAINTS);
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRATINTS);
+    private final ProfiledPIDController xController = new ProfiledPIDController(4/PIDConstant, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!!
+    private final ProfiledPIDController yController = new ProfiledPIDController(7/PIDConstant, 0, 0.0, Y_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!!
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(3/PIDConstant, 0, 0.0, OMEGA_CONSTRATINTS); //1 TODO DO 1 PID AT A TIME !!!!!
 
     private Pose2d goalPose;
 
@@ -64,7 +68,6 @@ public class AprilAlignCommand extends Command {
   public void execute() {
     // Grab the current states: april tag in view and the current robot pose
     Pose2d robotPose = m_drivetrain.getPose2d();
-    System.out.println("Pose Supplier is " + m_aprilTagProvider.get());
     AprilTag aprilTag  = m_aprilTagProvider.get();
     if (aprilTag.ID <= 0) { // is valid if > 0: we update our current estimate of where the april tag is relative to the robot
       m_drivetrain.stopModules();
@@ -74,7 +77,7 @@ public class AprilAlignCommand extends Command {
     Pose3d camToTarget = aprilTag.pose;
     Transform2d transform = new Transform2d(
         camToTarget.getTranslation().toTranslation2d(),
-        camToTarget.getRotation().toRotation2d());
+        camToTarget.getRotation().toRotation2d().minus(Rotation2d.fromDegrees(0)));
     
     // Transform the robot's pose to find the tag's pose
     Transform3d robotToCamera3d = Constants.CAMERA_TO_ROBOT.inverse();
@@ -82,6 +85,7 @@ public class AprilAlignCommand extends Command {
     robotToCamera3d.getRotation().toRotation2d());
     Pose2d cameraPose = robotPose.transformBy(robotToCamera2d);
     Pose2d targetPose = cameraPose.transformBy(transform);
+    System.out.println(robotToCamera3d);
     
     // Transform the tag's pose to set our goal
     goalPose = targetPose.transformBy(TAG_TO_GOAL);
@@ -108,11 +112,15 @@ public class AprilAlignCommand extends Command {
       omegaSpeed = 0;
     }
 
-    xSpeed = Math.min(xSpeed, kdriveMaxDriveSpeed);
-    ySpeed = Math.min(ySpeed, kdriveMaxDriveSpeed);
+   // xSpeed = Math.min(xSpeed, kdriveMaxDriveSpeed);
+    //ySpeed = Math.min(ySpeed, kdriveMaxDriveSpeed);
 
     m_drivetrain.driveChassisSpeeds(
       ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+    
+    SmartDashboard.putNumber("FRxSpeed", xSpeed);
+    SmartDashboard.putNumber("FRySpeed", ySpeed);
+    SmartDashboard.putNumber("FRrotSpeed", omegaSpeed);
     
   }
  

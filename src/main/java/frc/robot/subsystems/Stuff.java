@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDouble;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Stuff extends SubsystemBase {
@@ -111,7 +112,7 @@ public class Stuff extends SubsystemBase {
         }
         SmartDashboard.putNumber("subsystemangle", angle);
         SmartDashboard.putBoolean("Aligned?", isAligned);
-
+        //SmartDashboard.putData((Sendable) aprilTagPose);
         SmartDashboard.putNumber("AprilTag/tagID",  m_currentAprilTag.ID);
         SmartDashboard.putNumber("AprilTag/pose/X", m_currentAprilTag.pose.getX());
         SmartDashboard.putNumber("AprilTag/pose/Y", m_currentAprilTag.pose.getY());
