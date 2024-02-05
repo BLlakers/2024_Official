@@ -25,21 +25,21 @@ import frc.robot.subsystems.DriveTrainPID;
 public class AprilAlignCommand extends Command {
   public static double ConstraintsConstant = 1; 
   public static double PIDConstant = 16; 
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxSpeed, DriveTrainPID.kMaxSpeed/2); //TODO DO 1 PID AT A TIME !!!!!
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxSpeed, DriveTrainPID.kMaxSpeed/2); // TODO DO 1 PID AT A TIME !!!!!
-    private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxTurnAngularSpeed, DriveTrainPID.kMaxTurnAngularSpeed/2); // TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 2); //TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 2); // TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(8, 8); // TODO DO 1 PID AT A TIME !!!!!
 
     private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(1, 0),
-            Rotation2d.fromDegrees(180));
+            Rotation2d.fromDegrees(180)); //180
 
     private static final double kdriveMaxDriveSpeed = 0.1; // meters per second
 
     private final DriveTrainPID m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(4/PIDConstant, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!!
-    private final ProfiledPIDController yController = new ProfiledPIDController(7/PIDConstant, 0, 0.0, Y_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!!
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(3/PIDConstant, 0, 0.0, OMEGA_CONSTRATINTS); //1 TODO DO 1 PID AT A TIME !!!!!
+    private final ProfiledPIDController xController = new ProfiledPIDController(.8, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
+    private final ProfiledPIDController yController = new ProfiledPIDController(.8, 0, 0.0, Y_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(0.4, 0, 0.0, OMEGA_CONSTRATINTS); //1 TODO DO 1 PID AT A TIME !!!!! 2/4
 
     private Pose2d goalPose;
 
@@ -77,7 +77,7 @@ public class AprilAlignCommand extends Command {
     Pose3d camToTarget = aprilTag.pose;
     Transform2d transform = new Transform2d(
         camToTarget.getTranslation().toTranslation2d(),
-        camToTarget.getRotation().toRotation2d().minus(Rotation2d.fromDegrees(0)));
+        camToTarget.getRotation().toRotation2d());
     
     // Transform the robot's pose to find the tag's pose
     Transform3d robotToCamera3d = Constants.CAMERA_TO_ROBOT.inverse();
@@ -108,6 +108,7 @@ public class AprilAlignCommand extends Command {
     }
 
     double omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians());
+    System.out.println(omegaSpeed);
     if (omegaController.atGoal()) {
       omegaSpeed = 0;
     }

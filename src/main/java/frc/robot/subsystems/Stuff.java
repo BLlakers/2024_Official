@@ -29,7 +29,7 @@ public class Stuff extends SubsystemBase {
     public Stuff()
     {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        zstuff = table.getDoubleArrayTopic("targetpose_cameraspace").subscribe(new double[] {0, 0, 0, 0, 0, 0});
+        zstuff = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[] {0, 0, 0, 0, 0, 0});
         
     }
 

@@ -34,10 +34,7 @@ public final class Constants {
     );
 
     public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
-      Inches.of(9.625).in(Meters), // x 
-      0,  // y
-      Inches.of(7.25).in(Meters), // z
-      new Rotation3d(Degrees.of(90).in(Radians),Degrees.of(0).in(Radians),Degrees.of(90).in(Radians)));
+      0,0,0, new Rotation3d(0,0,0));
     
     public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxAngularSpeed,DriveTrainPID.kModuleMaxAngularAcceleration);
     public static double driveEncoderCtsperRev = 6.8;
