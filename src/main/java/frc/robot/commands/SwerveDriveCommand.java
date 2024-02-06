@@ -16,6 +16,7 @@ public class SwerveDriveCommand extends Command {
   DoubleSupplier m_leftY;
   DoubleSupplier m_leftX;
   DoubleSupplier m_rightX;
+  DoubleSupplier m_AccelerateRT;
   // double leftY;
   // double leftX;
   // double rightX;
@@ -29,12 +30,13 @@ public class SwerveDriveCommand extends Command {
   // double w3ca;
   // double w4ca;
 
-  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX,
+  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX, DoubleSupplier _AccelerateRT,
       DriveTrainPID _dTrain) {
     m_leftY = _leftY;
     m_leftX = _leftX;
     m_rightX = _rightX;
     m_DriveTrain = _dTrain;
+    m_AccelerateRT = _AccelerateRT;
     addRequirements(m_DriveTrain);
   }
 
@@ -52,10 +54,11 @@ public class SwerveDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    Double RT;
     Double x;
     Double y;
     Double rot;
+    double AccelerateRT = m_AccelerateRT.getAsDouble();
     Double leftX = m_leftX.getAsDouble();
     Double leftY = m_leftY.getAsDouble();
     Double rightX = m_rightX.getAsDouble();
@@ -84,10 +87,10 @@ public class SwerveDriveCommand extends Command {
     } else {
       rot = -rightX;
     }
-
+    RT = AccelerateRT;
     // Swerve drive uses a different Y and X than expected!
 
-    m_DriveTrain.drive(y * DriveTrainPID.kMaxSpeed, x * DriveTrainPID.kMaxSpeed, rot* DriveTrainPID.kMaxTurnAngularSpeed);
+    m_DriveTrain.drive(y * DriveTrainPID.kMaxSpeed * RT, x * DriveTrainPID.kMaxSpeed *RT, rot * DriveTrainPID.kMaxSpeed * RT);
     Pose2d pose = m_DriveTrain.getPose2d();
     //System.out.println(pose);
   }
