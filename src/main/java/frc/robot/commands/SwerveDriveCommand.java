@@ -90,7 +90,7 @@ public class SwerveDriveCommand extends Command {
     RT = AccelerateRT;
     // Swerve drive uses a different Y and X than expected!
 
-    m_DriveTrain.drive(y * DriveTrainPID.kMaxSpeed * RT, x * DriveTrainPID.kMaxSpeed *RT, rot * DriveTrainPID.kMaxSpeed * RT);
+    m_DriveTrain.drive(y * DriveTrainPID.kMaxSpeed * RT, x * DriveTrainPID.kMaxSpeed *RT, rot * DriveTrainPID.kMaxTurnAngularSpeed * RT);
     Pose2d pose = m_DriveTrain.getPose2d();
     //System.out.println(pose);
   }
