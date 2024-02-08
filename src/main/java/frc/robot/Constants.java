@@ -17,7 +17,7 @@ public final class Constants {
 
     // Robot
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(2, 0, 0), // Translation constants 
+      new PIDConstants(7, 0, 0), // Translation constants 
       new PIDConstants(3, 0, 0), // Rotation constants 
       3.68, 
       0.3875,
@@ -63,7 +63,7 @@ public final class Constants {
     public static int buttonOptions = 7;
     public static int buttonLS = 9;
     public static int buttonRS = 10;
-    public static double deadzone = 0.1;
+    public static double deadzone = 0.17;
 
     // Drive Train
     public static int blSteerMotorChannel = 1;
