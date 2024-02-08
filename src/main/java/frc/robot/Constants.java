@@ -17,7 +17,7 @@ public final class Constants {
 
     // Robot
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(7, 0, 0), // Translation constants 
+      new PIDConstants(5, 0, 0), // Translation constants 
       new PIDConstants(3, 0, 0), // Rotation constants 
       3.68, 
       0.3875,
