@@ -25,21 +25,21 @@ import frc.robot.subsystems.DriveTrainPID;
 public class AprilAlignCommand extends Command {
   public static double ConstraintsConstant = 1; 
   public static double PIDConstant = 16; 
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 2); //TODO DO 1 PID AT A TIME !!!!!
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 2); // TODO DO 1 PID AT A TIME !!!!!
-    private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = new TrapezoidProfile.Constraints(8, 8); // TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); //TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
 
-    private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(1, 0),
-            Rotation2d.fromDegrees(180)); //180
+    private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(2, 0),
+            Rotation2d.fromDegrees(0)); //180
 
     private static final double kdriveMaxDriveSpeed = 0.1; // meters per second
 
     private final DriveTrainPID m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(.8, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
-    private final ProfiledPIDController yController = new ProfiledPIDController(.8, 0, 0.0, Y_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(0.4, 0, 0.0, OMEGA_CONSTRATINTS); //1 TODO DO 1 PID AT A TIME !!!!! 2/4
+    private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
+    private final ProfiledPIDController yController = new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0.0, OMEGA_CONSTRAINTS); //1 TODO DO 1 PID AT A TIME !!!!! 2/4
 
     private Pose2d goalPose;
 
@@ -74,21 +74,18 @@ public class AprilAlignCommand extends Command {
       return;
     }
     // Find the tag we want to chase
-    Pose3d camToTarget = aprilTag.pose;
-    Transform2d transform = new Transform2d(
-        camToTarget.getTranslation().toTranslation2d(),
-        camToTarget.getRotation().toRotation2d());
-    
-    // Transform the robot's pose to find the tag's pose
-    Transform3d robotToCamera3d = Constants.CAMERA_TO_ROBOT.inverse();
-    Transform2d robotToCamera2d = new Transform2d(robotToCamera3d.getTranslation().toTranslation2d(),
-    robotToCamera3d.getRotation().toRotation2d());
-    Pose2d cameraPose = robotPose.transformBy(robotToCamera2d);
-    Pose2d targetPose = cameraPose.transformBy(transform);
-    System.out.println(robotToCamera3d);
+    Pose3d botToTarget = aprilTag.pose;
+    Pose2d targetPose = new Pose2d(
+      botToTarget.getTranslation().toTranslation2d(),
+      Rotation2d.fromRadians(Math.atan2(botToTarget.getY(), botToTarget.getX()))
+    );
+    System.out.println("3D:" + botToTarget.toString());
+    System.out.println("2D:" + targetPose.toString());
     
     // Transform the tag's pose to set our goal
-    goalPose = targetPose.transformBy(TAG_TO_GOAL);
+    goalPose = targetPose.transformBy(TAG_TO_GOAL.inverse());
+    System.out.println("goalPose:" + goalPose.toString());
+    System.out.println("robotPose:" + robotPose.toString());
 
     if (null != goalPose) {
       // Drive
@@ -117,7 +114,7 @@ public class AprilAlignCommand extends Command {
     //ySpeed = Math.min(ySpeed, kdriveMaxDriveSpeed);
 
     m_drivetrain.driveChassisSpeeds(
-      ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+       ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
     
     SmartDashboard.putNumber("FRxSpeed", xSpeed);
     SmartDashboard.putNumber("FRySpeed", ySpeed);
