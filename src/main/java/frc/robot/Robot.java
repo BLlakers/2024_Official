@@ -14,7 +14,6 @@ import frc.robot.subsystems.SwerveModule;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private Arm m_Arm;
   String codeVersion = "0.0";
   
   // commit
@@ -61,7 +60,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-
+    System.out.println(m_robotContainer.m_Arm.ArmPosition);
   }
 
   @Override
