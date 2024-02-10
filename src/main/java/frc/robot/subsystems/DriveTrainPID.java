@@ -53,7 +53,7 @@ public class DriveTrainPID extends SubsystemBase {
   public static final double kMaxAngularSpeed = Units.rotationsPerMinuteToRadiansPerSecond(Constants.NeoMaxSpeedRPM / Constants.TurnGearRatio); // 1/2 rotation per second
   public static final double kMaxTurnAngularSpeed = kMaxSpeed / Constants.SMBackLeftLocation.getNorm(); // 1/2 rotation per second
   public static final double kModuleMaxAngularAcceleration = Math.PI / 3;
-  private final AHRS navx = new AHRS();
+  public final AHRS navx = new AHRS();
 
   // constructor for each swerve module
   public final SwerveModule m_frontRight;

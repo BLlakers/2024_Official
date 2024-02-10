@@ -1,52 +1,44 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-
 import java.util.List;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.DriveTrainPID;
-import frc.robot.commands.AutoCommand;
-import frc.robot.commands.ManualRotateArmCommand;
+import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AutoRotateArmCommand;
 import frc.robot.commands.SwerveDriveCommand;
-import frc.robot.Constants.RobotVersionConstants;
-import frc.robot.Other.RobotVersion;
-import frc.robot.commands.AlignCommand;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Tags;
-import frc.robot.subsystems.Stuff;
-import frc.robot.subsystems.SwerveModule;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Stuff;
+import frc.robot.subsystems.Tags;
 
 public class RobotContainer {
   DriveTrainPID m_DriveTrainPID = new DriveTrainPID(Constants.defaultRobotVersion);
   Arm m_Arm = new Arm();
   Stuff m_Stuff = new Stuff();
   Tags m_Tags = new Tags();
+  Intake m_Intake = new Intake();
+  //Shooter 
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
   XboxController manipController = new XboxController(Constants.ManipControllerChannel);
@@ -68,6 +60,8 @@ public class RobotContainer {
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
+    JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
+
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
 
@@ -115,10 +109,31 @@ public class RobotContainer {
     // WP - DO NOT UNCOMMENT WITHOUT TALKING TO WARD
     driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
+    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
+    
+    
     manipButtonLeft.onTrue(m_Arm.LowerArm()); // starts at 1 (5 deegrees) goes down
     manipButtonRight.onTrue(m_Arm.RaiseArm());
-    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d()); // starts at 1, when pressed goes up to 2 (82 Deegrees),
+    
+    
+    
+    manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
+    manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
+    
+    
+    
+    manipButtonX.whileTrue(m_Intake.RaiseIntake());
+    manipButtonY.whileTrue(m_Intake.LowerIntake());
+    manipButtonX.onFalse(m_Intake.StopIntake());
+    manipButtonY.onFalse(m_Intake.StopIntake());
+    
+    
+    
+    
+    
+    // starts at 1, when pressed goes up to 2 (82 Deegrees),
                                                               // when pressed
+            
     // again goes up to 3 (85 deegrees)
     // TODO RT Accelerate LT Deaccelerate
 
