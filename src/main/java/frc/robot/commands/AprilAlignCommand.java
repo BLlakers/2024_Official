@@ -29,7 +29,9 @@ public class AprilAlignCommand extends Command {
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
 
-    private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(2, 0),
+    private static final double MAX_RADIUS = 3; // meters
+    private static final double OPTIMAL_RADIUS = 2; // meters
+    private static final Transform2d DEFAULT_TAG_TO_GOAL = new Transform2d(new Translation2d(OPTIMAL_RADIUS, 0),
             Rotation2d.fromDegrees(0)); //180
 
     private static final double kdriveMaxDriveSpeed = 0.1; // meters per second
@@ -39,7 +41,7 @@ public class AprilAlignCommand extends Command {
 
     private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
     private final ProfiledPIDController yController = new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0.0, OMEGA_CONSTRAINTS); //1 TODO DO 1 PID AT A TIME !!!!! 2/4
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS); //1 TODO DO 1 PID AT A TIME !!!!! 2/4
 
     private Pose2d goalPose;
 
@@ -75,17 +77,23 @@ public class AprilAlignCommand extends Command {
     }
     // Find the tag we want to chase
     Pose3d botToTarget = aprilTag.pose;
-    Pose2d targetPose = new Pose2d(
-      botToTarget.getTranslation().toTranslation2d(),
-      Rotation2d.fromRadians(Math.atan2(botToTarget.getY(), botToTarget.getX()))
-    );
+    Translation2d botToTargetTranslation = botToTarget.getTranslation().toTranslation2d();
+    Rotation2d targetDirection = botToTargetTranslation.getAngle();
     System.out.println("3D:" + botToTarget.toString());
-    System.out.println("2D:" + targetPose.toString());
+    System.out.println("2D:" + botToTargetTranslation.toString());
+    
     
     // Transform the tag's pose to set our goal
-    goalPose = targetPose.transformBy(TAG_TO_GOAL.inverse());
+    Transform2d botToGoalPose = new Transform2d(
+      botToTargetTranslation.times(
+        1 - (OPTIMAL_RADIUS / botToTargetTranslation.getNorm())
+      ),
+      targetDirection
+    );
+    goalPose = robotPose.transformBy(botToGoalPose);
     System.out.println("goalPose:" + goalPose.toString());
     System.out.println("robotPose:" + robotPose.toString());
+    System.out.println("botToGoalPose:" + botToGoalPose.toString());
 
     if (null != goalPose) {
       // Drive
