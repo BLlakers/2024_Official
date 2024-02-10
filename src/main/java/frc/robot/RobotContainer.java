@@ -46,6 +46,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
 import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.Intake;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
 
@@ -54,6 +55,7 @@ public class RobotContainer {
   Arm m_Arm = new Arm();
   Stuff m_Stuff = new Stuff();
   Tags m_Tags = new Tags();
+  Intake m_intake = new Intake();
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
   XboxController manipController = new XboxController(Constants.ManipControllerChannel);
@@ -85,7 +87,9 @@ public class RobotContainer {
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
-    NamedCommands.registerCommand("RaiseArm", m_Arm.RaiseArm());
+    NamedCommands.registerCommand("StopDriveAndWait", StopDriveAndWait());
+    NamedCommands.registerCommand("RunIntakeMotor", m_intake.RunIntake());
+    NamedCommands.registerCommand("StopIntakeMotor", m_intake.StopIntake());
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Another option that allows you to specify the default auto by its name
@@ -187,6 +191,11 @@ public class RobotContainer {
         new WaitCommand(3.0),
        autoChooser.getSelected()
       );
+  }
 
+  public Command StopDriveAndWait(){
+      return new SequentialCommandGroup( 
+        m_DriveTrainPID.StopDrive(),
+        new WaitCommand(3.0));
   }
 }

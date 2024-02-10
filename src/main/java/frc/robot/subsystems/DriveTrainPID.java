@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.revrobotics.CANSparkMax;
 
 /** Represents a swerve drive style drivetrain. */
 
@@ -338,4 +339,12 @@ public class DriveTrainPID extends SubsystemBase {
     m_backLeft.stop();
     m_backRight.stop();
   }
+  public Command StopDrive() {
+
+    return runOnce(
+        () -> {
+        stopModules();
+        });
+  }
+
 }

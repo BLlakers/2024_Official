@@ -20,13 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RaiseArm"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
+            "name": "StopDriveAndWait"
           }
         },
         {
@@ -36,15 +30,21 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "StopDriveAndWait"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Left note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopDriveAndWait"
           }
         }
       ]

@@ -45,6 +45,7 @@ public final class Constants {
     //ARM 
     public static int armMotorChannel1 = 9;
     public static int armMotorChannel2 = 10;
+    public static int intakeMtrChannel = 11;
     public static double PositionDown = 0;
     public static double PositionPickup = 30; // 69
 
