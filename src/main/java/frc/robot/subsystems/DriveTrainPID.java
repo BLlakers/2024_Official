@@ -347,4 +347,9 @@ public class DriveTrainPID extends SubsystemBase {
     m_backLeft.stop();
     m_backRight.stop();
   }
+  public Command Break(){
+  return run(()->{
+  stopModules();
+    });
+  }
 }

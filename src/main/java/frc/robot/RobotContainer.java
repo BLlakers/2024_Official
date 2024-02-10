@@ -65,6 +65,7 @@ public class RobotContainer {
   JoystickButton manipButtonY = new JoystickButton(manipController, Constants.buttonY);
   JoystickButton manipButtonRight = new JoystickButton(manipController, Constants.buttonRight);
   JoystickButton manipButtonLeft = new JoystickButton(manipController, Constants.buttonLeft);
+  
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
@@ -119,6 +120,8 @@ public class RobotContainer {
     manipButtonRight.onTrue(m_Arm.RaiseArm());
     driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d()); // starts at 1, when pressed goes up to 2 (82 Deegrees),
                                                               // when pressed
+    driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
+
     // again goes up to 3 (85 deegrees)
     // TODO RT Accelerate LT Deaccelerate
 
