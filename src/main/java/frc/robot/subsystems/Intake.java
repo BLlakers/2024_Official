@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase  {
     public int IntakePos = 1; 
 
     public Intake(){
-        intakeWheelMtr1.follow(intakeWheelMtr2, true);
+        // intakeWheelMtr1.follow(intakeWheelMtr2);
     }
 
     @Override
@@ -43,14 +43,14 @@ public class Intake extends SubsystemBase  {
     public Command RaiseIntake() {
         return run(
             () -> {
-            intakeAngleMtr.set(1);  
+            intakeAngleMtr.set(.5);  
             });
       }
 
     public Command LowerIntake() {
         return runOnce(
             () -> {
-            intakeAngleMtr.set(-1);
+            intakeAngleMtr.set(-.5);
             });
       }
 
@@ -62,8 +62,8 @@ public Command StopIntake(){
     public Command RunIntakeWheels() {
         return runOnce(
             () -> {
-        intakeWheelMtr1.set(-1);
-        intakeWheelMtr2.set(1);
+        intakeWheelMtr1.set(.5);
+        intakeWheelMtr2.set(-.5);
             });
       }
 
