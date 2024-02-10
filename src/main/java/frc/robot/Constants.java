@@ -68,6 +68,7 @@ public final class Constants {
     public static int buttonLS = 9;
     public static int buttonRS = 10;
     public static double deadzone = 0.17;
+    public static double RTdeadzone = .01;
 
     // Drive Train
     public static int blDriveMotorChannel = 2;
@@ -109,7 +110,7 @@ public final class Constants {
       public static final double brTurnEncoderOffset = 0.625;
     } 
 
-    public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
+    public static final RobotVersion defaultRobotVersion = RobotVersion.v2023;
 
 
 }

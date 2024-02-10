@@ -4,6 +4,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import com.revrobotics.CANSparkMax;
 
@@ -85,12 +86,24 @@ public class SwerveDriveCommand extends Command {
     if (Math.abs(rightX) < Constants.deadzone) {
       rot = 0.0;
     } else {
-      rot = -rightX;
+      rot = -Math.signum(rightX) * (Math.abs(rightX) - Constants.deadzone) / (1 - Constants.deadzone);
     }
     RT = AccelerateRT;
-    // Swerve drive uses a different Y and X than expected!
 
-    m_DriveTrain.drive(y * DriveTrainPID.kMaxSpeed * RT, x * DriveTrainPID.kMaxSpeed *RT, rot * DriveTrainPID.kMaxTurnAngularSpeed * RT);
+    double normalizingFactor = Math.sqrt(x*x + y*y);
+    if (normalizingFactor > 0)
+    {
+      x /= normalizingFactor;
+      y /= normalizingFactor;
+    }
+    // Swerve drive uses a different Y and X than expected!
+    double xSpeed = y * DriveTrainPID.kMaxSpeed * RT;
+    double ySpeed = x * DriveTrainPID.kMaxSpeed * RT;
+    double rotSpeed = rot * DriveTrainPID.kMaxTurnAngularSpeed;
+    SmartDashboard.putNumber("Robot/Controller/Command/X Speed", xSpeed);
+    SmartDashboard.putNumber("Robot/Controller/Command/Y Speed", ySpeed);
+
+    m_DriveTrain.drive(xSpeed, ySpeed, rotSpeed);
     Pose2d pose = m_DriveTrain.getPose2d();
     //System.out.println(pose);
   }
