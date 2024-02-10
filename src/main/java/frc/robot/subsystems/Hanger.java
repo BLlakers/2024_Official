@@ -14,17 +14,18 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
-
+import edu.wpi.first.math.controller.ArmFeedforward;
 import java.util.function.Supplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class Hanger extends SubsystemBase{
+  
     public CANSparkMax hangerLeftMtr = new CANSparkMax(Constants.hangerLeftMtrC,
-    com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-  public CANSparkMax hangerRightMtr = new CANSparkMax(Constants.hangerRightMtrC,
-    com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+        com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+    public CANSparkMax hangerRightMtr = new CANSparkMax(Constants.hangerRightMtrC,
+        com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
     public RelativeEncoder hangerLeftMtrEnc = hangerLeftMtr.getEncoder();
     public RelativeEncoder hangerRightMtrEnc = hangerRightMtr.getEncoder(); 

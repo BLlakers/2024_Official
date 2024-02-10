@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -27,7 +30,8 @@ public class Intake extends SubsystemBase  {
     public RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtr1.getEncoder(); 
     public RelativeEncoder intakeWheelMtr2Enc =  intakeWheelMtr2.getEncoder();
     public int IntakePos = 1; 
-
+  public ArmFeedforward IntakeFeedForward = new ArmFeedforward(0, 0, 0);
+    public PIDController m_ArmController = new PIDController(0, 0, 0);
     public Intake(){
         // intakeWheelMtr1.follow(intakeWheelMtr2);
     }
@@ -81,4 +85,18 @@ public Command StopIntake(){
         intakeWheelMtr2.set(-1);
             });
       }
+
+public void setIntakeAngle(Rotation2d angle){
+    double IntakeAngleFeedforward = IntakeFeedForward.calculate(angle.getRadians(), 0);
+    double IntakeAngleFeedback = m_ArmController.calculate(getIntakeAngle().getRadians(), angle.getRadians());
+    intakeAngleMtr.setVoltage(IntakeAngleFeedback + IntakeAngleFeedforward); //TODO INCORRECT
+}
+
+    public Rotation2d getIntakeAngle() {
+        // TODO
+        return new Rotation2d();
+    }
+
+
+
 }
