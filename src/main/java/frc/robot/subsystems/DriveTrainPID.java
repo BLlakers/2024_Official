@@ -284,7 +284,13 @@ public class DriveTrainPID extends SubsystemBase {
     resetOdometry(pose2d);
 
   }
-
+/**
+ * Reset's the Robots Odometry using the Gyro's Current Rotational Position
+ * 
+ * 
+ * 
+ * @param pose2d 
+ */
   public void resetOdometry(Pose2d pose2d) {
     m_odometry.resetPosition(navx.getRotation2d(), getSwerveModulePositions(), pose2d);
   }
@@ -298,7 +304,12 @@ public class DriveTrainPID extends SubsystemBase {
   public ChassisSpeeds getChassisSpeeds() {
     return m_kinematics.toChassisSpeeds(getSwerveModuleStates());
   }
-
+/**
+ * This command gets the 4 individual SwerveModule States, and groups it into 1 array.
+ * <pi> Used for getting our chassis (robots) speed.
+ * @author Jared Forchheimer, Dimitri Lezcano
+ * @return 4 different SwerveModuleStates
+ */
   public SwerveModuleState[] getSwerveModuleStates() {
     return new SwerveModuleState[] {
         m_frontLeft.getModuleState(),
@@ -308,13 +319,29 @@ public class DriveTrainPID extends SubsystemBase {
     };
   }
 
+/**
+ * 
+ * This is a runnable command. 
+ * <li> This resets the gyro's position.
+ * <li> This is needed for Auto, Limelight, and the DriveTrain.
+ *@author Jared Forchheimer, Dimitri Lezcano
+ *@return Pose2d
+ */
+
   public Command resetPose2d() {
     return runOnce(
         () -> {
           resetPose(new Pose2d());
         });
   }
-
+/**
+ * 
+ * This is a runnable command. 
+ * <li> This toggles field relative on and off.
+ * <li> If 
+ *@author Jared Forchheimer, Dimitri Lezcano
+ *@return Pose2d
+ */
   public Command toggleFieldRelativeEnable() {
 
     return runOnce(
