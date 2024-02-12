@@ -46,6 +46,7 @@ public final class Constants {
     public static double DriveGearRatio = 8.14;
     public static double TurnGearRatio = 12.8;
     public static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
+
     //ARM 
     public final static int intakeAngleMtrC = 11;
     public final static int intakeWheelMtr1C = 12;
@@ -58,8 +59,8 @@ public final class Constants {
 
 
     //HANGER
-    public final static int hangerLeftMtrC = 17;
-    public final static int hangerRightMtrC = 18;
+    public final static int hangerLeftMtrC = 9;
+    public final static int hangerRightMtrC = 10;
 
 
 
