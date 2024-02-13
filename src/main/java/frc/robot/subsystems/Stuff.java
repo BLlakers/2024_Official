@@ -59,7 +59,7 @@ public class Stuff extends SubsystemBase {
         //jank distance method
         double angleradians = cameray * (3.14159/180.0);
         double jankdistance = (heightfromfloor - targetheightfromfloor) / Math.tan(angleradians) + 10;
-        //System.out.println(jankdistance);
+        System.out.println(jankdistance);
 
         //double[] s = zstuff.get();
         //SmartDashboard.putNumber("Limelight X", camerax);

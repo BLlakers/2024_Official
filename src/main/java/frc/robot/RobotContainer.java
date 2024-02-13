@@ -45,6 +45,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
 import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.JsonING;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
 
@@ -53,6 +54,7 @@ public class RobotContainer {
   Arm m_Arm = new Arm();
   Stuff m_Stuff = new Stuff();
   Tags m_Tags = new Tags();
+  JsonING M_JsonTwo = new JsonING();
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
   XboxController manipController = new XboxController(Constants.ManipControllerChannel);
