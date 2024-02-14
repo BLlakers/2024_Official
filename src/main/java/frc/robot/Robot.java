@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // m_robotContainer.m_Arm.ArmPosition = 1;
+    m_robotContainer.m_DriveTrainPID.FieldRelativeEnable = false;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // m_robotContainer.m_DriveTrain.startYaw =
     // m_robotContainer.m_DriveTrain.getGyroYaw();
@@ -73,6 +74,7 @@ public class Robot extends TimedRobot {
     }
     // m_robotContainer.m_DriveTrain.startYaw =
     // m_robotContainer.m_DriveTrain.getGyroYaw();
+    m_robotContainer.m_DriveTrainPID.FieldRelativeEnable = true;
 
   }
 
