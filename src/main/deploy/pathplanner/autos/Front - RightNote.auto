@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.932024832710634,
-      "y": 4.864768248055015
+      "x": 1.28,
+      "y": 5.559932574410603
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Path"
+            "pathName": "Front - RightNote"
           }
         },
         {
@@ -26,7 +26,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Left Path"
+            "pathName": "Front - RightNote - MidNote"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left note"
           }
         }
       ]

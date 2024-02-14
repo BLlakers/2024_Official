@@ -10,11 +10,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -31,6 +33,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrainPID;
@@ -79,7 +82,8 @@ public class RobotContainer {
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
   private final SendableChooser<Command> autoChooser;
-
+  private final Field2d field;
+  List<Pose2d> currentPath = new ArrayList<Pose2d>();
 
   public RobotContainer() {
     configureShuffleboard();
@@ -91,6 +95,31 @@ public class RobotContainer {
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
+        field = new Field2d();
+      SmartDashboard.putData("Field", field);
+
+      // Logging callback for current robot pose
+      PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+          // Do whatever you want with the pose here
+          field.setRobotPose(pose);
+      });
+
+
+      // Logging callback for target robot pose
+      PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+          // Do whatever you want with the pose here
+          field.getObject("target pose").setPose(pose);
+      });
+
+
+      // Logging callback for the active path, this is sent as a list of poses
+      PathPlannerLogging.setLogActivePathCallback((poses) -> {
+          // Do whatever you want with the poses here
+          field.getObject("path").setPoses(poses);
+      });
+  }
+  public void periodic(){
+    field.setRobotPose(m_DriveTrainPID.getPose2d());
   }
 
   /**
@@ -156,24 +185,13 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(12.1, 8).setKinematics(m_DriveTrainPID.m_kinematics); // we don't know our acceleration 
-   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,new Rotation2d(0)), List.of(new Translation2d(1,0), new Translation2d(1,-1)), new Pose2d(2, -1, Rotation2d.fromDegrees(180)),trajectoryConfig);
-  
-  
-  PIDController xController = new PIDController(1.5, 0, 0);
-  PIDController yController = new PIDController(1.5, 0, 0);
-  ProfiledPIDController thetaController = new ProfiledPIDController(3, 0,0, Constants.kthetaController);
+    //loads New Auto auto file
+       //return new PathPlannerAuto("New Auto");
+      return new SequentialCommandGroup( 
+        new InstantCommand( () -> m_DriveTrainPID.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
+        new WaitCommand(3.0),
+       autoChooser.getSelected()
+      );
 
-  SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-trajectory, m_DriveTrainPID::getPose2d, m_DriveTrainPID.m_kinematics, xController, yController, thetaController, m_DriveTrainPID::setModuleStates, m_DriveTrainPID);
-
-return new SequentialCommandGroup(new InstantCommand(() -> m_DriveTrainPID.resetOdometry(trajectory.getInitialPose())), swerveControllerCommand, new InstantCommand(() -> m_DriveTrainPID.stopModules()));
-
-/*    Command autoSeq = Commands.sequence(
-        m_DriveTrainPID.ZeroGyro(),
-        Commands.waitSeconds(1.0),
-        new AutoCommand(m_DriveTrainPID, m_chooser.getSelected()));
-    return autoSeq;
-    // return new AutoCommand(m_DriveTrain);*/
   }
 }
