@@ -32,12 +32,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 /** Represents a swerve drive style drivetrain. */
 
 public class DriveTrainPID extends SubsystemBase {
-  public PIDController m_xController = new PIDController(1, 0, 0);
-  public PIDController m_yController = new PIDController(1, 0, 0);
-  public ProfiledPIDController m_thetaController = new ProfiledPIDController(1, 0, 0,
-      new TrapezoidProfile.Constraints(kMaxAngularSpeed, kModuleMaxAngularAcceleration));
 
-  public SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+    public SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
     Constants.SMFrontLeftLocation,
     Constants.SMFrontRightLocation, 
     Constants.SMBackLeftLocation, 
@@ -46,26 +42,30 @@ public class DriveTrainPID extends SubsystemBase {
 
   public boolean m_WheelLock = false;
   public boolean m_FieldRelativeEnable = true;
-  public static final double kMaxSpeed = Units.feetToMeters(12.4); // WP this seemed to work don't know why // 3.68
-                                                                   // meters per second or
-  // 12.1
-  // ft/s (max speed of SDS Mk3 with Neo motor)
+  public static final double kMaxSpeed = Units.feetToMeters(12.5); // WP this seemed to work don't know why // 3.68 meters per second or 12.1
+  // ft/s (max speed of SDS Mk3 with Neo motor) // TODO KMaxSpeed needs to go with enum
   public static final double kMaxAngularSpeed = Units.rotationsPerMinuteToRadiansPerSecond(Constants.NeoMaxSpeedRPM / Constants.TurnGearRatio); // 1/2 rotation per second
   public static final double kMaxTurnAngularSpeed = kMaxSpeed / Constants.SMBackLeftLocation.getNorm(); // 1/2 rotation per second
-  public static final double kModuleMaxAngularAcceleration = Math.PI / 3;
+  public static final double kModuleMaxAngularAcceleration = Math.PI / 3; // what is this used for again?
+
+
+  // creates a gyro object. Gyro gives the robots rotation/ where the robot is pointed. 
   private final AHRS navx = new AHRS();
 
-  // constructor for each swerve module
+  //Creates each swerve module. Swerve modules have a turning and drive motor + a turning and drive encoder. 
   public final SwerveModule m_frontRight;
   public final SwerveModule m_frontLeft;
   public final SwerveModule m_backLeft;
   public final SwerveModule m_backRight;
+  public SwerveDriveKinematics m_initialStates; // TODO unused variable
 
-  // INITIAL POSITIONS to help define swerve drive odometry. THis was a headache
-  public SwerveDriveKinematics m_initialStates;
 
+  // Creates an odometry object. Odometry tells the robot its position on the field.
   private final SwerveDriveOdometry m_odometry;
 
+
+  /** Flips our position on the field depending on the alliance we are on. Used for Auto.
+  */
   public boolean flipFieldPose() {
     // Boolean supplier that controls when the path will be mirrored for the red
     // alliance
@@ -101,15 +101,25 @@ public class DriveTrainPID extends SubsystemBase {
   // Set up custom logging to add the current path to a field 2d widget
   // PathPlannerLogging.setLogActivePathCallback((poses) ->
   // field.getObject("path").setPoses(poses));
-  public Pose2d getPose2d() {
-    Pose2d current_pose_meters = m_odometry.getPoseMeters();
 
-    return current_pose_meters;
+  /** Gets our current position in meters on the field. 
+  @return A current position on the field.
+  
+  * <pi> A translation2d (X and Y on the field) -> {@link #m_kinematics} + A rotation2d (Rot X and Y on the field) -> {@link #nav}
+  */
+  public Pose2d getPose2d() {
+  return m_odometry.getPoseMeters();
   }
 
-  // Constructor
-  public DriveTrainPID(RobotVersion version) {
+  // Constructor 
+  /** Our driveTrain Constructor. <p>
+   * In here, we initialize our swerve modules (example -> {@link #m_frontLeft}), Get input from autonomous and initialize our odometry -> {@link #m_odometry}. <p> Various other DriveTrain Related thing are initalized here too. 
+   * @param RobotVersion
+   *
+   */
+  public DriveTrainPID(RobotVersion version) { 
     AutoBuilder.configureHolonomic(
+      
         this::getPose2d,
         this::resetPose,
         this::getChassisSpeeds,
@@ -128,9 +138,9 @@ public class DriveTrainPID extends SubsystemBase {
           return false;
         },
         this);
-    m_initialStates = new SwerveDriveKinematics(Constants.SMFrontLeftLocation,Constants.SMFrontRightLocation,Constants.SMBackLeftLocation,
+            m_initialStates = new SwerveDriveKinematics(Constants.SMFrontLeftLocation,Constants.SMFrontRightLocation,Constants.SMBackLeftLocation,
        Constants.SMBackRightLocation);
-
+        // sets our wanted offsets. Varies between 2023 and 2024.
     double flTurnOffset = 0, frTurnOffset = 0, blTurnOffset = 0, brTurnOffset = 0;
     if (Constants.defaultRobotVersion == RobotVersion.v2023) {
       flTurnOffset = Constants.RobotVersion2023.flTurnEncoderOffset;
@@ -164,20 +174,23 @@ public class DriveTrainPID extends SubsystemBase {
         Constants.brSteerMotorChannel,
         Constants.brEncoderChannel,
         brTurnOffset); // 0.05178
-
+//initializes odometry
     m_odometry = new SwerveDriveOdometry(
         this.m_kinematics,
-        navx.getRotation2d(),
+         navx.getRotation2d(),
         getSwerveModulePositions());
+      
 
   }
-
+/**
+ * Gets the Position of the four SwerveModules. <p>
+ * This gets the encoder in the motor (drive) and the encoder on the swerve module. 
+ */
   public SwerveModulePosition[] getSwerveModulePositions() {
     SwerveModulePosition frontLeftPosition = m_frontLeft.getModulePosition();
     SwerveModulePosition frontRightPosition = m_frontRight.getModulePosition();
     SwerveModulePosition backLeftPosition = m_backLeft.getModulePosition();
     SwerveModulePosition backRightPosition = m_backRight.getModulePosition();
-
     return new SwerveModulePosition[] {
         frontLeftPosition,
         frontRightPosition,
@@ -216,7 +229,7 @@ public class DriveTrainPID extends SubsystemBase {
     }
 
   }
-
+/** Tells our modules what speed to go to */
   public void setModuleStates(SwerveModuleState[] swerveModuleStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveModule.kDriveMaxSpeed);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -224,7 +237,7 @@ public class DriveTrainPID extends SubsystemBase {
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
   }
-
+/** Tells our wheels to go to the Wheel Locking position (0 m/s, forming an X) */
   public void WheelLock() {
     m_backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d(3 * (Math.PI / 4))));
     m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d((Math.PI / 4))));
@@ -234,7 +247,9 @@ public class DriveTrainPID extends SubsystemBase {
 
   @Override
   public void periodic() {
+    //updates our Odometry
     updateOdometry();
+    //updating our current position
     Pose2d currentPose = this.getPose2d();
     ChassisSpeeds currentChassisSpeeds = this.getChassisSpeeds();
     SmartDashboard.putNumber("Robot/Odometry/Pose X", currentPose.getX());
@@ -243,16 +258,15 @@ public class DriveTrainPID extends SubsystemBase {
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds X", currentChassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Y", currentChassisSpeeds.vyMetersPerSecond);
     SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Rot",
-        Units.radiansToDegrees(currentChassisSpeeds.omegaRadiansPerSecond));
-    SmartDashboard.putNumber("2023 Back right encoder pos", m_backRight.m_turningEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("2023 Front right encoder pos", m_frontRight.m_turningEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("2023 Back Left encoder pos", m_backLeft.m_turningEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("2023 Front Left encoder pos", m_frontLeft.m_turningEncoder.getAbsolutePosition());
+    Units.radiansToDegrees(currentChassisSpeeds.omegaRadiansPerSecond));
     SmartDashboard.putNumber("Robot/Odometry/navx/Rotation", navx.getRotation2d().getDegrees());
 
     super.periodic();
   }
-
+/**
+ * Runnable Command. <p> Tells the Wheels when to stop or not based off of a boolean varible named {@link #m_WheelLock}. <p> Used in drive Method
+ * 
+ */
   public Command WheelzLock() {
 
     return runOnce(
@@ -267,7 +281,10 @@ public class DriveTrainPID extends SubsystemBase {
           }
         });
   }
-
+/**
+ * Runnable Command. <p> Tells the Gyro to reset its heading/which way its facing. <p> Used in drive Method.
+ * 
+ */
   public Command ZeroGyro() {
     // Inline construction of command goes here.
     // Subsystem::RunOnce implicitly requires `this` subsystem.
@@ -278,16 +295,25 @@ public class DriveTrainPID extends SubsystemBase {
 
         });
   }
-
+/** Tells the robot to drive based of off a given velocity. <p> Used for Autonomous. 
+ * @param chassisSpeed (ChassisSpeeds) - this is the desired velocity we would like to drive the robot.
+ *
+ */
   public void driveChassisSpeeds(ChassisSpeeds chassisSpeed) {
     drive(chassisSpeed.vxMetersPerSecond, chassisSpeed.vyMetersPerSecond, chassisSpeed.omegaRadiansPerSecond);
   }
-
+/**
+ * Resets the Position of the Odometer, given our Current position.
+ * @param Pose2d (pose2d) - The current position of the robot on the field. This is a {@link #resetOdometry(Pose2d)} 
+ */
   public void resetPose(Pose2d pose2d) {
     resetOdometry(pose2d);
 
   }
-
+/**
+ * Reset's Odometry
+ * @param pose2d
+ */
   public void resetOdometry(Pose2d pose2d) {
     m_odometry.resetPosition(navx.getRotation2d(), getSwerveModulePositions(), pose2d);
   }
@@ -334,19 +360,22 @@ public class DriveTrainPID extends SubsystemBase {
           }
         });
   }
-
+  /**Updates our current Odometry */
   public void updateOdometry() {
     m_odometry.update(
         navx.getRotation2d(),
         getSwerveModulePositions());
   }
-
+/**Stops all the motors on the SwerveModules */
   public void stopModules() {
     m_frontLeft.stop();
     m_frontRight.stop();
     m_backLeft.stop();
     m_backRight.stop();
   }
+  /**
+   * Runnable Command. Runs the {@link #stopModules()} Command.
+   */
   public Command Break(){
   return run(()->{
   stopModules();
