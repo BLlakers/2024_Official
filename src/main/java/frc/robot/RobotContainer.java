@@ -122,8 +122,8 @@ public class RobotContainer {
     
     
     
-    manipButtonX.whileTrue(m_Intake.RaiseIntake());
-    manipButtonY.whileTrue(m_Intake.LowerIntake());
+    //manipButtonX.whileTrue(m_Intake.RaiseIntake());
+    //manipButtonY.whileTrue(m_Intake.LowerIntake());
     manipButtonX.onFalse(m_Intake.StopIntake());
     manipButtonY.onFalse(m_Intake.StopIntake());
     
