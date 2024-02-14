@@ -55,17 +55,7 @@ public class SwerveModule extends SubsystemBase {
     private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0,
             new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
-    /**
-     * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
-     * and turning encoder.
-     *
-     * @param driveMotorChannel     CAN ID for the drive motor.
-     * @param turningMotorChannel   CAN ID for the turning motor.
-     * @param driveEncoder          DIO input for the drive encoder channel A
-     * @param turnEncoderPWMChannel DIO input for the drive encoder channel B
-     * @param turnOffset            offset from 0 to 1 for the home position of the
-     *                              encoder
-     */
+
     /*
      * private void intizialze(){
      * m_turningPIDController.reset(new
@@ -83,9 +73,19 @@ public class SwerveModule extends SubsystemBase {
         SmartDashboard.putNumber("Robot/Swerve/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/Angle", turnEncVal);
         SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Pos" , driveEncPos);
         SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Vel" , driveEncVel);
+        
         super.periodic();
     }
-
+    /**
+     * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
+     * and turning encoder.
+     *
+     * @param driveMotorChannel     CAN ID for the drive motor.
+     * @param turningMotorChannel   CAN ID for the turning motor
+     * @param turnEncoderPWMChannel DIO input for the drive encoder channel B
+     * @param turnOffset            offset from 0 to 1 for the home position of the
+     *                              encoder
+     */
     public SwerveModule(int driveMotorChannel, int turningMotorChannel, int turnEncoderPWMChannel, double turnOffset) {
         // can spark max motor controller objects
         m_driveMotor = new CANSparkMax(driveMotorChannel, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
@@ -217,4 +217,5 @@ public class SwerveModule extends SubsystemBase {
         m_driveMotor.set(0);
         m_turningMotor.set(0);
     }
+    
 }

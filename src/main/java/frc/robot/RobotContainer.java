@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import java.util.List;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,6 +20,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -65,6 +65,7 @@ public class RobotContainer {
   JoystickButton manipButtonY = new JoystickButton(manipController, Constants.buttonY);
   JoystickButton manipButtonRight = new JoystickButton(manipController, Constants.buttonRight);
   JoystickButton manipButtonLeft = new JoystickButton(manipController, Constants.buttonLeft);
+  
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
@@ -101,7 +102,7 @@ public class RobotContainer {
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
-        () -> driverController.getLeftX(), () -> driverController.getRightX(), m_DriveTrainPID));
+        () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
     // limelight allign works on both controllers
     // manipButtonX.whileTrue(new AlignCommand(m_DriveTrain, () ->
     // frc.robot.subsystems.Stuff.angle));
@@ -119,6 +120,8 @@ public class RobotContainer {
     manipButtonRight.onTrue(m_Arm.RaiseArm());
     driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d()); // starts at 1, when pressed goes up to 2 (82 Deegrees),
                                                               // when pressed
+    driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
+
     // again goes up to 3 (85 deegrees)
     // TODO RT Accelerate LT Deaccelerate
 

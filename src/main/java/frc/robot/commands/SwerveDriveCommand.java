@@ -4,6 +4,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import com.revrobotics.CANSparkMax;
 
@@ -16,6 +17,7 @@ public class SwerveDriveCommand extends Command {
   DoubleSupplier m_leftY;
   DoubleSupplier m_leftX;
   DoubleSupplier m_rightX;
+  DoubleSupplier m_AccelerateRT;
   // double leftY;
   // double leftX;
   // double rightX;
@@ -29,12 +31,13 @@ public class SwerveDriveCommand extends Command {
   // double w3ca;
   // double w4ca;
 
-  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX,
+  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX, DoubleSupplier _AccelerateRT,
       DriveTrainPID _dTrain) {
     m_leftY = _leftY;
     m_leftX = _leftX;
     m_rightX = _rightX;
     m_DriveTrain = _dTrain;
+    m_AccelerateRT = _AccelerateRT;
     addRequirements(m_DriveTrain);
   }
 
@@ -52,10 +55,11 @@ public class SwerveDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    Double RT;
     Double x;
     Double y;
     Double rot;
+    double AccelerateRT = m_AccelerateRT.getAsDouble();
     Double leftX = m_leftX.getAsDouble();
     Double leftY = m_leftY.getAsDouble();
     Double rightX = m_rightX.getAsDouble();
@@ -82,12 +86,24 @@ public class SwerveDriveCommand extends Command {
     if (Math.abs(rightX) < Constants.deadzone) {
       rot = 0.0;
     } else {
-      rot = -rightX;
+      rot = -Math.signum(rightX) * (Math.abs(rightX) - Constants.deadzone) / (1 - Constants.deadzone);
     }
+    RT = AccelerateRT;
 
+    double normalizingFactor = Math.sqrt(x*x + y*y);
+    if (normalizingFactor > 0)
+    {
+      x /= normalizingFactor;
+      y /= normalizingFactor;
+    }
     // Swerve drive uses a different Y and X than expected!
+    double xSpeed = y * DriveTrainPID.kMaxSpeed * RT;
+    double ySpeed = x * DriveTrainPID.kMaxSpeed * RT;
+    double rotSpeed = rot * DriveTrainPID.kMaxTurnAngularSpeed;
+    SmartDashboard.putNumber("Robot/Controller/Command/X Speed", xSpeed);
+    SmartDashboard.putNumber("Robot/Controller/Command/Y Speed", ySpeed);
 
-    m_DriveTrain.drive(y * DriveTrainPID.kMaxSpeed, x * DriveTrainPID.kMaxSpeed, rot* DriveTrainPID.kMaxTurnAngularSpeed);
+    m_DriveTrain.drive(xSpeed, ySpeed, rotSpeed);
     Pose2d pose = m_DriveTrain.getPose2d();
     //System.out.println(pose);
   }

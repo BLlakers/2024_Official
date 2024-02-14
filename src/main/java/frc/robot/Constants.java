@@ -1,18 +1,15 @@
 package frc.robot;
 
-import edu.wpi.first.units.*;
-import frc.robot.Other.RobotVersion;
-import frc.robot.subsystems.DriveTrainPID;
-
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
 
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.robot.Other.RobotVersion;
 import frc.robot.subsystems.DriveTrainPID;
 
 public final class Constants {
@@ -70,7 +67,8 @@ public final class Constants {
     public static int buttonOptions = 7;
     public static int buttonLS = 9;
     public static int buttonRS = 10;
-    public static double deadzone = 0.1;
+    public static double deadzone = 0.17;
+    public static double RTdeadzone = .01;
 
     // Drive Train
     public static int blDriveMotorChannel = 2;
@@ -98,10 +96,10 @@ public final class Constants {
 
     public class RobotVersion2023 extends RobotVersionConstants
     {
-      public static final double flTurnEncoderOffset = 0.3359;
-      public static final double frTurnEncoderOffset = 0.730;
-      public static final double blTurnEncoderOffset = 1.1819;
-      public static final double brTurnEncoderOffset = 0.9262;
+      public static final double flTurnEncoderOffset = 0.3359; // , 0.730
+      public static final double frTurnEncoderOffset = 0.730;// 0.3359);
+      public static final double blTurnEncoderOffset = .1819;// 1.1819);
+      public static final double brTurnEncoderOffset = 0.9262;// , 0.9262
     } 
 
      public class RobotVersion2024 extends RobotVersionConstants
@@ -112,7 +110,7 @@ public final class Constants {
       public static final double brTurnEncoderOffset = 0.625;
     } 
 
-    public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
+    public static final RobotVersion defaultRobotVersion = RobotVersion.v2023;
 
 
 }
