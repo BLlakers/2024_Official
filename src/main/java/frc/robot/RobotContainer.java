@@ -8,8 +8,14 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import java.util.List;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -35,6 +41,7 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.Constants.RobotVersionConstants;
 import frc.robot.Other.RobotVersion;
 import frc.robot.commands.AlignCommand;
+import frc.robot.commands.AprilAlignCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
@@ -71,10 +78,19 @@ public class RobotContainer {
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
+  private final SendableChooser<Command> autoChooser;
+
 
   public RobotContainer() {
     configureShuffleboard();
     configureBindings();
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -100,7 +116,7 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
+   driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
     // limelight allign works on both controllers
@@ -140,8 +156,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig
-    (12.1, 8).setKinematics(m_DriveTrainPID.m_kinematics); // we don't know our acceleration 
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(12.1, 8).setKinematics(m_DriveTrainPID.m_kinematics); // we don't know our acceleration 
    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,new Rotation2d(0)), List.of(new Translation2d(1,0), new Translation2d(1,-1)), new Pose2d(2, -1, Rotation2d.fromDegrees(180)),trajectoryConfig);
   
   

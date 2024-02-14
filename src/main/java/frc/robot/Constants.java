@@ -7,6 +7,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Other.RobotVersion;
@@ -27,6 +29,9 @@ public final class Constants {
       SMFrontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
       new ReplanningConfig()
     );
+
+    public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
+      0,0,0, new Rotation3d(0,0,0));
     
     public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxAngularSpeed,DriveTrainPID.kModuleMaxAngularAcceleration);
     public static double driveEncoderCtsperRev = 6.8;

@@ -55,7 +55,17 @@ public class SwerveModule extends SubsystemBase {
     private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0,
             new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
-
+    /**
+     * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
+     * and turning encoder.
+     *
+     * @param driveMotorChannel     CAN ID for the drive motor.
+     * @param turningMotorChannel   CAN ID for the turning motor.
+     * @param driveEncoder          DIO input for the drive encoder channel A
+     * @param turnEncoderPWMChannel DIO input for the drive encoder channel B
+     * @param turnOffset            offset from 0 to 1 for the home position of the
+     *                              encoder
+     */
     /*
      * private void intizialze(){
      * m_turningPIDController.reset(new
@@ -119,8 +129,9 @@ public class SwerveModule extends SubsystemBase {
     }
     /**
      * Returns the current state of the module.
+     * <pi> This takes a current velocity for each diffrent drive encoder and a current angle. 
      *
-     * @return The current state of the module.
+     * @return The current state of each Swerve Module.
      */
     public SwerveModuleState getModuleState() {
         // the getVelocity() function normally returns RPM but is scaled in the
@@ -130,14 +141,18 @@ public class SwerveModule extends SubsystemBase {
             Rotation2d.fromRadians(m_turningEncoder.getDistance())
         );
     }
-
-    public SwerveModulePosition getModulePosition() { // TIMES 60 TO CONVERRT FROM MINUTES TO SECONDS
+/**
+     
+     * This gets a current  Position (Distance per rotation in meters) for each diffrent drive encoder and a current angle from the Duty Cycle encoder. 
+     *
+     * @return The current Position of each Swerve Module
+     */
+    public SwerveModulePosition getModulePosition() {
         return new SwerveModulePosition(
             m_driveEncoder.getPosition(),
             Rotation2d.fromRadians(m_turningEncoder.getDistance())
         );
-    }
-
+    }  
     /**
      * Sets the desired state for the module.
      *
