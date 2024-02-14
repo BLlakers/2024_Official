@@ -19,9 +19,9 @@ public class Intake extends SubsystemBase  {
     
     public CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.intakeAngleMtrC,
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    public CANSparkMax intakeWheelMtr1 = new CANSparkMax(Constants.intakeWheelMtr1C,
+    public CANSparkMax intakeWheelMtr1 = new CANSparkMax(Constants.intakeWheelMtrL,
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    public CANSparkMax intakeWheelMtr2 = new CANSparkMax(Constants.intakeWheelMtr2C,
+    public CANSparkMax intakeWheelMtr2 = new CANSparkMax(Constants.intakeWheelMtrR,
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
     public RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtr1.getEncoder(); 
@@ -56,7 +56,8 @@ public class Intake extends SubsystemBase  {
 
 public Command StopIntake(){
     return runOnce(
-     () -> {intakeAngleMtr.set(0);
+     () -> {
+        intakeAngleMtr.set(0);
     });
 }
     public Command RunIntakeWheels() {

@@ -48,9 +48,9 @@ public final class Constants {
     public static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
 
     //ARM 
-    public final static int intakeAngleMtrC = 11;
-    public final static int intakeWheelMtr1C = 12;
-    public final static int intakeWheelMtr2C = 13;
+    public final static int intakeAngleMtrC = 13;
+    public final static int intakeWheelMtrL = 11;
+    public final static int intakeWheelMtrR = 12;
 
     //SHOOTER
     public final static int shooterMtrLeftC = 14;
