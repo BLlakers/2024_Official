@@ -29,7 +29,8 @@ public class Intake extends SubsystemBase  {
     public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
     public RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtr1.getEncoder(); 
     public RelativeEncoder intakeWheelMtr2Enc =  intakeWheelMtr2.getEncoder();
-    public int IntakePos = 1; 
+    public double d3 = .1527;
+    public double IntakePosConversion = (d3/Math.PI) /100; 
   public ArmFeedforward IntakeFeedForward = new ArmFeedforward(0, 0, 0);
     public PIDController m_ArmController = new PIDController(0, 0, 0);
     public Intake(){
