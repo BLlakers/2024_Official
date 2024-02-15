@@ -53,8 +53,8 @@ public final class Constants {
     public static double TurnGearRatio = 12.8;
     public static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
     //ARM 
-    public static int armMotorChannel1 = 9;
-    public static int armMotorChannel2 = 10;
+    //public static int armMotorChannel1 = 9;
+    //public static int armMotorChannel2 = 10;
     public static double PositionDown = 0;
     public static double PositionPickup = 30; // 69
 
@@ -116,7 +116,7 @@ public final class Constants {
       public static final double brTurnEncoderOffset = 0.625;
     } 
 
-    public static final RobotVersion defaultRobotVersion = RobotVersion.v2023;
+    public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
 
 
 }
