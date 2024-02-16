@@ -45,8 +45,8 @@ public class Shooter extends SubsystemBase {
     public Command RunShooter() {
         return runOnce(
             () -> {
-            shooterMtrLeft.set(-.4);
-            shooterMtrRight.set(.4);
+            shooterMtrLeft.set(-.85);
+            shooterMtrRight.set(.85);
             });
       }
     public Command StopShooter() {
@@ -58,14 +58,14 @@ public class Shooter extends SubsystemBase {
     }
 
 
-     public Command AngleDownShooter() {
+     public Command AngleUpShooter() {
         return run(
         () -> {
             ShooterAngleMtr.set(.95);
         });
     }
 
-     public Command AngleUpShooter() {
+     public Command AngleDownShooter() {
         return run(
         () -> {
             ShooterAngleMtr.set(-.95);
