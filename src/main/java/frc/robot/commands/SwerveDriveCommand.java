@@ -1,15 +1,8 @@
-
 package frc.robot.commands;
-
 import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import com.revrobotics.CANSparkMax;
-
 import frc.robot.Constants;
-
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.RobotContainer;
 
@@ -89,7 +82,7 @@ public class SwerveDriveCommand extends Command {
     SmartDashboard.putNumber("Robot/Controller/Command/Y Speed", ySpeed);
 
     m_DriveTrain.drive(xSpeed, ySpeed, rotSpeed);
-    Pose2d pose = m_DriveTrain.getPose2d();
+    //Pose2d pose = m_DriveTrain.getPose2d(); UNUSED. Would print pose2d out
     //System.out.println(pose);
   }
 

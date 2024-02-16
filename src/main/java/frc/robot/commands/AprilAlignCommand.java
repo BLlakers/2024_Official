@@ -10,38 +10,34 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 
-// TODO DO 1 PID AT A TIME !!!!!
 // WHAT I MEAN IS DO ROTATION, Y, then X.
 public class AprilAlignCommand extends Command {
   public static double ConstraintsConstant = 1; 
   public static double PIDConstant = 16; 
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); //TODO DO 1 PID AT A TIME !!!!!
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
-    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); 
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); 
+    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); 
 
-    private static final double MAX_RADIUS = 3; // meters
+    //private static final double MAX_RADIUS = 3; // meters UNUSED
     private static final double OPTIMAL_RADIUS = 2; // meters
-    private static final Transform2d DEFAULT_TAG_TO_GOAL = new Transform2d(new Translation2d(OPTIMAL_RADIUS, 0),
-            Rotation2d.fromDegrees(0)); //180
+    //private static final Transform2d DEFAULT_TAG_TO_GOAL = new Transform2d(new Translation2d(OPTIMAL_RADIUS, 0),
+    //        Rotation2d.fromDegrees(0)); //180 UNUSED
 
-    private static final double kdriveMaxDriveSpeed = 0.1; // meters per second
 
     private final DriveTrain m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
-    private final ProfiledPIDController yController = new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS); //1 TODO DO 1 PID AT A TIME !!!!! 2/4
+    private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS); 
+    private final ProfiledPIDController yController = new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS); 
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS);
 
     private Pose2d goalPose;
 

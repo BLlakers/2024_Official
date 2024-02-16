@@ -5,31 +5,18 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.pathfinding.*;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.RobotVersion2023;
-import frc.robot.Constants.RobotVersionConstants;
 import frc.robot.Other.RobotVersion;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PathPlannerLogging;
-
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 /** Represents a swerve drive style drivetrain. */
 
@@ -59,7 +46,6 @@ public class DriveTrain extends SubsystemBase {
   public final SwerveModule m_frontLeft;
   public final SwerveModule m_backLeft;
   public final SwerveModule m_backRight;
-  public SwerveDriveKinematics m_initialStates; // TODO unused variable
 
 
   // Creates an odometry object. Odometry tells the robot its position on the field.

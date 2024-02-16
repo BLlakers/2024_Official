@@ -6,47 +6,24 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
-import edu.wpi.first.networktables.DoubleArrayTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.TimestampedDouble;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
-    // these are global-ish
-    public static Double angle = 0.0;
-    public Double aligncamera;
-    public boolean isAligned;
     public DoubleArraySubscriber zstuff;
-    private Double heightfromfloor = 7.5;
-    private Double targetheightfromfloor = 1.0; //changes with field design
-
     private AprilTag m_currentAprilTag = new AprilTag(-1, null);
-
     public Limelight()
     {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         zstuff = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[] {0, 0, 0, 0, 0, 0});
-        
     }
-
-    public void robotInit(){
-        
-    }
-
-    
-
     @Override
     public void periodic() {      
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        NetworkTableEntry tx = table.getEntry("tx");
-        NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry tid = table.getEntry("tid");
-        double camerax = tx.getDouble(0.0);
-        double cameray = ty.getDouble(0.0);
         TimestampedDoubleArray poseArray =  zstuff.getAtomic(); // (x, y, z, rotx, roty, rotz)
         Translation3d poseTranslation = new Translation3d(
             poseArray.value[0],  // x
