@@ -48,14 +48,14 @@ public final class Constants {
     public static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
 
     //ARM 
-    public final static int intakeAngleMtrC = 13;
-    public final static int intakeWheelMtrL = 11;
-    public final static int intakeWheelMtrR = 12;
+    public final static int intakeAngleMtrC = 16;
+    public final static int intakeWheelMtrL = 14;
+    public final static int intakeWheelMtrR = 15;
 
     //SHOOTER
-    public final static int shooterMtrLeftC = 14;
-    public final static int shooterMtrRightC = 15;
-    public final static int shooterAngleMtrC = 16;
+    public final static int shooterMtrLeftC = 11;
+    public final static int shooterMtrRightC = 12;
+    public final static int shooterAngleMtrC = 13;
 
 
     //HANGER

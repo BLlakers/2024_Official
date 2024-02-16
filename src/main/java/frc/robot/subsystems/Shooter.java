@@ -21,14 +21,14 @@ public class Shooter extends SubsystemBase {
     com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
   public CANSparkMax shooterMtrRight = new CANSparkMax(Constants.shooterMtrRightC,
     com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-  public CANSparkMax AngleMtr = new CANSparkMax(Constants.shooterAngleMtrC,
+  public CANSparkMax ShooterAngleMtr = new CANSparkMax(Constants.shooterAngleMtrC,
     com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     public RelativeEncoder shooterMtrLeftEnc = shooterMtrLeft.getEncoder();
     public RelativeEncoder shooterMtrRightEnc = shooterMtrRight.getEncoder(); 
-    public RelativeEncoder AngleMtrEnc =  AngleMtr.getEncoder();
+    public RelativeEncoder AngleMtrEnc =  ShooterAngleMtr.getEncoder();
 
     public Shooter (){
-        shooterMtrLeft.follow(shooterMtrRight, true);
+        //shooterMtrLeft.follow(shooterMtrRight, true);
     }
 
 
@@ -43,37 +43,39 @@ public class Shooter extends SubsystemBase {
 
 
     public Command RunShooter() {
-        return run(
+        return runOnce(
             () -> {
-            shooterMtrLeft.set(1);
+            shooterMtrLeft.set(.4);
+            shooterMtrRight.set(.4);
             });
       }
     public Command StopShooter() {
         return run(
         () -> {
             shooterMtrLeft.set(0);
+            shooterMtrRight.set(0);
         });
     }
 
-
-     public Command AngleUpShooter() {
-        return run(
-        () -> {
-            AngleMtr.set(1);
-        });
-    }
 
      public Command AngleDownShooter() {
         return run(
         () -> {
-            AngleMtr.set(-1);
+            ShooterAngleMtr.set(.95);
+        });
+    }
+
+     public Command AngleUpShooter() {
+        return run(
+        () -> {
+            ShooterAngleMtr.set(-.95);
         });
     }
 
          public Command AngleStop() {
         return run(
         () -> {
-            AngleMtr.set(0);
+            ShooterAngleMtr.set(0);
         });
     }
     

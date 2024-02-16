@@ -19,13 +19,13 @@ public class Intake extends SubsystemBase  {
     
     public CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.intakeAngleMtrC,
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    public CANSparkMax intakeWheelMtr1 = new CANSparkMax(Constants.intakeWheelMtrL,
+    public CANSparkMax intakeWheelMtrL = new CANSparkMax(Constants.intakeWheelMtrL,
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    public CANSparkMax intakeWheelMtr2 = new CANSparkMax(Constants.intakeWheelMtrR,
+    public CANSparkMax intakeWheelMtrR = new CANSparkMax(Constants.intakeWheelMtrR,
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
-    public RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtr1.getEncoder(); 
-    public RelativeEncoder intakeWheelMtr2Enc =  intakeWheelMtr2.getEncoder();
+    public RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtrL.getEncoder(); 
+    public RelativeEncoder intakeWheelMtr2Enc =  intakeWheelMtrR.getEncoder();
     public int IntakePos = 1; 
 
     public Intake(){
@@ -40,17 +40,17 @@ public class Intake extends SubsystemBase  {
         SmartDashboard.putNumber("Intake Position", intakeAngleMtrEnc.getPosition());
     }
 
-    public Command RaiseIntake() {
+    public Command LowerIntake() {
         return run(
             () -> {
-            intakeAngleMtr.set(.5);  
+            intakeAngleMtr.set(.17);  
             });
       }
 
-    public Command LowerIntake() {
+    public Command RaiseIntake() {
         return runOnce(
             () -> {
-            intakeAngleMtr.set(-.5);
+            intakeAngleMtr.set(-.45);
             });
       }
 
@@ -63,23 +63,23 @@ public Command StopIntake(){
     public Command RunIntakeWheels() {
         return runOnce(
             () -> {
-        intakeWheelMtr1.set(.5);
-        intakeWheelMtr2.set(-.5);
+        intakeWheelMtrL.set(-.5); // inverted
+        intakeWheelMtrR.set(-.5);
             });
       }
 
     public Command StopIntakeWheels() {
         return runOnce(
             () -> {
-        intakeWheelMtr1.set(0);
-        intakeWheelMtr2.set(0);
+        intakeWheelMtrL.set(0);
+        intakeWheelMtrR.set(0);
             });
       }
       public Command ReverseIntakeWheels() {
         return runOnce(
             () -> {
-        intakeWheelMtr1.set(1);
-        intakeWheelMtr2.set(-1);
+        intakeWheelMtrL.set(1);
+        intakeWheelMtrR.set(-1);
             });
       }
 }
