@@ -45,8 +45,8 @@ public class Shooter extends SubsystemBase {
     public Command RunShooter() {
         return runOnce(
             () -> {
-            shooterMtrLeft.set(-.85);
-            shooterMtrRight.set(.85);
+            shooterMtrLeft.set(-.87);
+            shooterMtrRight.set(.87);
             });
       }
     public Command StopShooter() {

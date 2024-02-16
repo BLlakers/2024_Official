@@ -40,6 +40,7 @@ public class RobotContainer {
   Tags m_Tags = new Tags();
   Intake m_Intake = new Intake();
   Shooter m_Shooter = new Shooter();
+  Hanger m_Hanger = new Hanger();
   //Shooter 
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
@@ -132,7 +133,10 @@ public class RobotContainer {
     manipButtonRight.whileTrue(m_Intake.RaiseIntake());
     manipButtonLeft.onFalse(m_Intake.StopIntake());
     manipButtonRight.onFalse(m_Intake.StopIntake());
-    
+    manipButtonY.whileTrue(m_Hanger.HangUp());
+    manipButtonY.onFalse(m_Hanger.HangStop());
+    manipButtonX.onFalse(m_Hanger.HangStop());
+    manipButtonX.whileTrue(m_Hanger.HangDown());
     
     
     

@@ -36,9 +36,7 @@ public class Hanger extends SubsystemBase{
     private static final double GOAL_ORIENTATION = 0.0; // radians
 
 
-    public Hanger (Supplier<Rotation3d> robotOrientationSupplier){
-        m_robotOrientationSupplier = robotOrientationSupplier;
-    }
+    public Hanger (){}//Supplier<Rotation3d> robotOrientationSupplier){
 
     @Override
 
@@ -51,7 +49,7 @@ public class Hanger extends SubsystemBase{
         SmartDashboard.putNumber("Hanger/Left Current",hangerLeftMtr.getOutputCurrent());
         SmartDashboard.putNumber("Hanger/Right Current",hangerRightMtr.getOutputCurrent());
 
-        Rotation3d robotOrientation = m_robotOrientationSupplier.get();
+/*        Rotation3d robotOrientation = m_robotOrientationSupplier.get();
 
         double roll, pitch, yaw;
         roll  = robotOrientation.getX(); // radians
@@ -60,48 +58,30 @@ public class Hanger extends SubsystemBase{
 
         SmartDashboard.putNumber("Robot/Navx/Orientation/Roll",  Units.radiansToDegrees(roll));
         SmartDashboard.putNumber("Robot/Navx/Orientation/Pitch", Units.radiansToDegrees(pitch));
-        SmartDashboard.putNumber("Robot/Navx/Orientation/Yaw",   Units.radiansToDegrees(yaw));
+        SmartDashboard.putNumber("Robot/Navx/Orientation/Yaw",   Units.radiansToDegrees(yaw));*/
     }
 
-    public Command LeftHangUp() {
+    public Command HangUp() {
         return run(
             () -> {
-            hangerLeftMtr.set(1);
+            hangerLeftMtr.set(.25);
+            hangerRightMtr.set(.25);
             });
       }
 
-    public Command LeftHangDown() {
+    public Command HangDown() {
         return run(
             () -> {
-            hangerLeftMtr.set(-1);
+            hangerLeftMtr.set(-.25);
+            hangerRightMtr.set(-.25);
             });
       }
 
-    public Command LeftHangStop() {
+    public Command HangStop() {
         return run(
             () -> {
             hangerLeftMtr.set(0);
-            });
-      }
-    public Command RightHangUp() {
-        return run(
-            () -> {
-            hangerRightMtr.set(1);
-            });
-      }
-
-    public Command RightHangDown() {
-        return run(
-            () -> {
-            hangerRightMtr.set(-1);
-            });
-      }
-
-    public Command RightHangStop() {
-        return run(
-            () -> {
             hangerRightMtr.set(0);
             });
       }
-
 }
