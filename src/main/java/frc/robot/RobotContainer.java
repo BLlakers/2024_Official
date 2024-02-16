@@ -1,10 +1,10 @@
 
 package frc.robot;
+
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -32,102 +32,98 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AutoRotateArmCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.Constants.RobotVersionConstants;
 import frc.robot.Other.RobotVersion;
-import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AprilAlignCommand;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Tags;
-import frc.robot.subsystems.Stuff;
-import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.Limelight;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.DriveTrainPID;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Stuff;
-import frc.robot.subsystems.Tags;
 
 public class RobotContainer {
-  DriveTrainPID m_DriveTrainPID = new DriveTrainPID(Constants.defaultRobotVersion);
-  Arm m_Arm = new Arm();
-  Stuff m_Stuff = new Stuff();
-  Tags m_Tags = new Tags();
+  // Creates our objects from our methods for our classes
+  DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
+  Limelight m_Stuff = new Limelight();
   Intake m_Intake = new Intake();
   Shooter m_Shooter = new Shooter();
   Hanger m_Hanger = new Hanger();
-  //Shooter 
+  // Shooter
 
-  XboxController driverController = new XboxController(Constants.DriverControllerChannel);
-  XboxController manipController = new XboxController(Constants.ManipControllerChannel);
-  JoystickButton driverButtonB = new JoystickButton(driverController, Constants.buttonB);
-  JoystickButton manipButtonA = new JoystickButton(manipController, Constants.buttonA);
-  JoystickButton driverButtonA = new JoystickButton(driverController, Constants.buttonA);
+  XboxController driverController = new XboxController(Constants.Controller.DriverControllerChannel);
+  JoystickButton driverButtonA = new JoystickButton(driverController, Constants.Controller.buttonA);
+  JoystickButton driverButtonB = new JoystickButton(driverController, Constants.Controller.buttonB);
+  JoystickButton driverButtonX = new JoystickButton(driverController, Constants.Controller.buttonX);
+  JoystickButton driverButtonY = new JoystickButton(driverController, Constants.Controller.buttonY);
+  JoystickButton driverButtonRight = new JoystickButton(driverController, Constants.Controller.buttonRight);
+  JoystickButton driverButtonLeft = new JoystickButton(driverController, Constants.Controller.buttonLeft);
+  JoystickButton driverButtonLS = new JoystickButton(driverController, Constants.Controller.buttonLS);
+  JoystickButton driverButtonRS = new JoystickButton(driverController, Constants.Controller.buttonRS);
+  JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.Controller.buttonOptions);
 
-  JoystickButton driverButtonRight = new JoystickButton(driverController, Constants.buttonRight);
-  JoystickButton driverButtonLeft = new JoystickButton(driverController, Constants.buttonLeft);
-  JoystickButton driverButtonOption = new JoystickButton(driverController, Constants.buttonOptions);
-  JoystickButton driverButtonY = new JoystickButton(driverController, Constants.buttonY);
-  // Constants.buttonX);
-  JoystickButton driverButtonX = new JoystickButton(driverController, Constants.buttonX);
-  JoystickButton driverButtonRS = new JoystickButton(driverController, Constants.buttonRS);
-  JoystickButton driverButtonLS = new JoystickButton(driverController, Constants.buttonLS);
-  JoystickButton manipButtonB = new JoystickButton(manipController, Constants.buttonB);
-  JoystickButton manipButtonY = new JoystickButton(manipController, Constants.buttonY);
-  JoystickButton manipButtonRight = new JoystickButton(manipController, Constants.buttonRight);
-  JoystickButton manipButtonLeft = new JoystickButton(manipController, Constants.buttonLeft);
-  
-  JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
-  JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
-  JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
-    JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
+  // Creates buttons and controller for the manipulator controller (port 1)
+  XboxController manipController = new XboxController(Constants.Controller.ManipControllerChannel);
+  JoystickButton manipButtonA = new JoystickButton(manipController, Constants.Controller.buttonA);
+  JoystickButton manipButtonB = new JoystickButton(manipController, Constants.Controller.buttonB);
+  JoystickButton manipButtonX = new JoystickButton(manipController, Constants.Controller.buttonX);
+  JoystickButton manipButtonY = new JoystickButton(manipController, Constants.Controller.buttonY);
+  JoystickButton manipButtonRight = new JoystickButton(manipController, Constants.Controller.buttonRight);
+  JoystickButton manipButtonLeft = new JoystickButton(manipController, Constants.Controller.buttonLeft);
+  JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.Controller.buttonOptions);
+  JoystickButton manipButtonLS = new JoystickButton(manipController, Constants.Controller.buttonLS);
+  JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.Controller.buttonRS);
 
   // A chooser for autonomous commands
-  SendableChooser<Integer> m_chooser = new SendableChooser<>();
   private final SendableChooser<Command> autoChooser;
+  // Creating 2d field in Sim/ShuffleBoard
   private final Field2d field;
+  // Trying to get feedback from auto
   List<Pose2d> currentPath = new ArrayList<Pose2d>();
 
   public RobotContainer() {
-    configureShuffleboard();
     configureBindings();
-    // Build an auto chooser. This will use Commands.none() as the default option.
+    // Build an auto chooser. How we choose which auto we want to run.
     autoChooser = AutoBuilder.buildAutoChooser();
 
-    // Another option that allows you to specify the default auto by its name
+    // Another option that allows you to specify the default auto by its name:
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-        field = new Field2d();
-      SmartDashboard.putData("Field", field);
+    // Creates a field to be put to the shuffleboard
+    field = new Field2d();
 
-      // Logging callback for current robot pose
-      PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-          // Do whatever you want with the pose here
-          field.setRobotPose(pose);
-      });
+    SmartDashboard.putData("Field", field);
 
+    // Logging callback for current robot pose
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      // Do whatever you want with the pose here
+      field.setRobotPose(pose);
+    });
 
-      // Logging callback for target robot pose
-      PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-          // Do whatever you want with the pose here
-          field.getObject("target pose").setPose(pose);
-      });
+    // Logging callback for target robot pose
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+      // Do whatever you want with the pose here
+      field.getObject("target pose").setPose(pose);
+    });
 
-
-      // Logging callback for the active path, this is sent as a list of poses
-      PathPlannerLogging.setLogActivePathCallback((poses) -> {
-          // Do whatever you want with the poses here
-          field.getObject("path").setPoses(poses);
-      });
+    // Logging callback for the active path, this is sent as a list of poses
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+      // Do whatever you want with the poses here
+      field.getObject("path").setPoses(poses);
+    });
   }
-  public void periodic(){
-    field.setRobotPose(m_DriveTrainPID.getPose2d());
+
+  public void periodic() {
+    // us trying to set pose for field2d
+    field.setRobotPose(m_DriveTrain.getPose2d());
   }
 
   /**
+   * Creates Command Bindings. Read description down below:
+   * <p>
    * Use this method to define your trigger->comand mappings. Triggers can be
    * created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
@@ -144,44 +140,36 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     /// new Trigger(m_exampleSubsystem::exampleCondition)
-    /// .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
-    /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-   driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
-    m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
-        () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
-    // limelight allign works on both controllers
-    // manipButtonX.whileTrue(new AlignCommand(m_DriveTrain, () ->
-    // frc.robot.subsystems.Stuff.angle));
-    driverButtonX.whileTrue(new AlignCommand(m_DriveTrainPID, () -> frc.robot.subsystems.Stuff.angle));
-    // manipButtonB.whileTrue(new AprilAlignCommand(m_DriveTrain, () ->
-    // frc.robot.subsystems.Tags.tx2));
-    // driverButtonB.whileTrue(new FieldAlignedCommand(m_DriveTrain));
-    driverButtonRS.onTrue(m_DriveTrainPID.WheelzLock());
-    driverButtonB.onTrue(m_DriveTrainPID.ZeroGyro());
-    driverButtonA.onTrue(m_DriveTrainPID.toggleFieldRelativeEnable());
-    // WP - DO NOT UNCOMMENT WITHOUT TALKING TO WARD
-    driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
-    m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
-    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
+    // BINDINGS OF EACH COMMAND
+    //LIMELIGHT
+    driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrain));
     
+    //SWERVE DRIVE/ DRIVETRAIN
+    m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
+        () -> driverController.getLeftX(), () -> driverController.getRightX(),
+        () -> driverController.getRightTriggerAxis(), m_DriveTrain));
+    driverButtonX.whileTrue(new AlignCommand(m_DriveTrain, () -> frc.robot.subsystems.Stuff.angle));
+    // WHEEL LOCK
+    driverButtonRS.onTrue(m_DriveTrain.WheelzLock());
+    // ZERO GYRO
+    driverButtonB.onTrue(m_DriveTrain.ZeroGyro());
+    // TOGGLE FIELD RELATIVE ON AND OFF
+    driverButtonA.onTrue(m_DriveTrain.toggleFieldRelativeEnable());
     
-    
+    // RESETING OUR POSE 2d/ odometry
+    driverButtonOptions.onTrue(m_DriveTrain.resetPose2d());
     
     driverButtonY.whileTrue(m_Shooter.RunShooter());
     driverButtonY.whileFalse(m_Shooter.StopShooter());
-    
+
     manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
     manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
-   driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());//moves down
-   driverButtonLeft.onFalse(m_Shooter.AngleStop());
-   driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); //moves up
-   driverButtonRight.onFalse(m_Shooter.AngleStop()); 
-    
-    
+
+    driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());// moves down
+    driverButtonLeft.onFalse(m_Shooter.AngleStop());
+    driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); // moves up
+    driverButtonRight.onFalse(m_Shooter.AngleStop());
+
     manipButtonLeft.whileTrue(m_Intake.LowerIntake());
     manipButtonRight.whileTrue(m_Intake.RaiseIntake());
     manipButtonLeft.onFalse(m_Intake.StopIntake());
@@ -189,19 +177,6 @@ public class RobotContainer {
 
     manipButtonX.whileTrue(m_Hanger.LeftHangUp());
     manipButtonY.whileTrue(m_Hanger.RightHangUp());
-
-
-    
-    
-    
-    
-    
-    // starts at 1, when pressed goes up to 2 (82 Deegrees),
-                                                              // when pressed
-    driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
-
-    // again goes up to 3 (85 deegrees)
-    // TODO RT Accelerate LT Deaccelerate
 
   }
 
@@ -218,13 +193,12 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //loads New Auto auto file
-       //return new PathPlannerAuto("New Auto");
-      return new SequentialCommandGroup( 
-        new InstantCommand( () -> m_DriveTrainPID.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
+    // loads New Auto auto file
+    // Where we set order of autoCommands
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> m_DriveTrain.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
         new WaitCommand(3.0),
-       autoChooser.getSelected()
-      );
+        autoChooser.getSelected());
 
   }
 }

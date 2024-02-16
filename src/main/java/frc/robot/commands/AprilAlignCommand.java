@@ -18,7 +18,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.subsystems.DriveTrain;
 
 // TODO DO 1 PID AT A TIME !!!!!
 // WHAT I MEAN IS DO ROTATION, Y, then X.
@@ -36,7 +36,7 @@ public class AprilAlignCommand extends Command {
 
     private static final double kdriveMaxDriveSpeed = 0.1; // meters per second
 
-    private final DriveTrainPID m_drivetrain;
+    private final DriveTrain m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
 
     private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
@@ -45,7 +45,7 @@ public class AprilAlignCommand extends Command {
 
     private Pose2d goalPose;
 
-    public AprilAlignCommand(Supplier<AprilTag> aprilTagSupplier, DriveTrainPID drivetrainSubsystem) {
+    public AprilAlignCommand(Supplier<AprilTag> aprilTagSupplier, DriveTrain drivetrainSubsystem) {
         this.m_drivetrain = drivetrainSubsystem;
         this.m_aprilTagProvider = aprilTagSupplier;
 
@@ -118,11 +118,7 @@ public class AprilAlignCommand extends Command {
       omegaSpeed = 0;
     }
 
-   // xSpeed = Math.min(xSpeed, kdriveMaxDriveSpeed);
-    //ySpeed = Math.min(ySpeed, kdriveMaxDriveSpeed);
-
-    m_drivetrain.driveChassisSpeeds(
-       ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+    m_drivetrain.driveChassisSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
     
     SmartDashboard.putNumber("FRxSpeed", xSpeed);
     SmartDashboard.putNumber("FRySpeed", ySpeed);

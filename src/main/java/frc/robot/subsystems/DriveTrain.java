@@ -33,23 +33,26 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 /** Represents a swerve drive style drivetrain. */
 
-public class DriveTrainPID extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
 
     public SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-    Constants.SMFrontLeftLocation,
-    Constants.SMFrontRightLocation, 
-    Constants.SMBackLeftLocation, 
-    Constants.SMBackRightLocation
+    Constants.Drive.SMFrontLeftLocation,
+    Constants.Drive.SMFrontRightLocation, 
+    Constants.Drive.SMBackLeftLocation, 
+    Constants.Drive.SMBackRightLocation
   );
 
   public boolean m_WheelLock = false;
   public boolean m_FieldRelativeEnable = true;
   public static final double kMaxSpeed = Units.feetToMeters(12.5); // WP this seemed to work don't know why // 3.68 meters per second or 12.1
   // ft/s (max speed of SDS Mk3 with Neo motor) // TODO KMaxSpeed needs to go with enum
-  public static final double kMaxAngularSpeed = Units.rotationsPerMinuteToRadiansPerSecond(Constants.NeoMaxSpeedRPM / Constants.TurnGearRatio); // 1/2 rotation per second
-  public static final double kMaxTurnAngularSpeed = kMaxSpeed / Constants.SMBackLeftLocation.getNorm(); // 1/2 rotation per second
-  public static final double kModuleMaxAngularAcceleration = Math.PI / 3;
-  public final AHRS navx = new AHRS();
+  public static final double kMaxAngularSpeed = Units.rotationsPerMinuteToRadiansPerSecond(Constants.Conversion.NeoMaxSpeedRPM / Constants.Conversion.TurnGearRatio); // 1/2 rotation per second
+  public static final double kMaxTurnAngularSpeed = kMaxSpeed / Constants.Drive.SMBackLeftLocation.getNorm(); // 1/2 rotation per second
+  public static final double kModuleMaxAngularAcceleration = Math.PI / 3; // what is this used for again?
+
+
+  // creates a gyro object. Gyro gives the robots rotation/ where the robot is pointed. 
+  private final AHRS navx = new AHRS();
 
   //Creates each swerve module. Swerve modules have a turning and drive motor + a turning and drive encoder. 
   public final SwerveModule m_frontRight;
@@ -77,10 +80,6 @@ public class DriveTrainPID extends SubsystemBase {
     return false;
   }
 
-  // Set up custom logging to add the current path to a field 2d widget
-  // PathPlannerLogging.setLogActivePathCallback((poses) ->
-  // field.getObject("path").setPoses(poses));
-
   /** Gets our current position in meters on the field. 
   @return A current position on the field.
   
@@ -96,17 +95,16 @@ public class DriveTrainPID extends SubsystemBase {
    * @param RobotVersion
    *
    */
-  public DriveTrainPID(RobotVersion version) { 
+  public DriveTrain(RobotVersion version) { 
     AutoBuilder.configureHolonomic(
       
         this::getPose2d,
         this::resetPose,
         this::getChassisSpeeds,
         this::driveChassisSpeeds,
-        Constants.pathFollowerConfig,
+        Constants.Drive.pathFollowerConfig,
         () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
@@ -117,8 +115,6 @@ public class DriveTrainPID extends SubsystemBase {
           return false;
         },
         this);
-            m_initialStates = new SwerveDriveKinematics(Constants.SMFrontLeftLocation,Constants.SMFrontRightLocation,Constants.SMBackLeftLocation,
-       Constants.SMBackRightLocation);
         // sets our wanted offsets. Varies between 2023 and 2024.
     double flTurnOffset = 0, frTurnOffset = 0, blTurnOffset = 0, brTurnOffset = 0;
     if (Constants.defaultRobotVersion == RobotVersion.v2023) {
@@ -134,24 +130,24 @@ public class DriveTrainPID extends SubsystemBase {
     }
 
     m_frontRight = new SwerveModule(
-        Constants.frDriveMotorChannel,
-        Constants.frSteerMotorChannel,
-        Constants.frEncoderChannel,
+        Constants.Port.frDriveMotorChannel,
+        Constants.Port.frSteerMotorChannel,
+        Constants.Port.frEncoderChannel,
         frTurnOffset);
     m_frontLeft = new SwerveModule(
-        Constants.flDriveMotorChannel,
-        Constants.flSteerMotorChannel,
-        Constants.flEncoderChannel,
+        Constants.Port.flDriveMotorChannel,
+        Constants.Port.flSteerMotorChannel,
+        Constants.Port.flEncoderChannel,
         flTurnOffset);
     m_backLeft = new SwerveModule(
-        Constants.blDriveMotorChannel,
-        Constants.blSteerMotorChannel,
-        Constants.blEncoderChannel,
+        Constants.Port.blDriveMotorChannel,
+        Constants.Port.blSteerMotorChannel,
+        Constants.Port.blEncoderChannel,
         blTurnOffset);
     m_backRight = new SwerveModule(
-        Constants.brDriveMotorChannel,
-        Constants.brSteerMotorChannel,
-        Constants.brEncoderChannel,
+        Constants.Port.brDriveMotorChannel,
+        Constants.Port.brSteerMotorChannel,
+        Constants.Port.brEncoderChannel,
         brTurnOffset); // 0.05178
 //initializes odometry
     m_odometry = new SwerveDriveOdometry(
@@ -246,7 +242,7 @@ public class DriveTrainPID extends SubsystemBase {
  * Runnable Command. <p> Tells the Wheels when to stop or not based off of a boolean varible named {@link #m_WheelLock}. <p> Used in drive Method
  * 
  */
-  public Command WheelzLock() {
+  public Command WheelLockCommand() {
 
     return runOnce(
         () -> {
@@ -304,7 +300,7 @@ public class DriveTrainPID extends SubsystemBase {
    * 
    * Converts raw module states into chassis speeds
    * 
-   * @return chassis speeds object
+   * @return chassisSpeeds --> A reading of the speed in m/s our robot is going.
    */
   public ChassisSpeeds getChassisSpeeds() {
     return m_kinematics.toChassisSpeeds(getSwerveModuleStates());
@@ -380,8 +376,7 @@ public class DriveTrainPID extends SubsystemBase {
    * Runnable Command. Runs the {@link #stopModules()} Command.
    */
   public Command Break(){
-  return run(()->{
-  stopModules();
-    });
+  return run(
+    ()->{stopModules();});
   }
 }
