@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -28,8 +29,14 @@ public class Intake extends SubsystemBase  {
     public RelativeEncoder intakeWheelMtr2Enc =  intakeWheelMtrR.getEncoder();
     public int IntakePos = 1; 
 
+    public static double GEAR_RATIO = 100.0;
+    public static double TARGET_ANGLE = 68; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
+    //I set this at 410 to account for gravity orginal value was 445 -Ben
     public Intake(){
         // intakeWheelMtr1.follow(intakeWheelMtr2);
+        intakeAngleMtrEnc.setPosition(0);
+        intakeAngleMtrEnc.setPositionConversionFactor(2 * Math.PI / GEAR_RATIO);
+
     }
 
     @Override
@@ -37,7 +44,7 @@ public class Intake extends SubsystemBase  {
     public void periodic() {
         // armRotationMtr1.follow(armRotationMtr2);
 
-        SmartDashboard.putNumber("Intake Position", intakeAngleMtrEnc.getPosition());
+        SmartDashboard.putNumber("Intake Position", GetIntakeMotorAngle().getDegrees());
     }
 
     public Command LowerIntake() {
@@ -82,4 +89,17 @@ public Command StopIntake(){
         intakeWheelMtrR.set(-1);
             });
       }
+    public Command AutoLowerIntake(){
+        return run(
+            () -> {
+            if (GetIntakeMotorAngle().getDegrees() < TARGET_ANGLE){
+                intakeAngleMtr.set(.17);
+            }
+            });
+    }
+
+    public Rotation2d GetIntakeMotorAngle()
+    {
+        return Rotation2d.fromRadians(intakeAngleMtrEnc.getPosition());
+    }
 }

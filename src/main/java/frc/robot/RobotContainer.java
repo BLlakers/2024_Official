@@ -7,6 +7,7 @@ import java.util.List;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -95,6 +96,8 @@ public class RobotContainer {
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
+
+    NamedCommands.registerCommand("AutoLowerIntake", m_Intake.AutoLowerIntake());
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
