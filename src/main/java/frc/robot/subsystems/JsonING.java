@@ -1,41 +1,42 @@
 package frc.robot.subsystems;
 //JsonING becuse thats what it is
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import com.fasterxml.jackson.core.JsonParser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.DoubleArrayTopic;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import org.json.simple.JSONObject; 
+import org.json.simple.parser.*; 
 
 public class JsonING extends SubsystemBase {
-
-
-    public void robotInit(){
-        
-    }
-    
+    //only periodic since we only need things to repeat    
     @Override
     public void periodic(){
-        //System.out.println("wut?????????????????????????????????????????");
-        try
-        {
-        URL url = new URL("http://wpilibpi.local:8080/home/pi/data.json");
-        JSONParser parser = new JSONParser();
-        JSONObject json = (JSONObject) parser.parse(new InputStreamReader(url.openStream()));
-        System.out.println(json);
-        System.out.println("stuff ran, possibly nothing outoput due to compuers being computers?");
-        }
+        //create object here
+        Object obj;
 
-        catch(IOException | ParseException e)
-        {
-            System.out.println("nope");
+        try{
+        //update iot here if it dosent fail
+        obj = new JSONParser().parse(new FileReader("test.json"));
         }
+        catch(IOException | ParseException e){
+            System.out.println("it no working");
+            return;
+        }
+        //getting the whole json thing
+        JSONObject fromcamera = (JSONObject) obj;
+
+        //getting the values of things
+        String x = (String) fromcamera.get("x");
+        String y = (String) fromcamera.get("y");
+        String obj_name = (String) fromcamera.get("object_name");
+        
+        //maybe print it out
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println(obj_name);
     }
-
 }
