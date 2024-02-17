@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AutoRotateArmCommand;
@@ -48,7 +50,6 @@ public class RobotContainer {
   JoystickButton driverButtonB = new JoystickButton(driverController, Constants.buttonB);
   JoystickButton manipButtonA = new JoystickButton(manipController, Constants.buttonA);
   JoystickButton driverButtonA = new JoystickButton(driverController, Constants.buttonA);
-
   JoystickButton driverButtonRight = new JoystickButton(driverController, Constants.buttonRight);
   JoystickButton driverButtonLeft = new JoystickButton(driverController, Constants.buttonLeft);
   JoystickButton driverButtonOption = new JoystickButton(driverController, Constants.buttonOptions);
@@ -65,7 +66,8 @@ public class RobotContainer {
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
     JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
-
+    POVButton driverPOVUp = new POVButton(driverController, 0);
+  POVButton driverPOVRight = new POVButton(driverController, 45);
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
 
@@ -90,14 +92,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    /// new Trigger(m_exampleSubsystem::exampleCondition)
-    /// .onTrue(new ExampleCommand(m_exampleSubsystem));
+    /// new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    
+    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
     // limelight allign works on both controllers
@@ -127,18 +127,17 @@ public class RobotContainer {
    driverButtonLeft.onFalse(m_Shooter.AngleStop());
    driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); //moves up
    driverButtonRight.onFalse(m_Shooter.AngleStop()); 
-    
-    
-    manipButtonLeft.whileTrue(m_Intake.LowerIntake());
-    manipButtonRight.whileTrue(m_Intake.RaiseIntake());
-    manipButtonLeft.onFalse(m_Intake.StopIntake());
-    manipButtonRight.onFalse(m_Intake.StopIntake());
+   driverPOVUp.whileTrue(m_Hanger.HangHold());
+   driverPOVUp.onFalse(m_Hanger.HangStop());
+    //manipButtonLeft.whileTrue(m_Intake.LowerIntake());
+    ///manipButtonRight.whileTrue(m_Intake.RaiseIntake());
+    //manipButtonLeft.onFalse(m_Intake.StopIntake());
+    //manipButtonRight.onFalse(m_Intake.StopIntake());
     manipButtonY.whileTrue(m_Hanger.HangUp());
     manipButtonY.onFalse(m_Hanger.HangStop());
     manipButtonX.onFalse(m_Hanger.HangStop());
     manipButtonX.whileTrue(m_Hanger.HangDown());
-    
-    
+    driverPOVRight.onTrue(m_Hanger.HangReset());
     
     
     // starts at 1, when pressed goes up to 2 (82 Deegrees),
