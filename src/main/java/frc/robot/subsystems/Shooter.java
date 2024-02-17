@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
 
     public Shooter() {
         // shooterMtrLeft.follow(shooterMtrRight, true);
-        double positionConversionFactor = LEAD_SCREW_PITCH * 2 * Math.PI / MOTOR_ANGLE_GEAR_RATIO;
+        double positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO;
         AngleMtrEnc.setPositionConversionFactor(positionConversionFactor);
         AngleMtrEnc.setVelocityConversionFactor(positionConversionFactor / 60);
     }
