@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AutoRotateArmCommand;
 import frc.robot.commands.SwerveDriveCommand;
-import frc.robot.subsystems.Hanger;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
 import frc.robot.subsystems.*;
@@ -41,6 +40,7 @@ public class RobotContainer {
   Tags m_Tags = new Tags();
   Intake m_Intake = new Intake();
   Shooter m_Shooter = new Shooter();
+  Hanger m_Hanger = new Hanger();
   //Shooter 
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
@@ -134,8 +134,8 @@ public class RobotContainer {
     manipButtonLeft.onFalse(m_Intake.StopIntake());
     manipButtonRight.onFalse(m_Intake.StopIntake());
 
-    manipButtonX.whileTrue(Hanger.LeftHangUp());
-    manipButtonY.whileTrue(Hanger.RightHangUp());
+    manipButtonX.whileTrue(m_Hanger.LeftHangUp());
+    manipButtonY.whileTrue(m_Hanger.RightHangUp());
 
 
     

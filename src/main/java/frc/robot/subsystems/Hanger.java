@@ -35,10 +35,14 @@ public class Hanger extends SubsystemBase{
     private static final double GOAL_HEIGHT = 0.5; // meters
     private static final double GOAL_ORIENTATION = 0.0; // radians
 
+    public Hanger (){
 
-    public Hanger (Supplier<Rotation3d> robotOrientationSupplier){
-        m_robotOrientationSupplier = robotOrientationSupplier;
     }
+
+
+    //public Hanger(Supplier<Rotation3d> robotOrientationSupplier){
+      //  m_robotOrientationSupplier = robotOrientationSupplier;
+   // }
 
     @Override
 
