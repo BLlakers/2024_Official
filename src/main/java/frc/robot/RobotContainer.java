@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AutoRotateArmCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.Hanger;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
 import frc.robot.subsystems.*;
@@ -132,6 +133,11 @@ public class RobotContainer {
     manipButtonRight.whileTrue(m_Intake.RaiseIntake());
     manipButtonLeft.onFalse(m_Intake.StopIntake());
     manipButtonRight.onFalse(m_Intake.StopIntake());
+
+    manipButtonX.whileTrue(Hanger.LeftHangUp());
+    manipButtonY.whileTrue(Hanger.RightHangUp());
+
+
     
     
     
