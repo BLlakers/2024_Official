@@ -52,14 +52,31 @@ public final class Constants {
     public static double DriveGearRatio = 8.14;
     public static double TurnGearRatio = 12.8;
     public static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
+
     //ARM 
-    //public static int armMotorChannel1 = 9;
-    //public static int armMotorChannel2 = 10;
+    public final static int intakeAngleMtrC = 16;
+    public final static int intakeWheelMtrL = 14;
+    public final static int intakeWheelMtrR = 15;
+
+    //SHOOTER
+    public final static int shooterMtrLeftC = 11;
+    public final static int shooterMtrRightC = 12;
+    public final static int shooterAngleMtrC = 13;
+
+
+    //HANGER
+    public final static int hangerLeftMtrC = 9;
+    public final static int hangerRightMtrC = 10;
+
+
+
+
     public static double PositionDown = 0;
     public static double PositionPickup = 30; // 69
 
     public static double[] Positions = { PositionDown, PositionPickup };
     public static double ArmTolerance = 3;
+  
 
     // Controller
     public static int DriverControllerChannel = 0;

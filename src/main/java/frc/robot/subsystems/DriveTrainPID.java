@@ -48,11 +48,8 @@ public class DriveTrainPID extends SubsystemBase {
   // ft/s (max speed of SDS Mk3 with Neo motor) // TODO KMaxSpeed needs to go with enum
   public static final double kMaxAngularSpeed = Units.rotationsPerMinuteToRadiansPerSecond(Constants.NeoMaxSpeedRPM / Constants.TurnGearRatio); // 1/2 rotation per second
   public static final double kMaxTurnAngularSpeed = kMaxSpeed / Constants.SMBackLeftLocation.getNorm(); // 1/2 rotation per second
-  public static final double kModuleMaxAngularAcceleration = Math.PI / 3; // what is this used for again?
-
-
-  // creates a gyro object. Gyro gives the robots rotation/ where the robot is pointed. 
-  private final AHRS navx = new AHRS();
+  public static final double kModuleMaxAngularAcceleration = Math.PI / 3;
+  public final AHRS navx = new AHRS();
 
   //Creates each swerve module. Swerve modules have a turning and drive motor + a turning and drive encoder. 
   public final SwerveModule m_frontRight;

@@ -34,10 +34,6 @@ public class Arm extends SubsystemBase {
 
  
   // public TalonFX armRotationMtr = new TalonFX(Constants.armMotorChannel);
-  //public CANSparkMax armRotationMtr1 = new CANSparkMax(Constants.armMotorChannel1,
- //     com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
- // public CANSparkMax armRotationMtr2 = new CANSparkMax(Constants.armMotorChannel2,
- //     com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
  // public int ArmPosition = 2;
   //public TalonFX armRotationMtr = new TalonFX(Constants.armMotorChannel2);

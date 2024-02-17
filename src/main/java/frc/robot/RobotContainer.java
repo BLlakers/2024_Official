@@ -1,17 +1,10 @@
 
 package frc.robot;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -23,22 +16,21 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.DriveTrainPID;
-import frc.robot.commands.AutoCommand;
-import frc.robot.commands.ManualRotateArmCommand;
+import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AutoRotateArmCommand;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.Constants.RobotVersionConstants;
@@ -51,12 +43,22 @@ import frc.robot.subsystems.Stuff;
 import frc.robot.subsystems.SwerveModule;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
+import frc.robot.subsystems.*;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Stuff;
+import frc.robot.subsystems.Tags;
 
 public class RobotContainer {
   DriveTrainPID m_DriveTrainPID = new DriveTrainPID(Constants.defaultRobotVersion);
   Arm m_Arm = new Arm();
   Stuff m_Stuff = new Stuff();
   Tags m_Tags = new Tags();
+  Intake m_Intake = new Intake();
+  Shooter m_Shooter = new Shooter();
+  Hanger m_Hanger = new Hanger();
+  //Shooter 
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
   XboxController manipController = new XboxController(Constants.ManipControllerChannel);
@@ -67,6 +69,7 @@ public class RobotContainer {
   JoystickButton driverButtonRight = new JoystickButton(driverController, Constants.buttonRight);
   JoystickButton driverButtonLeft = new JoystickButton(driverController, Constants.buttonLeft);
   JoystickButton driverButtonOption = new JoystickButton(driverController, Constants.buttonOptions);
+  JoystickButton driverButtonY = new JoystickButton(driverController, Constants.buttonY);
   // Constants.buttonX);
   JoystickButton driverButtonX = new JoystickButton(driverController, Constants.buttonX);
   JoystickButton driverButtonRS = new JoystickButton(driverController, Constants.buttonRS);
@@ -79,6 +82,8 @@ public class RobotContainer {
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
+    JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
+
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
   private final SendableChooser<Command> autoChooser;
@@ -161,9 +166,37 @@ public class RobotContainer {
     // WP - DO NOT UNCOMMENT WITHOUT TALKING TO WARD
     driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
-    manipButtonLeft.onTrue(m_Arm.LowerArm()); // starts at 1 (5 deegrees) goes down
-    manipButtonRight.onTrue(m_Arm.RaiseArm());
-    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d()); // starts at 1, when pressed goes up to 2 (82 Deegrees),
+    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
+    
+    
+    
+    
+    driverButtonY.whileTrue(m_Shooter.RunShooter());
+    driverButtonY.whileFalse(m_Shooter.StopShooter());
+    
+    manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
+    manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
+   driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());//moves down
+   driverButtonLeft.onFalse(m_Shooter.AngleStop());
+   driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); //moves up
+   driverButtonRight.onFalse(m_Shooter.AngleStop()); 
+    
+    
+    manipButtonLeft.whileTrue(m_Intake.LowerIntake());
+    manipButtonRight.whileTrue(m_Intake.RaiseIntake());
+    manipButtonLeft.onFalse(m_Intake.StopIntake());
+    manipButtonRight.onFalse(m_Intake.StopIntake());
+
+    manipButtonX.whileTrue(m_Hanger.LeftHangUp());
+    manipButtonY.whileTrue(m_Hanger.RightHangUp());
+
+
+    
+    
+    
+    
+    
+    // starts at 1, when pressed goes up to 2 (82 Deegrees),
                                                               // when pressed
     driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
 
