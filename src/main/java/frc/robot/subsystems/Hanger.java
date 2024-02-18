@@ -51,9 +51,9 @@ public class Hanger extends SubsystemBase{
 
         SmartDashboard.putNumber("Hanger/Left Hang Pos", hangerLeftMtrEnc.getPosition());
         SmartDashboard.putNumber("Hanger/Right Hang Pos", hangerRightMtrEnc.getPosition());
-
+      
         SmartDashboard.putNumber("Hanger/Left Current",hangerLeftMtr.getOutputCurrent());
-        SmartDashboard.putNumber("Hanger/Right Current",hangerRightMtr.getOutputCurrent());
+        SmartDashboard.putNumber("Hanger/Right Current",hangerRightMtr.getOutputCurrent()); 
 
      //   Rotation3d robotOrientation = m_robotOrientationSupplier.get();
 

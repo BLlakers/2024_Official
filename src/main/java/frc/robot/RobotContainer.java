@@ -38,6 +38,7 @@ import frc.robot.Constants.RobotVersionConstants;
 import frc.robot.Other.RobotVersion;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AprilAlignCommand;
+import frc.robot.commands.AutoIntake;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
@@ -97,7 +98,7 @@ public class RobotContainer {
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
 
-    NamedCommands.registerCommand("AutoLowerIntake", m_Intake.AutoLowerIntake());
+    NamedCommands.registerCommand("AutoLowerIntake", null);
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -153,6 +154,8 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_Intake.setDefaultCommand(new AutoIntake(m_Intake));
+
    driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
@@ -169,7 +172,6 @@ public class RobotContainer {
     // WP - DO NOT UNCOMMENT WITHOUT TALKING TO WARD
     driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
-    driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
     
     
     
@@ -185,26 +187,14 @@ public class RobotContainer {
    driverButtonRight.onFalse(m_Shooter.AngleStop()); 
     
     
-    manipButtonLeft.whileTrue(m_Intake.LowerIntake());
-    manipButtonRight.whileTrue(m_Intake.RaiseIntake());
-    manipButtonLeft.onFalse(m_Intake.StopIntake());
-    manipButtonRight.onFalse(m_Intake.StopIntake());
+    manipButtonLeft.onTrue(m_Intake.IntakePosLower());
+    manipButtonRight.onTrue(m_Intake.IntakePosRaise());
+    //manipButtonLeft.onFalse(m_Intake.StopIntake());
+    //manipButtonRight.onFalse(m_Intake.StopIntake());
 
     manipButtonX.whileTrue(m_Hanger.LeftHangUp());
     manipButtonY.whileTrue(m_Hanger.RightHangUp());
-
-
-    
-    
-    
-    
-    
-    // starts at 1, when pressed goes up to 2 (82 Deegrees),
-                                                              // when pressed
     driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
-
-    // again goes up to 3 (85 deegrees)
-    // TODO RT Accelerate LT Deaccelerate
 
   }
 

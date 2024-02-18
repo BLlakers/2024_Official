@@ -28,9 +28,7 @@ public class Intake extends SubsystemBase  {
     public RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtrL.getEncoder(); 
     public RelativeEncoder intakeWheelMtr2Enc =  intakeWheelMtrR.getEncoder();
     public int IntakePos = 1; 
-
-    public static double GEAR_RATIO = 100.0;
-    public static double TARGET_ANGLE = 68; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
+    public static double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
     //I set this at 410 to account for gravity orginal value was 445 -Ben
     public Intake(){
         // intakeWheelMtr1.follow(intakeWheelMtr2);
@@ -89,14 +87,37 @@ public Command StopIntake(){
         intakeWheelMtrR.set(-1);
             });
       }
-    public Command AutoLowerIntake(){
+   /* public Command AutoLowerIntake(){
         return run(
             () -> {
             if (GetIntakeMotorAngle().getDegrees() < TARGET_ANGLE){
                 intakeAngleMtr.set(.17);
             }
             });
+    }*/
+
+
+public Command IntakePosRaise(){
+    return runOnce(()->{
+        IntakePos = IntakePos + 1;
+        if( IntakePos == 3){
+            IntakePos = 2;
+        }
+      });
     }
+
+
+public Command IntakePosLower(){
+    return runOnce(()->{
+        IntakePos = IntakePos - 1;
+        if( IntakePos == 0){
+            IntakePos = 1;
+        }
+      });
+    }
+
+
+
 
     public Rotation2d GetIntakeMotorAngle()
     {
