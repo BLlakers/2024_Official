@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class AutoIntake extends Command {
     Intake m_Intake;
     int TargetDeg;
-    public static int Pos2 = 68;
-    public static int Pos1 = 0;
+    public static int Pos2 = 68; //  Down
+    public static int Pos1 = 0; // starting
     public double CurrentIntakePose;
     public double IntakeTolerence = 3;
     public double StaticSetpointDeg = 30; // This needs to be measured TODO
@@ -32,6 +32,7 @@ public void execute(){
             }
     } else{
         m_Intake.intakeAngleMtr.set(0);
+        m_Intake.intakeAngleMtrEnc.setPosition(0);
     }
 }
     
