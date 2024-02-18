@@ -12,21 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "AutoLowerIntake"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Front - RightNote"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoLowerIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Front - RightNote"
+                }
+              }
+            ]
           }
         },
         {

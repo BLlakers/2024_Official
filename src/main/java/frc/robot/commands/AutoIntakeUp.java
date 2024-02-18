@@ -13,8 +13,8 @@ public class AutoIntakeUp extends Command {
     public double StaticSetpointDeg = 30; // This needs to be measured TODO
 
     @Override
-public void initialize(){
-}
+    public void initialize(){
+    }
     public AutoIntakeUp(Intake IntakeSub) {
 
         m_Intake = IntakeSub;
@@ -22,18 +22,27 @@ public void initialize(){
         addRequirements(m_Intake);
 
     }
-@Override
-public void execute(){
-    if (m_Intake.GetIntakeMotorAngle().getDegrees() > Pos1){
-        m_Intake.intakeAngleMtr.set(-.35);
-    } else {
+
+    @Override
+    public void execute(){
+        if (m_Intake.GetIntakeMotorAngle().getDegrees() > Pos1){
+            m_Intake.intakeAngleMtr.set(-.35);
+        } else {
+            m_Intake.intakeAngleMtr.set(0);
+        }
+    }
+    @Override
+    public void end(boolean inerrupted){
         m_Intake.intakeAngleMtr.set(0);
     }
-
-
-
-
-
-}
+    @Override
+    public boolean isFinished(){
+        if( m_Intake.GetIntakeMotorAngle().getDegrees() > Pos1){
+            
+            return false;
+        }else {
+            return true;
+        }
+    }
 
 }

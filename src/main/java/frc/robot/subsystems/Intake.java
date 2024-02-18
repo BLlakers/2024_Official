@@ -16,6 +16,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
+
+import com.revrobotics.ColorSensorV3;
+
 public class Intake extends SubsystemBase  {
     
     public CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.intakeAngleMtrC,
@@ -30,6 +35,17 @@ public class Intake extends SubsystemBase  {
     public int IntakePos = 1; 
     public static double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
     //I set this at 410 to account for gravity orginal value was 445 -Ben
+public Color detectedColor;
+public double IR;
+    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+
+    /**
+     * A Rev Color Sensor V3 object is constructed with an I2C port as a 
+     * parameter. The device will be automatically initialized with default 
+     * parameters.
+     */
+    public final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+    
     public Intake(){
         // intakeWheelMtr1.follow(intakeWheelMtr2);
         intakeAngleMtrEnc.setPosition(0);
@@ -40,8 +56,19 @@ public class Intake extends SubsystemBase  {
     @Override
 
     public void periodic() {
-        // armRotationMtr1.follow(armRotationMtr2);
+        detectedColor = m_colorSensor.getColor();
 
+        /**
+         * The sensor returns a raw IR value of the infrared light detected.
+         */
+        IR = m_colorSensor.getIR();
+        // armRotationMtr1.follow(armRotationMtr2);
+        SmartDashboard.putNumber("IR",IR);
+        SmartDashboard.putNumber("Color/Red", detectedColor.red);
+        
+        SmartDashboard.putNumber("Color/blue", detectedColor.blue);
+        SmartDashboard.putNumber("Color/green", detectedColor.green);
+        
         SmartDashboard.putNumber("Intake Position", GetIntakeMotorAngle().getDegrees());
     }
 
@@ -83,8 +110,8 @@ public Command StopIntake(){
       public Command ReverseIntakeWheels() {
         return runOnce(
             () -> {
-        intakeWheelMtrL.set(1);
-        intakeWheelMtrR.set(-1);
+        intakeWheelMtrL.set(.1);
+        intakeWheelMtrR.set(-.1);
             });
       }
    /* public Command AutoLowerIntake(){

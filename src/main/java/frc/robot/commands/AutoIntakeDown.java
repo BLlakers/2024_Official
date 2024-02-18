@@ -29,6 +29,30 @@ public void execute(){
     } else {
         m_Intake.intakeAngleMtr.set(0);
     }
+
+    if (m_Intake.IR < 40){
+    m_Intake.intakeWheelMtrL.set(-.5); // inverted
+    m_Intake.intakeWheelMtrR.set(-.5);
+    } else {
+    m_Intake.intakeWheelMtrL.set(0); // inverted
+    m_Intake.intakeWheelMtrR.set(0);
+    }
+
+}
+@Override
+public void end(boolean inerrupted){
+    m_Intake.intakeAngleMtr.set(0);
+    m_Intake.intakeWheelMtrL.set(0); // inverted
+    m_Intake.intakeWheelMtrR.set(0);
+}
+@Override
+public boolean isFinished(){
+    if (m_Intake.IR < 40){
+    return false;
+   // }else{
+    //    return true;
+   // }
+}
   /*  CurrentIntakePose = m_Intake.GetIntakeMotorAngle().getDegrees();
     if (m_Intake.IntakePos == 1){
         TargetDeg = Pos1;
@@ -59,7 +83,8 @@ public void execute(){
 
 
 
-
+return false;
+}
 }
 
-}
+
