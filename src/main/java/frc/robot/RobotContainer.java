@@ -52,12 +52,12 @@ import frc.robot.subsystems.Tags;
 
 public class RobotContainer {
   DriveTrainPID m_DriveTrainPID = new DriveTrainPID(Constants.defaultRobotVersion);
-  Arm m_Arm = new Arm();
-  Stuff m_Stuff = new Stuff();
-  Tags m_Tags = new Tags();
-  Intake m_Intake = new Intake();
-  Shooter m_Shooter = new Shooter();
-  Hanger m_Hanger = new Hanger();
+ // Arm m_Arm = new Arm();
+ // Stuff m_Stuff = new Stuff();
+ // Tags m_Tags = new Tags();
+ // Intake m_Intake = new Intake();
+ // Shooter m_Shooter = new Shooter();
+ // Hanger m_Hanger = new Hanger();
   //Shooter 
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
@@ -150,7 +150,7 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-   driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
+   //driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
     // limelight allign works on both controllers
@@ -165,36 +165,36 @@ public class RobotContainer {
     driverButtonA.onTrue(m_DriveTrainPID.toggleFieldRelativeEnable());
     // WP - DO NOT UNCOMMENT WITHOUT TALKING TO WARD
     driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
-    m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
+    //m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
     
     
     
     
-    driverButtonY.whileTrue(m_Shooter.RunShooter());
-    driverButtonY.whileFalse(m_Shooter.StopShooter());
+   // driverButtonY.whileTrue(m_Shooter.RunShooter());
+   // driverButtonY.whileFalse(m_Shooter.StopShooter());
     
-    manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
-    manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
-   driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());//moves down
-   driverButtonLeft.onFalse(m_Shooter.AngleStop());
-   driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); //moves up
-   driverButtonRight.onFalse(m_Shooter.AngleStop()); 
+   // manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
+   // manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
+  // driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());//moves down
+  // driverButtonLeft.onFalse(m_Shooter.AngleStop());
+  // driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); //moves up
+   //driverButtonRight.onFalse(m_Shooter.AngleStop()); 
     
     
-    manipButtonLeft.whileTrue(m_Intake.LowerIntake());
-    manipButtonRight.whileTrue(m_Intake.RaiseIntake());
-    manipButtonLeft.onFalse(m_Intake.StopIntake());
-    manipButtonRight.onFalse(m_Intake.StopIntake());
+ //   manipButtonLeft.whileTrue(m_Intake.LowerIntake());
+  //  manipButtonRight.whileTrue(m_Intake.RaiseIntake());
+   // manipButtonLeft.onFalse(m_Intake.StopIntake());
+    //manipButtonRight.onFalse(m_Intake.StopIntake());
 
-    manipButtonX.whileTrue(m_Hanger.LeftHangUp());
-    manipButtonY.whileTrue(m_Hanger.RightHangUp());
+    //manipButtonX.whileTrue(m_Hanger.LeftHangUp());
+   // manipButtonY.whileTrue(m_Hanger.RightHangUp());
 
 
     
     
     
-    
+  
     
     // starts at 1, when pressed goes up to 2 (82 Deegrees),
                                                               // when pressed

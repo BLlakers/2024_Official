@@ -54,7 +54,7 @@ public class AutoRotateArmCommand extends Command {
     //}
     // SmartDashboard.putNumber("Target", targetDegrees);
     // SmartDashboard.putNumber("Arm Degrees", m_Arm.ArmDegrees);
-    // Use bang bang control to reach the target
+    // Use bang bang control to reach the target 
 
     // Apply a feedforward constant to hold the arm in position
 

@@ -14,7 +14,7 @@ import frc.robot.subsystems.SwerveModule;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private Arm m_Arm;
+//  private Arm m_Arm;
   String codeVersion = "0.0";
   
   // commit
@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     // UsbCamera camera = new UsbCamera("cam0", 0);
     // camera.setFPS(15);
     // camera.setResolution(480, 320);
-    CameraServer.startAutomaticCapture();
+   // CameraServer.startAutomaticCapture();
 
     SmartDashboard.putString("Code Version", codeVersion);
 
