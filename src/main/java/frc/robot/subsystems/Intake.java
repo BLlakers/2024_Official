@@ -58,12 +58,12 @@ public double IR;
     public void periodic() {
         detectedColor = m_colorSensor.getColor();
 
-        /**
+        /*
          * The sensor returns a raw IR value of the infrared light detected.
          */
         IR = m_colorSensor.getIR();
         // armRotationMtr1.follow(armRotationMtr2);
-        SmartDashboard.putNumber("IR",IR);
+        SmartDashboard.putNumber("Color/IR",IR);
         SmartDashboard.putNumber("Color/Red", detectedColor.red);
         
         SmartDashboard.putNumber("Color/blue", detectedColor.blue);

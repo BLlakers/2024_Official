@@ -212,8 +212,8 @@ public class RobotContainer {
    driverButtonRight.onFalse(m_Shooter.AngleStop()); 
     ManippovUp.onTrue(new AutoIntakeUp(m_Intake));   
     ManippovDown.onTrue(new AutoIntakeDown(m_Intake));    
-    manipButtonLeft.onTrue(new AutoIntakeDown(m_Intake)); /*m_Intake.IntakePosLower()*/
-    manipButtonRight.onTrue(m_Intake.IntakePosRaise());
+    //manipButtonLeft.onTrue(new AutoIntakeDown(m_Intake)); /*m_Intake.IntakePosLower()*/
+    //manipButtonRight.onTrue(m_Intake.IntakePosRaise());
     //manipButtonLeft.onFalse(m_Intake.StopIntake());
     //manipButtonRight.onFalse(m_Intake.StopIntake());
 

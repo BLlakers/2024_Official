@@ -49,9 +49,10 @@ public void end(boolean inerrupted){
 public boolean isFinished(){
     if (m_Intake.IR < 40){
     return false;
-   // }else{
-    //    return true;
-   // }
+    }else{
+        return true;
+   }
+ }
 }
   /*  CurrentIntakePose = m_Intake.GetIntakeMotorAngle().getDegrees();
     if (m_Intake.IntakePos == 1){
@@ -80,11 +81,5 @@ public boolean isFinished(){
 
 */
 
-
-
-
-return false;
-}
-}
 
 
