@@ -59,7 +59,7 @@ public class SwerveModule extends SubsystemBase {
      * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
      * and turning encoder.
      *
-     * @param driveMotorChannel     CAN ID for the drive motor.
+     * @param driveMotorChannel     CAN ID for the drive motor.  
      * @param turningMotorChannel   CAN ID for the turning motor.
      * @param driveEncoder          DIO input for the drive encoder channel A
      * @param turnEncoderPWMChannel DIO input for the drive encoder channel B
