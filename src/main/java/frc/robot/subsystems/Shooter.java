@@ -78,6 +78,15 @@ public class Shooter extends SubsystemBase {
 
     }
 
+    public void CalibrateShooterAngle()
+    {
+        // update to be non-blocking
+        while (!BottomLimitSwitchTripped())
+            SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
+
+        m_angleMtrEnc.setPosition(0);
+    }
+
     public void Shoot()
     {
         double speed = 0.85; // percentage
