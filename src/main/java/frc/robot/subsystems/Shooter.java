@@ -114,8 +114,8 @@ public class Shooter extends SubsystemBase {
         double interiorLength = Math.sqrt(
             heightOfLeadScrew * heightOfLeadScrew + LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET * LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET
         );
-        double interiorAngle = Math.atan2(heightOfLeadScrew, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET);
-        double exteriorAngle = Math.acos(
+        double interiorAngle = Math.atan2(heightOfLeadScrew, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET); // bottom triangle
+        double exteriorAngle = Math.acos( // top triangle LAW OF COSINES
             (
                 LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK
                 + interiorLength * interiorLength
@@ -126,7 +126,7 @@ public class Shooter extends SubsystemBase {
             )
         );
 
-        double shooterAngle = interiorAngle + exteriorAngle;
+        double shooterAngle = interiorAngle + exteriorAngle; // all angle 
 
         return Rotation2d.fromRadians(shooterAngle);
 

@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.Shooter;
 
 public class OrientShooterAngle extends ProfiledPIDCommand {
-
-    public OrientShooterAngle(Shooter shooter, Rotation2d goal)
+int jared = 1;
+    public OrientShooterAngle(Shooter shooter, Rotation2d goal, int jared)
     {   
         super(
             new ProfiledPIDController(0.5, 0, 0, new TrapezoidProfile.Constraints(0.05, 1.0)),
