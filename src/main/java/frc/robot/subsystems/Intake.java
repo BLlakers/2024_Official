@@ -29,11 +29,14 @@ public class Intake extends SubsystemBase  {
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     public CANSparkMax intakeWheelMtrR = new CANSparkMax(Constants.intakeWheelMtrR,
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+
+    public CANSparkMax passthroughMtr = new CANSparkMax(Constants.passthroughMtrC,
+      com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
     public RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtrL.getEncoder(); 
     public RelativeEncoder intakeWheelMtr2Enc =  intakeWheelMtrR.getEncoder();
     public int IntakePos = 1; 
-    public static double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
+    public static double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR 
     //I set this at 410 to account for gravity orginal value was 445 -Ben
 public Color detectedColor;
 public double IR;
@@ -122,6 +125,18 @@ public Command StopIntake(){
             }
             });
     }*/
+    public Command RunPassthrough(){
+        return runOnce(
+            () -> {
+        passthroughMtr.set(-.95);
+            });
+    }
+    public Command StopPassthrough(){
+        return runOnce(
+            () -> {
+        passthroughMtr.set(0);
+            });
+    }
 
 
 public Command IntakePosRaise(){

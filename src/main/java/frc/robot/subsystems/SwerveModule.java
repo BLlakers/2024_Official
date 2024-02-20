@@ -76,7 +76,7 @@ public class SwerveModule extends SubsystemBase {
     @Override
     public void periodic() {
         // m_turningEncoder.getCountsPerRevolution();
-        double turnEncVal =  Units.radiansToDegrees(m_turningEncoder.getDistance());
+          double turnEncVal =  Units.radiansToDegrees(m_turningEncoder.getDistance());
         double driveEncPos = m_driveEncoder.getPosition();
         double driveEncVel = m_driveEncoder.getVelocity();
 
