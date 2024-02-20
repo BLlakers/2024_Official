@@ -53,7 +53,7 @@ public class AprilAlignCommand extends Command {
         xController.setTolerance(0.1);
         yController.setTolerance(0.1);
         omegaController.setTolerance(Units.degreesToRadians(3));
-        omegaController.enableContinuousInput(-1, 1);
+        omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
         addRequirements(drivetrainSubsystem);
     }
