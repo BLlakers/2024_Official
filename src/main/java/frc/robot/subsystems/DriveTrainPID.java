@@ -158,7 +158,9 @@ public class DriveTrainPID extends SubsystemBase {
         this.m_kinematics,
          navx.getRotation2d(),
         getSwerveModulePositions());
-      
+
+    navx.reset();
+    resetPose(new Pose2d());
 
   }
 /**
