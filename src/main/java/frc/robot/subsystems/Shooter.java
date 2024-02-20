@@ -81,6 +81,8 @@ public class Shooter extends SubsystemBase {
     public void CalibrateShooterAngle()
     {
         // update to be non-blocking
+        if (m_limitSwitchBottom == null)
+            return; // don't calibrate if you don't have a limit switch
         while (!BottomLimitSwitchTripped())
             SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
 
