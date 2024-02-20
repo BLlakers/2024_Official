@@ -13,6 +13,7 @@ import frc.robot.subsystems.Shooter;
 
 public class OrientShooterAngle extends ProfiledPIDCommand {
     private Shooter m_Shooter;
+    private boolean m_dynamicAngling;
 
     private static double s_kP = 0.5;
     private static double s_kI = 0.0;
@@ -21,6 +22,11 @@ public class OrientShooterAngle extends ProfiledPIDCommand {
     private static final double s_maxShooterAnglingVelocity     = Shooter.s_angleMotorSpeedPercentage; // motor percentage power
     private static final double s_maxShooterAnglingAcceleration = s_maxShooterAnglingVelocity / 2;     // motor percentage power
 
+    /**
+     * Orient the shooter angle to a fixed goal
+     * @param shooter - the shooter subsystem
+     * @param goal - Rotation2d object of the goal
+     */
     public OrientShooterAngle(Shooter shooter, Rotation2d goal) {
         super(
                 new ProfiledPIDController(s_kP, s_kI, s_kD, new TrapezoidProfile.Constraints(s_maxShooterAnglingVelocity, s_maxShooterAnglingAcceleration)),
@@ -33,6 +39,27 @@ public class OrientShooterAngle extends ProfiledPIDCommand {
                 
         getController().enableContinuousInput(-Math.PI, Math.PI);
         m_Shooter = shooter;
+        m_dynamicAngling = false;
+    }
+
+    /**
+     * Orient the shooter angle adaptively with a dynamic goal supplier
+     * @param shooter - the shooter subystem
+     * @param goalSupplier - the dynamic goal supplier for the angle to achieve (in radians)
+     */
+    public OrientShooterAngle(Shooter shooter, DoubleSupplier goalSupplier) {
+        super(
+                new ProfiledPIDController(s_kP, s_kI, s_kD, new TrapezoidProfile.Constraints(s_maxShooterAnglingVelocity, s_maxShooterAnglingAcceleration)),
+                () -> {
+                    return shooter.GetShooterAngle().getRadians();
+                },
+                goalSupplier,
+                (output, setpoint) -> shooter.SetShooterAngleSpeedPercentage(output),
+                shooter);
+                
+        getController().enableContinuousInput(-Math.PI, Math.PI);
+        m_Shooter = shooter;
+        m_dynamicAngling = true;
     }
 
     @Override
@@ -48,6 +75,8 @@ public class OrientShooterAngle extends ProfiledPIDCommand {
 
     @Override
     public boolean isFinished() {
+        if (m_dynamicAngling) // if you are angling the shooter dynamically, don't stop moving it
+            return false;
         return getController().atGoal();
     }
 

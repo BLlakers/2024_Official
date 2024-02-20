@@ -18,6 +18,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrainPID;
 
 // TODO DO 1 PID AT A TIME !!!!!
@@ -29,8 +30,8 @@ public class AprilAlignCommand extends Command {
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
 
-    private static final double MAX_RADIUS = 3; // meters
-    private static final double OPTIMAL_RADIUS = 2; // meters
+    private static final double MAX_RADIUS = 2; // meters
+    private static final double OPTIMAL_RADIUS = 1.5; // meters
     private static final Transform2d DEFAULT_TAG_TO_GOAL = new Transform2d(new Translation2d(OPTIMAL_RADIUS, 0),
             Rotation2d.fromDegrees(0)); //180
 
@@ -79,8 +80,6 @@ public class AprilAlignCommand extends Command {
     Pose3d botToTarget = aprilTag.pose;
     Translation2d botToTargetTranslation = botToTarget.getTranslation().toTranslation2d();
     Rotation2d targetDirection = botToTargetTranslation.getAngle();
-    System.out.println("3D:" + botToTarget.toString());
-    System.out.println("2D:" + botToTargetTranslation.toString());
     
     
     // Transform the tag's pose to set our goal
@@ -91,9 +90,6 @@ public class AprilAlignCommand extends Command {
       targetDirection
     );
     goalPose = robotPose.transformBy(botToGoalPose);
-    System.out.println("goalPose:" + goalPose.toString());
-    System.out.println("robotPose:" + robotPose.toString());
-    System.out.println("botToGoalPose:" + botToGoalPose.toString());
 
     if (null != goalPose) {
       // Drive
@@ -118,21 +114,34 @@ public class AprilAlignCommand extends Command {
       omegaSpeed = 0;
     }
 
-   // xSpeed = Math.min(xSpeed, kdriveMaxDriveSpeed);
-    //ySpeed = Math.min(ySpeed, kdriveMaxDriveSpeed);
-
     m_drivetrain.driveChassisSpeeds(
        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
-    
-    SmartDashboard.putNumber("FRxSpeed", xSpeed);
-    SmartDashboard.putNumber("FRySpeed", ySpeed);
-    SmartDashboard.putNumber("FRrotSpeed", omegaSpeed);
     
   }
  
     @Override
     public void end(boolean interrupted) {
         m_drivetrain.stopModules();
+    }
+
+    protected boolean PoseIsWithinGoalRadius(Pose2d robotPose)
+    {
+        Translation2d goalLocation = new Translation2d(xController.getGoal().position, yController.getGoal().position);
+        double distance = robotPose.getTranslation().getDistance(goalLocation);
+
+        return distance <= MAX_RADIUS;
+
+    }
+
+    public boolean RobotIsWithinGoalRadius()
+    {
+      return PoseIsWithinGoalRadius(m_drivetrain.getPose2d());
+    }
+
+    @Override
+    public boolean isFinished()
+    {
+        return omegaController.atGoal() && RobotIsWithinGoalRadius();
     }
 
 }

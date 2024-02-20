@@ -78,11 +78,17 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    public Command RunShooter() {
+    public void Shoot()
+    {
         double speed = 0.85; // percentage
+        SetShootingSpeed(speed);
+    }
+
+    public Command RunShooter() {
+        
         return runOnce(
                 () -> {
-                    SetShootingSpeed(speed);
+                    Shoot();
                 });
     }
 
