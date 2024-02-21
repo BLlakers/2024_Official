@@ -22,7 +22,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class Hanger extends SubsystemBase{
-    
+    public static String HangType = "HangUp"; // Tracks what Command we are running. Not needed but implemented for viewing purposes. 
+    public static int HangState = 0; //  Tracks the total state. Not needed but implemented for viewing purposes.
     public CANSparkMax hangerLeftMtr = new CANSparkMax(Constants.hangerLeftMtrC,
         com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     public CANSparkMax hangerRightMtr = new CANSparkMax(Constants.hangerRightMtrC,
@@ -63,6 +64,7 @@ public class Hanger extends SubsystemBase{
         hangerLeftMtrEnc.setPosition(0.0);
         hangerRightMtrEnc.setPosition(0.0);
     }
+    
 
     public Command ResetHangCmd(){
         return runOnce(
