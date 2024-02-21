@@ -23,11 +23,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AutoRotateArmCommand;
+import frc.robot.commands.HangCommand;
 import frc.robot.commands.SwerveDriveCommand;
 //add in later
 //import frc.robot.commands.AprilAlignCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Stuff;
 import frc.robot.subsystems.Tags;
@@ -38,6 +40,7 @@ public class RobotContainer {
   Stuff m_Stuff = new Stuff();
   Tags m_Tags = new Tags();
   Intake m_Intake = new Intake();
+  Hanger m_Hanger = new Hanger();
   //Shooter 
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
@@ -61,6 +64,7 @@ public class RobotContainer {
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
     JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
+  JoystickButton manipButtonStart = new JoystickButton(manipController, Constants.buttonStart);
 
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
@@ -110,10 +114,22 @@ public class RobotContainer {
     driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
+
+    manipButtonA.whileTrue(new HangCommand(m_Hanger));
+    manipButtonStart.onTrue(m_Hanger.ResetHangCmd());
+    
+
     
     
-    manipButtonLeft.onTrue(m_Arm.LowerArm()); // starts at 1 (5 deegrees) goes down
-    manipButtonRight.onTrue(m_Arm.RaiseArm());
+    manipButtonLeft.whileTrue(m_Hanger.LeftHangUp()); // starts at 1 (5 deegrees) goes down
+    manipButtonLeft.onFalse(m_Hanger.LeftHangStop());
+    manipButtonRight.whileTrue(m_Hanger.RightHangUp());
+    manipButtonRight.onFalse(m_Hanger.RightHangStop());
+    manipButtonX.whileTrue(m_Hanger.LeftHangDown());
+    manipButtonX.onFalse(m_Hanger.LeftHangStop());
+    manipButtonY.whileTrue(m_Hanger.RightHangDown());
+    manipButtonY.onFalse(m_Hanger.RightHangStop());
+    
     
     
     
@@ -122,10 +138,10 @@ public class RobotContainer {
     
     
     
-    manipButtonX.whileTrue(m_Intake.RaiseIntake());
-    manipButtonY.whileTrue(m_Intake.LowerIntake());
-    manipButtonX.onFalse(m_Intake.StopIntake());
-    manipButtonY.onFalse(m_Intake.StopIntake());
+    // manipButtonX.whileTrue(m_Intake.RaiseIntake());
+    // manipButtonY.whileTrue(m_Intake.LowerIntake());
+    // manipButtonX.onFalse(m_Intake.StopIntake());
+    // manipButtonY.onFalse(m_Intake.StopIntake());
     
     
     

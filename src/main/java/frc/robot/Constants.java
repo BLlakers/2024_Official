@@ -58,8 +58,8 @@ public final class Constants {
 
 
     //HANGER
-    public final static int hangerLeftMtrC = 17;
-    public final static int hangerRightMtrC = 18;
+    public final static int hangerLeftMtrC = 9;
+    public final static int hangerRightMtrC = 10;
 
 
 
@@ -81,6 +81,7 @@ public final class Constants {
     public static int buttonLeft = 5;
     public static int buttonRight = 6;
     public static int buttonOptions = 7;
+    public static int buttonStart = 8;
     public static int buttonLS = 9;
     public static int buttonRS = 10;
     public static double deadzone = 0.17;
