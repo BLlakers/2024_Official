@@ -104,7 +104,7 @@ public class HangCommand extends Command {
                 m_HangerSub.hangerLeftMtr.set(-0.9);
                 m_HangerSub.hangerRightMtr.set(-0.9);
             }
-        }else if(HangState == 3){
+        }else if(HangState == 3 ){
             m_HangerSub.hangerLeftMtr.set(0);
             m_HangerSub.hangerRightMtr.set(0);
         }else{
