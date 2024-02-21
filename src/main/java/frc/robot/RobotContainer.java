@@ -53,7 +53,7 @@ import frc.robot.subsystems.Tags;
 public class RobotContainer {
   DriveTrainPID m_DriveTrainPID = new DriveTrainPID(Constants.defaultRobotVersion);
  // Arm m_Arm = new Arm();
- // Stuff m_Stuff = new Stuff();
+ Stuff m_Stuff = new Stuff();
  // Tags m_Tags = new Tags();
  // Intake m_Intake = new Intake();
  // Shooter m_Shooter = new Shooter();
@@ -150,7 +150,7 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-   //driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
+   driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
     // limelight allign works on both controllers
@@ -198,7 +198,7 @@ public class RobotContainer {
     
     // starts at 1, when pressed goes up to 2 (82 Deegrees),
                                                               // when pressed
-    driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
+    // driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
 
     // again goes up to 3 (85 deegrees)
     // TODO RT Accelerate LT Deaccelerate
