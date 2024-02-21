@@ -29,7 +29,7 @@ public class AutoShooter extends Command {
     private final OrientShooterAngle m_orientShooterAngleCommand;
     private final AprilAlignCommand m_aprilAlignCommand;
 
-    private static final Transform3d APRILTAG_TO_SHOOTINGTARGET = new Transform3d(); // TODO: update
+    private static final Transform3d APRILTAG_TO_SHOOTINGTARGET = new Transform3d(); // TODO: update should be top of shooter 
 
     public AutoShooter(Supplier<AprilTag> aprilTagSupplier, Shooter m_ShooterSub, DriveTrainPID drivetrainSubsystem) {
         m_drivetrainSubsystem = drivetrainSubsystem;

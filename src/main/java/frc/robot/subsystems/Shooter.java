@@ -59,7 +59,7 @@ public class Shooter extends SubsystemBase {
         double positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO;
         m_angleMtrEnc.setPositionConversionFactor(positionConversionFactor);
         m_angleMtrEnc.setVelocityConversionFactor(positionConversionFactor / 60);
-
+        // why did dimitri do this? 
         // limit switches
         if (Constants.shooterLimitSwitchTopDIO >= 0)
             m_limitSwitchTop = new DigitalInput(Constants.shooterLimitSwitchTopDIO);
@@ -217,7 +217,7 @@ public class Shooter extends SubsystemBase {
         double heightOfLeadScrew = GetHeightAlongLeadScrew();
 
         // geometrical equations
-        double interiorLength = Math.sqrt(
+        double interiorLength = Math.sqrt( //Math.hypot(heightOfLeadScrew, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET) This does same exact thing in way less lines TODO 
                 heightOfLeadScrew * heightOfLeadScrew
                         + LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET * LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET);
         double interiorAngle = Math.atan2(heightOfLeadScrew, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET); // bottom triangle
