@@ -17,11 +17,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrainPID;
 
-// TODO DO 1 PID AT A TIME !!!!!
-// WHAT I MEAN IS DO ROTATION, Y, then X.
 public class AprilAlignCommand extends Command {
-  public static double ConstraintsConstant = 1; 
-  public static double PIDConstant = 16; 
     private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); //TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
@@ -31,8 +27,6 @@ public class AprilAlignCommand extends Command {
     private static final double OPTIMAL_RADIUS = 1.5; // meters
     private static final Transform2d DEFAULT_TAG_TO_GOAL = new Transform2d(new Translation2d(OPTIMAL_RADIUS, 0),
             Rotation2d.fromDegrees(0)); //180
-
-    private static final double kdriveMaxDriveSpeed = 0.1; // meters per second
 
     private final DriveTrainPID m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
