@@ -39,11 +39,6 @@ public class Hanger extends SubsystemBase{
 
     }
 
-
-    //public Hanger(Supplier<Rotation3d> robotOrientationSupplier){
-      //  m_robotOrientationSupplier = robotOrientationSupplier;
-   // }
-
     @Override
 
     public void periodic() {
@@ -54,17 +49,6 @@ public class Hanger extends SubsystemBase{
 
         SmartDashboard.putNumber("Hanger/Left Current",hangerLeftMtr.getOutputCurrent());
         SmartDashboard.putNumber("Hanger/Right Current",hangerRightMtr.getOutputCurrent());
-
-        Rotation3d robotOrientation = m_robotOrientationSupplier.get();
-
-        double roll, pitch, yaw;
-        roll  = robotOrientation.getX(); // radians
-        pitch = robotOrientation.getY(); // radians 
-        yaw   = robotOrientation.getZ(); // radians
-
-        SmartDashboard.putNumber("Robot/Navx/Orientation/Roll",  Units.radiansToDegrees(roll));
-        SmartDashboard.putNumber("Robot/Navx/Orientation/Pitch", Units.radiansToDegrees(pitch));
-        SmartDashboard.putNumber("Robot/Navx/Orientation/Yaw",   Units.radiansToDegrees(yaw));
     }
 
     public Command LeftHangUp() {

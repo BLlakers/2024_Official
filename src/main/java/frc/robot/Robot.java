@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_robotContainer.m_DriveTrainPID.m_FieldRelativeEnable = false;
+    m_robotContainer.m_DriveTrain.m_FieldRelativeEnable = false;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.m_DriveTrainPID.m_FieldRelativeEnable = true;
+    m_robotContainer.m_DriveTrain.m_FieldRelativeEnable = true;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

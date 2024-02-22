@@ -12,18 +12,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.commands.AlignCommand;
-import frc.robot.commands.AutoRotateArmCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.commands.AprilAlignCommand;
 import frc.robot.subsystems.Limelight;
@@ -135,9 +128,8 @@ public class RobotContainer {
     m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(),
         () -> driverController.getRightTriggerAxis(), m_DriveTrain));
-    driverButtonX.whileTrue(new AlignCommand(m_DriveTrain, () -> frc.robot.subsystems.Stuff.angle));
     // WHEEL LOCK
-    driverButtonRS.onTrue(m_DriveTrain.WheelzLock());
+    driverButtonRS.onTrue(m_DriveTrain.WheelLockCommand());
     // ZERO GYRO
     driverButtonB.onTrue(m_DriveTrain.ZeroGyro());
     // TOGGLE FIELD RELATIVE ON AND OFF
@@ -166,19 +158,6 @@ public class RobotContainer {
     manipButtonY.whileTrue(m_Hanger.RightHangUp());
 
   }
-
-  private void configureShuffleboard() {
-    // Add commands to the autonomous command chooser
-    m_chooser.setDefaultOption("Auto 1", 1);
-    m_chooser.addOption("Auto 2", 2);
-    m_chooser.addOption("Auto 3", 3);
-
-    SmartDashboard.putData(m_chooser);
-
-    // SmartDashboard.putData(m_DriveTrainPID.GetPose2d().getTranslation());
-
-  }
-
   public Command getAutonomousCommand() {
     // loads New Auto auto file
     // Where we set order of autoCommands
