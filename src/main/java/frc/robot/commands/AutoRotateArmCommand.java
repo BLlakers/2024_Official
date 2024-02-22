@@ -62,7 +62,7 @@ public class AutoRotateArmCommand extends Command {
     // Logic if the limit switch is pressed
     // Set the encoder to the lower position, update the position we are at
     // accordingly
-  }
+
   
 
   @Override
