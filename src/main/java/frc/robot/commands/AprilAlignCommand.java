@@ -22,11 +22,9 @@ public class AprilAlignCommand extends Command {
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
 
-    private static final double MIN_RADIUS = 0.75; // meters
-    private static final double MAX_RADIUS = 2; // meters
+    private static final double MIN_RADIUS = 0.75;    // meters
     private static final double OPTIMAL_RADIUS = 1.5; // meters
-    private static final Transform2d DEFAULT_TAG_TO_GOAL = new Transform2d(new Translation2d(OPTIMAL_RADIUS, 0),
-            Rotation2d.fromDegrees(0)); //180
+    private static final double MAX_RADIUS = 2;       // meters
 
     private final DriveTrainPID m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
@@ -61,17 +59,16 @@ public class AprilAlignCommand extends Command {
   @Override
   public void execute() {
     // Grab the current states: april tag in view and the current robot pose
-    Pose2d robotPose = m_drivetrain.getPose2d();
+    Pose2d robotPose   = m_drivetrain.getPose2d();
     AprilTag aprilTag  = m_aprilTagProvider.get();
     if (aprilTag.ID <= 0) { // is valid if > 0: we update our current estimate of where the april tag is relative to the robot
       m_drivetrain.stopModules();
       return;
     }
     // Find the tag we want to chase
-    Pose3d botToTarget = aprilTag.pose;
+    Pose3d botToTarget                   = aprilTag.pose;
     Translation2d botToTargetTranslation = botToTarget.getTranslation().toTranslation2d();
-    Rotation2d targetDirection = botToTargetTranslation.getAngle();
-    
+    Rotation2d targetDirection           = botToTargetTranslation.getAngle();
     
     // Transform the tag's pose to set our goal
     Transform2d botToGoalPose = new Transform2d(
@@ -106,7 +103,8 @@ public class AprilAlignCommand extends Command {
     }
 
     m_drivetrain.driveChassisSpeeds(
-       ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+       ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation())
+    );
     
   }
  
