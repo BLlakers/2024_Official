@@ -18,6 +18,8 @@ public class OrientShooterAngle extends ProfiledPIDCommand {
     private static double s_kP = 0.5;
     private static double s_kI = 0.0;
     private static double s_kD = 0.0;
+
+    public static Rotation2d s_DefaultAngle = Rotation2d.fromDegrees(55); // TODO: to be changed based on experiment
     
     private static final double s_maxShooterAnglingVelocity     = Shooter.s_angleMotorSpeedPercentage; // motor percentage power
     private static final double s_maxShooterAnglingAcceleration = s_maxShooterAnglingVelocity / 2;     // motor percentage power
@@ -62,6 +64,21 @@ public class OrientShooterAngle extends ProfiledPIDCommand {
         m_dynamicAngling = true;
     }
 
+    /**
+     * Provides a default command constructor to a preset desired default angle
+     * 
+     * This is intended as a backup for running this command with the pre-defined optimal
+     * shooter angle (used for up close shooting)
+     * 
+     * @param shooter - the Robot's "Shooter" subsystem
+     * @return OrientShooterAngle command set for the default angle 
+     */
+    public static OrientShooterAngle DefaultOrientShooterAngleCommand(Shooter shooter)
+    {
+        return new OrientShooterAngle(shooter, OrientShooterAngle.s_DefaultAngle);
+
+    }
+
     @Override
     public void initialize() {
         super.initialize();
@@ -70,6 +87,7 @@ public class OrientShooterAngle extends ProfiledPIDCommand {
 
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         m_Shooter.AngleStop();
     }
 
