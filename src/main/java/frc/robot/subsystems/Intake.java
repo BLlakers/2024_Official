@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.commands.AutoIntake;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
@@ -32,14 +33,15 @@ public class Intake extends SubsystemBase  {
 
     public CANSparkMax passthroughMtr = new CANSparkMax(Constants.passthroughMtrC,
       com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+      // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
     public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
     public RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtrL.getEncoder(); 
     public RelativeEncoder intakeWheelMtr2Enc =  intakeWheelMtrR.getEncoder();
-    public int IntakePos = 1; 
+ //   public int IntakePos = 1; 
     public static double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR 
     //I set this at 410 to account for gravity orginal value was 445 -Ben
-public Color detectedColor;
-public double IR;
+    public Color detectedColor;
+    public double IR;
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
     /**
@@ -89,12 +91,12 @@ public double IR;
             });
       }
 
-public Command StopIntake(){
-    return runOnce(
-     () -> {
-        intakeAngleMtr.set(0);
-    });
-}
+    public Command StopIntake(){
+        return runOnce(
+         () -> {
+            intakeAngleMtr.set(0);
+        });
+    }
     public Command RunIntakeWheels() {
         return runOnce(
             () -> {
@@ -138,27 +140,16 @@ public Command StopIntake(){
             });
     }
 
-
-public Command IntakePosRaise(){
-    return runOnce(()->{
-        IntakePos = IntakePos + 1;
-        if( IntakePos == 3){
-            IntakePos = 2;
-        }
-      });
+    public Command AmpMode(){
+        return runOnce(()->{
+            if (AutoIntake.IsAmp == false){
+                AutoIntake.IsAmp = true;
+            } 
+            else if (AutoIntake.IsAmp == true){
+                AutoIntake.IsAmp = false;
+            }
+        });
     }
-
-
-public Command IntakePosLower(){
-    return runOnce(()->{
-        IntakePos = IntakePos - 1;
-        if( IntakePos == 0){
-            IntakePos = 1;
-        }
-      });
-    }
-
-
 
 
     public Rotation2d GetIntakeMotorAngle()
