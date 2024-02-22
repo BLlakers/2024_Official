@@ -30,6 +30,7 @@ public class AprilAlignCommand extends Command {
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
 
+    private static final double MIN_RADIUS = 0.75; // meters
     private static final double MAX_RADIUS = 2; // meters
     private static final double OPTIMAL_RADIUS = 1.5; // meters
     private static final Transform2d DEFAULT_TAG_TO_GOAL = new Transform2d(new Translation2d(OPTIMAL_RADIUS, 0),
@@ -129,7 +130,7 @@ public class AprilAlignCommand extends Command {
         Translation2d goalLocation = new Translation2d(xController.getGoal().position, yController.getGoal().position);
         double distance = robotPose.getTranslation().getDistance(goalLocation);
 
-        return distance <= MAX_RADIUS;
+        return (MIN_RADIUS <= distance) && (distance <= MAX_RADIUS);
 
     }
 
