@@ -1,54 +1,28 @@
 
 package frc.robot;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.commands.AlignCommand;
-import frc.robot.commands.AutoRotateArmCommand;
-import frc.robot.commands.SwerveDriveCommand;
-import frc.robot.Constants.RobotVersionConstants;
-import frc.robot.Other.RobotVersion;
-import frc.robot.commands.AlignCommand;
-import frc.robot.commands.AprilAlignCommand;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Tags;
-import frc.robot.subsystems.Stuff;
-import frc.robot.subsystems.SwerveModule;
-//add in later
-//import frc.robot.commands.AprilAlignCommand;
+
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.DriveTrainPID;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Stuff;
-import frc.robot.subsystems.Tags;
 
 public class RobotContainer {
   DriveTrainPID m_DriveTrainPID = new DriveTrainPID(Constants.defaultRobotVersion);
@@ -58,7 +32,7 @@ public class RobotContainer {
   Intake m_Intake = new Intake();
   Shooter m_Shooter = new Shooter();
   Hanger m_Hanger = new Hanger();
-  //Shooter 
+  // Shooter
 
   XboxController driverController = new XboxController(Constants.DriverControllerChannel);
   XboxController manipController = new XboxController(Constants.ManipControllerChannel);
@@ -78,11 +52,11 @@ public class RobotContainer {
   JoystickButton manipButtonY = new JoystickButton(manipController, Constants.buttonY);
   JoystickButton manipButtonRight = new JoystickButton(manipController, Constants.buttonRight);
   JoystickButton manipButtonLeft = new JoystickButton(manipController, Constants.buttonLeft);
-  
+
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
-    JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
+  JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
 
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
@@ -100,30 +74,29 @@ public class RobotContainer {
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-        field = new Field2d();
-      SmartDashboard.putData("Field", field);
+    field = new Field2d();
+    SmartDashboard.putData("Field", field);
 
-      // Logging callback for current robot pose
-      PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-          // Do whatever you want with the pose here
-          field.setRobotPose(pose);
-      });
+    // Logging callback for current robot pose
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      // Do whatever you want with the pose here
+      field.setRobotPose(pose);
+    });
 
+    // Logging callback for target robot pose
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+      // Do whatever you want with the pose here
+      field.getObject("target pose").setPose(pose);
+    });
 
-      // Logging callback for target robot pose
-      PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-          // Do whatever you want with the pose here
-          field.getObject("target pose").setPose(pose);
-      });
-
-
-      // Logging callback for the active path, this is sent as a list of poses
-      PathPlannerLogging.setLogActivePathCallback((poses) -> {
-          // Do whatever you want with the poses here
-          field.getObject("path").setPoses(poses);
-      });
+    // Logging callback for the active path, this is sent as a list of poses
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+      // Do whatever you want with the poses here
+      field.getObject("path").setPoses(poses);
+    });
   }
-  public void periodic(){
+
+  public void periodic() {
     field.setRobotPose(m_DriveTrainPID.getPose2d());
   }
 
@@ -150,9 +123,10 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-   driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
+    driverButtonLeft.whileTrue(new AprilAlignCommand(() -> m_Stuff.getCurrentAprilTag(), m_DriveTrainPID));
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
-        () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
+        () -> driverController.getLeftX(), () -> driverController.getRightX(),
+        () -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
     // limelight allign works on both controllers
     // manipButtonX.whileTrue(new AlignCommand(m_DriveTrain, () ->
     // frc.robot.subsystems.Stuff.angle));
@@ -167,21 +141,17 @@ public class RobotContainer {
     driverButtonOptions.onTrue(m_DriveTrainPID.resetPose2d());
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
-    
-    
-    
-    
+
     driverButtonY.whileTrue(m_Shooter.RunShooter());
     driverButtonY.whileFalse(m_Shooter.StopShooter());
-    
+
     manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
     manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
-   driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());//moves down
-   driverButtonLeft.onFalse(m_Shooter.AngleStop());
-   driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); //moves up
-   driverButtonRight.onFalse(m_Shooter.AngleStop()); 
-    
-    
+    driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());// moves down
+    driverButtonLeft.onFalse(m_Shooter.AngleStop());
+    driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); // moves up
+    driverButtonRight.onFalse(m_Shooter.AngleStop());
+
     manipButtonLeft.whileTrue(m_Intake.LowerIntake());
     manipButtonRight.whileTrue(m_Intake.RaiseIntake());
     manipButtonLeft.onFalse(m_Intake.StopIntake());
@@ -190,14 +160,8 @@ public class RobotContainer {
     manipButtonX.whileTrue(m_Hanger.LeftHangUp());
     manipButtonY.whileTrue(m_Hanger.RightHangUp());
 
-
-    
-    
-    
-    
-    
     // starts at 1, when pressed goes up to 2 (82 Deegrees),
-                                                              // when pressed
+    // when pressed
     driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
 
     // again goes up to 3 (85 deegrees)
@@ -218,13 +182,12 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //loads New Auto auto file
-       //return new PathPlannerAuto("New Auto");
-      return new SequentialCommandGroup( 
-        new InstantCommand( () -> m_DriveTrainPID.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
+    // loads New Auto auto file
+    // return new PathPlannerAuto("New Auto");
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> m_DriveTrainPID.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
         new WaitCommand(3.0),
-       autoChooser.getSelected()
-      );
+        autoChooser.getSelected());
 
   }
 }
