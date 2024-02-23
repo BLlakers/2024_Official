@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
@@ -58,6 +60,24 @@ public class RobotContainer {
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
   JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
 
+  POVButton DriverpovUp = new POVButton(driverController, 0);
+  POVButton DriverpovRight = new POVButton(driverController, 90);
+  POVButton DriverpovDown = new POVButton(driverController, 180);
+  POVButton DriverpovLeft = new POVButton(driverController, 270);
+  POVButton DriverpovUpRight = new POVButton(driverController, 45);
+  POVButton DriverpovDownRight = new POVButton(driverController, 135);
+  POVButton DriverpovDownLeft = new POVButton(driverController, 225);
+  POVButton DriverpovUpLeft = new POVButton(driverController, 315);
+
+  POVButton ManippovUp = new POVButton(manipController, 0);
+  POVButton ManippovRight = new POVButton(manipController, 90);
+  POVButton ManippovDown = new POVButton(manipController, 180);
+  POVButton ManippovLeft = new POVButton(manipController, 270);
+  POVButton ManippovUpRight = new POVButton(manipController, 45);
+  POVButton ManippovDownRight = new POVButton(manipController, 135);
+  POVButton ManippovDownLeft = new POVButton(manipController, 225);
+  POVButton ManippovUpLeft = new POVButton(manipController, 315);
+
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
   private final SendableChooser<Command> autoChooser;
@@ -68,6 +88,8 @@ public class RobotContainer {
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
+    NamedCommands.registerCommand("AutoLowerIntake", new AutoIntake(m_Intake, AutoIntake.DrivingState.DriveIntakeDown));
+    NamedCommands.registerCommand("AutoRaiseIntake", new AutoIntake(m_Intake, AutoIntake.DrivingState.DriveIntakeUp));
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Another option that allows you to specify the default auto by its name
@@ -147,25 +169,23 @@ public class RobotContainer {
 
     manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
     manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
+    manipButtonLeft.whileTrue(m_Intake.RunPassthrough());
+    manipButtonLeft.whileFalse(m_Intake.StopPassthrough());
+
     driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());// moves down
     driverButtonLeft.onFalse(m_Shooter.AngleStop());
     driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); // moves up
     driverButtonRight.onFalse(m_Shooter.AngleStop());
+    ManippovUp.onTrue(new AutoIntake(m_Intake));
 
-    manipButtonLeft.whileTrue(m_Intake.LowerIntake());
-    manipButtonRight.whileTrue(m_Intake.RaiseIntake());
-    manipButtonLeft.onFalse(m_Intake.StopIntake());
-    manipButtonRight.onFalse(m_Intake.StopIntake());
+    // manipButtonLeft.onTrue(new AutoIntakeDown(m_Intake));
+    // /*m_Intake.IntakePosLower()*/
+    // manipButtonRight.onTrue(m_Intake.IntakePosRaise());
+    // manipButtonLeft.onFalse(m_Intake.StopIntake());
+    // manipButtonRight.onFalse(m_Intake.StopIntake());
 
     manipButtonX.whileTrue(m_Hanger.LeftHangUp());
     manipButtonY.whileTrue(m_Hanger.RightHangUp());
-
-    // starts at 1, when pressed goes up to 2 (82 Deegrees),
-    // when pressed
-    driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
-
-    // again goes up to 3 (85 deegrees)
-    // TODO RT Accelerate LT Deaccelerate
 
   }
 
