@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.apriltag.AprilTag;
@@ -12,18 +14,25 @@ import frc.robot.subsystems.Shooter;
 public class AutoShooter extends Command {
     private final Supplier<AprilTag> m_aprilTagProvider;
     private final Shooter m_shooter;
+    private final BooleanSupplier m_shooterLoaded;
 
     private final OrientShooterAngle m_orientShooterAngleCommand;
     private final AprilAlignCommand m_aprilAlignCommand;
 
     private static final Transform3d APRILTAG_TO_SHOOTINGTARGET = new Transform3d(); // TODO: update should be top of shooter 
 
-    public AutoShooter(Supplier<AprilTag> aprilTagSupplier, Shooter m_ShooterSub, DriveTrainPID drivetrainSubsystem) {
+    public AutoShooter(
+        Supplier<AprilTag> aprilTagSupplier, 
+        Shooter shooterSubsystem, 
+        DriveTrainPID drivetrainSubsystem, 
+        BooleanSupplier shooterLoaded
+    ) {
         m_aprilTagProvider = aprilTagSupplier;
-        m_shooter = m_ShooterSub;
+        m_shooter = shooterSubsystem;
+        m_shooterLoaded = shooterLoaded;
 
         m_aprilAlignCommand = new AprilAlignCommand(aprilTagSupplier, drivetrainSubsystem);
-        m_orientShooterAngleCommand = new OrientShooterAngle(m_ShooterSub, this::CalculateShooterAngle);
+        m_orientShooterAngleCommand = new OrientShooterAngle(shooterSubsystem, this::CalculateShooterAngle);
 
         m_orientShooterAngleCommand.unless(m_aprilAlignCommand::isFinished);
     }
@@ -54,7 +63,7 @@ public class AutoShooter extends Command {
         m_aprilAlignCommand.end(interrupted);
         m_orientShooterAngleCommand.end(interrupted);
 
-        if (!interrupted)
+        if (!interrupted && m_shooterLoaded.getAsBoolean())
             m_shooter.Shoot(); // shoot if we actually reached the target
     }
 
