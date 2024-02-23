@@ -39,8 +39,7 @@ import frc.robot.Constants.RobotVersionConstants;
 import frc.robot.Other.RobotVersion;
 import frc.robot.commands.AlignCommand;
 import frc.robot.commands.AprilAlignCommand;
-import frc.robot.commands.AutoIntakeDown;
-import frc.robot.commands.AutoIntakeUp;
+import frc.robot.commands.AutoIntake;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Tags;
 import frc.robot.subsystems.Stuff;
@@ -122,8 +121,8 @@ public class RobotContainer {
     // Build an auto chooser. This will use Commands.none() as the default option.
     
 
-    NamedCommands.registerCommand("AutoLowerIntake", new AutoIntakeDown(m_Intake));
-    NamedCommands.registerCommand("AutoRaiseIntake", new AutoIntakeUp(m_Intake));
+    NamedCommands.registerCommand("AutoLowerIntake", new AutoIntake(m_Intake, AutoIntake.DrivingState.DriveIntakeDown));
+    NamedCommands.registerCommand("AutoRaiseIntake", new AutoIntake(m_Intake, AutoIntake.DrivingState.DriveIntakeUp));
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -213,13 +212,13 @@ public class RobotContainer {
    driverButtonLeft.onFalse(m_Shooter.AngleStop());
    driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); //moves up
    driverButtonRight.onFalse(m_Shooter.AngleStop()); 
-    ManippovUp.onTrue(new AutoIntakeUp(m_Intake));   
-    ManippovDown.onTrue(new AutoIntakeDown(m_Intake));    
+    ManippovUp.onTrue(new AutoIntake(m_Intake));   
+    
     //manipButtonLeft.onTrue(new AutoIntakeDown(m_Intake)); /*m_Intake.IntakePosLower()*/
     //manipButtonRight.onTrue(m_Intake.IntakePosRaise());
     //manipButtonLeft.onFalse(m_Intake.StopIntake());
     //manipButtonRight.onFalse(m_Intake.StopIntake());
-
+  
     manipButtonX.whileTrue(m_Hanger.LeftHangUp());
     manipButtonY.whileTrue(m_Hanger.RightHangUp());
     driverButtonLeft.whileTrue(m_DriveTrainPID.Break());
