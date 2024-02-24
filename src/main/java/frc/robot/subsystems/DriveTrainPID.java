@@ -160,8 +160,8 @@ public class DriveTrainPID extends SubsystemBase {
          navx.getRotation2d(),
         getSwerveModulePositions());
 
-        navx.reset();
-        resetPose(new Pose2d());
+    navx.reset();
+    resetPose(new Pose2d());
 
   }
 /**
@@ -286,7 +286,7 @@ public class DriveTrainPID extends SubsystemBase {
   }
 /**
  * Resets the Position of the Odometer, given our Current position.
- * @param pose2d (Pose2d) - The current position of the robot on the field. This is a {@link #resetOdometry(Pose2d)} 
+ * @param Pose2d (pose2d) - The current position of the robot on the field. This is a {@link #resetOdometry(Pose2d)} 
  */
   public void resetPose(Pose2d pose2d) {
     resetOdometry(pose2d);

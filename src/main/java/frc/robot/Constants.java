@@ -23,17 +23,17 @@ public final class Constants {
 
     // Robot
     public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(5, 0, 0), // Translation constants 
-      new PIDConstants(3, 0, 0), // Rotation constants 
-      3.68, 
+      new PIDConstants(5, 0, 0), // Translation constants
+      new PIDConstants(3, 0, 0), // Rotation constants
+      3.68,
       0.3875,
-      //DriveTrainPID.m_frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module) 
+      //DriveTrainPID.m_frontLeftLocation.getNorm(), // Drive base radius (distance from center to furthest module)
       new ReplanningConfig()
     );
 
     public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
       0,0,0, new Rotation3d(0,0,0));
-    
+
     public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(DriveTrainPID.kMaxAngularSpeed,DriveTrainPID.kModuleMaxAngularAcceleration);
     public static double driveEncoderCtsperRev = 6.8;
     public static int PHChannel = 30; // REV Pneumatic Hub
@@ -47,13 +47,13 @@ public final class Constants {
     //MISC
     public static double MetersToInches = Meters.of(1.0).in(Inches);
     public static double InchesToMeters = Inches.of(1.0).in(Meters);
-    public static double MagEncoderCountsPerRev = 4096; 
+    public static double MagEncoderCountsPerRev = 4096;
     public static double MagRevPerEncoderCounts = 1/MagEncoderCountsPerRev;
     public static double DriveGearRatio = 8.14;
     public static double TurnGearRatio = 12.8;
     public static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
 
-    //ARM 
+    //ARM
     public final static int intakeAngleMtrC = 16;
     public final static int intakeWheelMtrL = 14;
     public final static int intakeWheelMtrR = 15;
@@ -62,13 +62,15 @@ public final class Constants {
     public final static int shooterMtrLeftC = 11;
     public final static int shooterMtrRightC = 12;
     public final static int shooterAngleMtrC = 13;
+    public final static int shooterLimitSwitchTopDIO = -1;    // TODO: add the digital input channel for this limit switch
+    public final static int shooterLimitSwitchBottomDIO = -1; // TODO: add the digital input channel for this limit switch
 
 
     //HANGER
     public final static int hangerLeftMtrC = 9;
     public final static int hangerRightMtrC = 10;
 
-    //
+//
     public final static int passthroughMtrC = 17;
 
 
@@ -79,7 +81,7 @@ public final class Constants {
 
     public static double[] Positions = { PositionDown, PositionPickup };
     public static double ArmTolerance = 3;
-  
+
 
     // Controller
     public static int DriverControllerChannel = 0;
@@ -117,7 +119,7 @@ public final class Constants {
       public static final double flTurnEncoderOffset = 0;
       public static final double frTurnEncoderOffset = 0;
       public static final double blTurnEncoderOffset = 0;
-      public static final double brTurnEncoderOffset = 0;    
+      public static final double brTurnEncoderOffset = 0;
     }
 
     public class RobotVersion2023 extends RobotVersionConstants
@@ -126,7 +128,7 @@ public final class Constants {
       public static final double frTurnEncoderOffset = 0.730;// 0.3359);
       public static final double blTurnEncoderOffset = .1819;// 1.1819);
       public static final double brTurnEncoderOffset = 0.9262;// , 0.9262
-    } 
+    }
 
      public class RobotVersion2024 extends RobotVersionConstants
     {
@@ -134,7 +136,7 @@ public final class Constants {
       public static final double frTurnEncoderOffset = 0.777;
       public static final double blTurnEncoderOffset = 0.519;
       public static final double brTurnEncoderOffset = 0.625;
-    } 
+    }
 
     public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
 
