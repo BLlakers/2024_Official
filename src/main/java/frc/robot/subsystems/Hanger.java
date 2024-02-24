@@ -19,13 +19,6 @@ public class Hanger extends SubsystemBase {
     private RelativeEncoder hangerLeftMtrEnc = hangerLeftMtr.getEncoder();
     private RelativeEncoder hangerRightMtrEnc = hangerRightMtr.getEncoder();
 
-    // public Supplier<Rotation3d> m_robotOrientationSupplier;
-    // public PIDController m_hangingController = new PIDController(1, 0, 0);
-
-    // private static final double GOAL_HEIGHT = 0.5; // meters
-    // private static final double GOAL_ORIENTATION = 0.0; // radians
-    // public AHRS navx = new AHRS();
-
     public Hanger() { // Limelight - get Rotation3d rel to tag. / get navx pose (Can navx get 3d?)
         ResetHangEnc();
     }

@@ -84,7 +84,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     m_DriveTrain.setName("DriveTrain");
-
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
@@ -171,6 +170,10 @@ public class RobotContainer {
     manipButtonRight.whileTrue(m_Intake.RaiseIntake());
     manipButtonLeft.onFalse(m_Intake.StopIntake());
     manipButtonRight.onFalse(m_Intake.StopIntake());
+
+    // Shooter bindings
+    m_Shooter.setDefaultCommand(new OrientShooterAngle(m_Shooter, OrientShooterAngle.s_DefaultAngle));
+
   }
 
   private void configureShuffleboard() {

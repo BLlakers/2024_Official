@@ -31,6 +31,7 @@ public class Shooter extends SubsystemBase {
     private static final double LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK = Units.inchesToMeters(9.6796875);
     private static final double MOTOR_ANGLE_GEAR_RATIO = 5.0;
     private static final double LEAD_SCREW_PITCH = 1.0; // TODO: revolutions to meters of travel conversion
+    private static final double HEIGHT_OF_SHOOTER_BASE = Units.inchesToMeters(9.0);
     private static final double HEIGHT_OFFSET_LEADSCREW = Units.inchesToMeters(6.375);
 
     // Constants
