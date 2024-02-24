@@ -97,6 +97,7 @@ public class DriveTrainPID extends SubsystemBase {
    *
    */
   public DriveTrainPID(RobotVersion version) { 
+
     AutoBuilder.configureHolonomic(
       
         this::getPose2d,
@@ -160,7 +161,7 @@ public class DriveTrainPID extends SubsystemBase {
         getSwerveModulePositions());
 
         navx.reset();
-      
+        resetPose(new Pose2d());
 
   }
 /**
