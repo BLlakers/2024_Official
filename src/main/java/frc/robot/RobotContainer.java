@@ -63,8 +63,11 @@ public class RobotContainer {
   JoystickButton manipButtonOptions = new JoystickButton(manipController, Constants.buttonOptions);
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
-    JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
+  JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
   JoystickButton manipButtonStart = new JoystickButton(manipController, Constants.buttonStart);
+
+  // commands
+  HangCommand m_hangCommand = new HangCommand(m_Hanger, driverButtonA);
 
   // A chooser for autonomous commands
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
@@ -99,7 +102,8 @@ public class RobotContainer {
     /// m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     m_DriveTrainPID.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
-        () -> driverController.getLeftX(), () -> driverController.getRightX(),() -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
+        () -> driverController.getLeftX(), () -> driverController.getRightX(),
+        () -> driverController.getRightTriggerAxis(), m_DriveTrainPID));
     // limelight allign works on both controllers
     // manipButtonX.whileTrue(new AlignCommand(m_DriveTrain, () ->
     // frc.robot.subsystems.Stuff.angle));
@@ -115,43 +119,17 @@ public class RobotContainer {
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
 
-    manipButtonA.whileTrue(new HangCommand(m_Hanger));
     manipButtonStart.onTrue(m_Hanger.ResetHangCmd());
-    
+    manipButtonA.onTrue(m_hangCommand);
+    manipButtonB.onTrue(new InstantCommand(m_hangCommand::cancel));
 
-    
-    
-    manipButtonLeft.whileTrue(m_Hanger.LeftHangUp()); // starts at 1 (5 deegrees) goes down
-    manipButtonLeft.onFalse(m_Hanger.LeftHangStop());
-    manipButtonRight.whileTrue(m_Hanger.RightHangUp());
-    manipButtonRight.onFalse(m_Hanger.RightHangStop());
-    manipButtonX.whileTrue(m_Hanger.LeftHangDown());
-    manipButtonX.onFalse(m_Hanger.LeftHangStop());
-    manipButtonY.whileTrue(m_Hanger.RightHangDown());
-    manipButtonY.onFalse(m_Hanger.RightHangStop());
-    
-    
-    
-    
     manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
     manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
-    
-    
-    
+
     // manipButtonX.whileTrue(m_Intake.RaiseIntake());
     // manipButtonY.whileTrue(m_Intake.LowerIntake());
     // manipButtonX.onFalse(m_Intake.StopIntake());
     // manipButtonY.onFalse(m_Intake.StopIntake());
-    
-    
-    
-    
-    
-    // starts at 1, when pressed goes up to 2 (82 Deegrees),
-                                                              // when pressed
-            
-    // again goes up to 3 (85 deegrees)
-    // TODO RT Accelerate LT Deaccelerate
 
   }
 
@@ -163,30 +141,37 @@ public class RobotContainer {
 
     SmartDashboard.putData(m_chooser);
 
-    // SmartDashboard.putData(m_DriveTrainPID.GetPose2d().getTranslation());
-
   }
 
   public Command getAutonomousCommand() {
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig
-    (12.1, 8).setKinematics(m_DriveTrainPID.m_kinematics); // we don't know our acceleration 
-   Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0,0,new Rotation2d(0)), List.of(new Translation2d(1,0), new Translation2d(1,-1)), new Pose2d(2, -1, Rotation2d.fromDegrees(180)),trajectoryConfig);
-  
-  
-  PIDController xController = new PIDController(1.5, 0, 0);
-  PIDController yController = new PIDController(1.5, 0, 0);
-  ProfiledPIDController thetaController = new ProfiledPIDController(3, 0,0, Constants.kthetaController);
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(12.1, 8).setKinematics(m_DriveTrainPID.m_kinematics); // we
+                                                                                                                   // don't
+                                                                                                                   // know
+                                                                                                                   // our
+                                                                                                                   // acceleration
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(1, 0), new Translation2d(1, -1)), new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
+        trajectoryConfig);
 
-  SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-trajectory, m_DriveTrainPID::getPose2d, m_DriveTrainPID.m_kinematics, xController, yController, thetaController, m_DriveTrainPID::setModuleStates, m_DriveTrainPID);
+    PIDController xController = new PIDController(1.5, 0, 0);
+    PIDController yController = new PIDController(1.5, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0, Constants.kthetaController);
 
-return new SequentialCommandGroup(new InstantCommand(() -> m_DriveTrainPID.resetOdometry(trajectory.getInitialPose())), swerveControllerCommand, new InstantCommand(() -> m_DriveTrainPID.stopModules()));
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        trajectory, m_DriveTrainPID::getPose2d, m_DriveTrainPID.m_kinematics, xController, yController, thetaController,
+        m_DriveTrainPID::setModuleStates, m_DriveTrainPID);
 
-/*    Command autoSeq = Commands.sequence(
-        m_DriveTrainPID.ZeroGyro(),
-        Commands.waitSeconds(1.0),
-        new AutoCommand(m_DriveTrainPID, m_chooser.getSelected()));
-    return autoSeq;
-    // return new AutoCommand(m_DriveTrain);*/
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> m_DriveTrainPID.resetOdometry(trajectory.getInitialPose())), swerveControllerCommand,
+        new InstantCommand(() -> m_DriveTrainPID.stopModules()));
+
+    /*
+     * Command autoSeq = Commands.sequence(
+     * m_DriveTrainPID.ZeroGyro(),
+     * Commands.waitSeconds(1.0),
+     * new AutoCommand(m_DriveTrainPID, m_chooser.getSelected()));
+     * return autoSeq;
+     * // return new AutoCommand(m_DriveTrain);
+     */
   }
 }
