@@ -59,6 +59,10 @@ public class RobotContainer {
   JoystickButton driverButtonOptions = new JoystickButton(driverController, Constants.buttonOptions);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.buttonRS);
   JoystickButton manipButtonX = new JoystickButton(manipController, Constants.buttonX);
+  JoystickButton manipButtonStart = new JoystickButton(manipController, Constants.buttonStart);
+
+  // commands
+  HangCommand m_hangCommand = new HangCommand(m_Hanger, driverButtonA);
 
   POVButton DriverpovUp = new POVButton(driverController, 0);
   POVButton DriverpovRight = new POVButton(driverController, 90);
@@ -166,29 +170,18 @@ public class RobotContainer {
     m_Arm.setDefaultCommand(new AutoRotateArmCommand(m_Arm));
     driverButtonOption.onTrue(m_DriveTrainPID.resetPose2d());
 
-    driverButtonY.whileTrue(m_Shooter.RunShooter());
-    driverButtonY.whileFalse(m_Shooter.StopShooter());
+    manipButtonStart.onTrue(m_Hanger.ResetHangCmd());
+    manipButtonA.onTrue(m_hangCommand);
+    manipButtonB.onTrue(new InstantCommand(m_hangCommand::cancel));
 
     manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
     manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
-    manipButtonLeft.whileTrue(m_Intake.RunPassthrough());
-    manipButtonLeft.whileFalse(m_Intake.StopPassthrough());
 
     driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());// moves down
     driverButtonLeft.onFalse(m_Shooter.AngleStop());
     driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); // moves up
     driverButtonRight.onFalse(m_Shooter.AngleStop());
     ManippovUp.onTrue(new AutoIntake(m_Intake));
-
-    // manipButtonLeft.onTrue(new AutoIntakeDown(m_Intake));
-    // /*m_Intake.IntakePosLower()*/
-    // manipButtonRight.onTrue(m_Intake.IntakePosRaise());
-    // manipButtonLeft.onFalse(m_Intake.StopIntake());
-    // manipButtonRight.onFalse(m_Intake.StopIntake());
-
-    manipButtonX.whileTrue(m_Hanger.LeftHangUp());
-    manipButtonY.whileTrue(m_Hanger.RightHangUp());
-
   }
 
   private void configureShuffleboard() {
