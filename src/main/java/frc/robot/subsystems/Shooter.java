@@ -201,19 +201,20 @@ public class Shooter extends SubsystemBase {
      */
     public Rotation2d GetShooterAngle() {
         double heightOfLeadScrew = GetHeightAlongLeadScrew();
+        double heightOffsetOfShooterBase = HEIGHT_OF_SHOOTER_BASE - heightOfLeadScrew;
 
         // geometrical equations
-        double interiorLength = Math.sqrt( //Math.hypot(heightOfLeadScrew, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET) This does same exact thing in way less lines TODO 
-                heightOfLeadScrew * heightOfLeadScrew
-                        + LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET * LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET);
-        double interiorAngle = Math.atan2(heightOfLeadScrew, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET); // bottom triangle
+        double interiorLength = Math.hypot(heightOffsetOfShooterBase, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET);
+        double interiorAngle = Math.atan2(heightOffsetOfShooterBase, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET); // bottom triangle
         double exteriorAngle = Math.acos( // top triangle LAW OF COSINES
-                (LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK
-                        + interiorLength * interiorLength
-                        - LENGTH_OF_SHOOTER_LINK * LENGTH_OF_SHOOTER_LINK) /
-                        (2 * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * interiorLength));
+                (
+                    LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK
+                    + interiorLength * interiorLength
+                    - LENGTH_OF_SHOOTER_LINK * LENGTH_OF_SHOOTER_LINK
+                ) /
+                (2 * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * interiorLength));
 
-        double shooterAngle = interiorAngle + exteriorAngle; // all angle
+        double shooterAngle = exteriorAngle - interiorAngle; // all angle
 
         return Rotation2d.fromRadians(shooterAngle);
 
