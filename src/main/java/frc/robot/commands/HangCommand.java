@@ -25,6 +25,7 @@ import com.revrobotics.RelativeEncoder;
 
 public class HangCommand extends Command {
     private Hanger m_HangerSub;
+    public boolean ControllerAHeld;
     public Supplier<Rotation3d> m_robotOrientationSupplier;
     public PIDController m_hangingController = new PIDController(1, 0, 0);
 
@@ -37,7 +38,12 @@ public class HangCommand extends Command {
     double tolerance = 0.5; 
     double ff = 0.1;
 
-    int HangState = 0;
+    public enum HangState{
+        hangUp,
+        hangDown,
+        hangLimit
+    }
+    public HangState CurrentHangState;
 
 
     // public HangCommand(Supplier<Rotation3d> robotOrientationSupplier){ // Limelight - get Rotation3d rel to tag. / get navx pose (Can navx get 3d?)
@@ -51,7 +57,6 @@ public class HangCommand extends Command {
 
     @Override
     public void initialize() {
-        HangState = 0;
         m_HangerSub.ResetHangEnc();
     }
 
@@ -69,21 +74,26 @@ public class HangCommand extends Command {
         // SmartDashboard.putNumber("Robot/Navx/Orientation/Pitch", Units.radiansToDegrees(pitch));
         // SmartDashboard.putNumber("Robot/Navx/Orientation/Yaw",   Units.radiansToDegrees(yaw));
 
-        if (HangState == 0){
-            if(m_HangerSub.hangerLeftMtrEnc.getPosition()  >= 140 && m_HangerSub.hangerRightMtrEnc.getPosition()  >= 140){
-                HangState = 1;
-            }else if(m_HangerSub.hangerLeftMtrEnc.getPosition()  >= 140){
-                m_HangerSub.hangerLeftMtr.set(0);
-            }else if(m_HangerSub.hangerRightMtrEnc.getPosition()  >= 140){
-                m_HangerSub.hangerRightMtr.set(0);
-            }else{
-                m_HangerSub.hangerLeftMtr.set(0.9);
-                m_HangerSub.hangerRightMtr.set(0.9);
-            }
-
-        }else if (HangState == 1){
+        if (ControllerAHeld = true){
+            if (CurrentHangState == HangState.hangUp){
+                if(m_HangerSub.hangerLeftMtrEnc.getPosition()  >= 140 && m_HangerSub.hangerRightMtrEnc.getPosition()  >= 140){
+                    m_HangerSub.LeftHangStop();
+                    m_HangerSub.RightHangStop();
+                    } if(ControllerAHeld = false) {
+                    CurrentHangState = HangState.hangDown;  
+                    }
+                }else if(m_HangerSub.hangerLeftMtrEnc.getPosition()  >= 140){
+                    m_HangerSub.hangerLeftMtr.set(0);
+                }else if(m_HangerSub.hangerRightMtrEnc.getPosition()  >= 140){
+                    m_HangerSub.hangerRightMtr.set(0);
+                }else {
+                    m_HangerSub.hangerLeftMtr.set(0.9);
+                    m_HangerSub.hangerRightMtr.set(0.9);
+                }
+        }
+      /*   else if (CurrentHangState == HangState.hangDown){
             if(m_HangerSub.hangerLeftMtrEnc.getVelocity()  >= -3000 && m_HangerSub.hangerRightMtrEnc.getVelocity()  >= -3000){
-                HangState = 2;
+                CurrentHangState = HangState.HangStop;
             }else if(m_HangerSub.hangerLeftMtrEnc.getVelocity()  >= -3000){
                 m_HangerSub.hangerLeftMtr.set(0);
             }else if(m_HangerSub.hangerRightMtrEnc.getVelocity()  >= -3000){
@@ -92,10 +102,10 @@ public class HangCommand extends Command {
                 m_HangerSub.hangerLeftMtr.set(-0.9);
                 m_HangerSub.hangerRightMtr.set(-0.9);
             }
-
-        }else if(HangState == 2) { 
+*/ // Is this needed? }
+        else if(CurrentHangState == HangState.hangDown) { 
             if(m_HangerSub.hangerLeftMtrEnc.getPosition()  <= 10 && m_HangerSub.hangerRightMtrEnc.getPosition()  <= 10){
-                HangState = 3;
+                CurrentHangState = HangState.hangLimit;
             }else if(m_HangerSub.hangerLeftMtrEnc.getPosition()  <= 10){
                 m_HangerSub.hangerLeftMtr.set(0);
             }else if(m_HangerSub.hangerRightMtrEnc.getPosition()  <= 10){
@@ -104,9 +114,19 @@ public class HangCommand extends Command {
                 m_HangerSub.hangerLeftMtr.set(-0.9);
                 m_HangerSub.hangerRightMtr.set(-0.9);
             }
-        }else if(HangState == 3 ){
-            m_HangerSub.hangerLeftMtr.set(0);
-            m_HangerSub.hangerRightMtr.set(0);
+        }else if(CurrentHangState == HangState.hangLimit){
+            if (m_HangerSub.LimitSwitchRightGet() == true){
+                m_HangerSub.RightHangStop().schedule();
+            } else {
+                m_HangerSub.RightHangDown().schedule();
+            }
+            
+            if(m_HangerSub.LimitSwitchLeftGet() == true){
+                m_HangerSub.LeftHangStop().schedule();
+            }else{
+                m_HangerSub.LeftHangDown().schedule();
+            }
+        
         }else{
             m_HangerSub.hangerLeftMtr.set(0);
             m_HangerSub.hangerRightMtr.set(0);
@@ -117,12 +137,8 @@ public class HangCommand extends Command {
 
     @Override
     public boolean isFinished(){
-        if(HangState == 3){
-            return true;
-        }else {
             return false;
         }
-    }
 
     @Override
     public void end(boolean interrupted) {

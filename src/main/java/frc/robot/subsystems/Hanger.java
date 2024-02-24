@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -22,8 +23,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class Hanger extends SubsystemBase{
-    public static String HangType = "HangUp"; // Tracks what Command we are running. Not needed but implemented for viewing purposes. 
-    public static int HangState = 0; //  Tracks the total state. Not needed but implemented for viewing purposes.
+    public DigitalInput hangRightLimitSwitch = new DigitalInput(9);
+    public DigitalInput hangLeftLimitSwitch = new DigitalInput(8);
     public CANSparkMax hangerLeftMtr = new CANSparkMax(Constants.hangerLeftMtrC,
         com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     public CANSparkMax hangerRightMtr = new CANSparkMax(Constants.hangerRightMtrC,
@@ -112,6 +113,12 @@ public class Hanger extends SubsystemBase{
             () -> {
             hangerRightMtr.set(0);
             });
+      }
+      public boolean LimitSwitchLeftGet(){
+       return hangLeftLimitSwitch.get();
+      }
+         public boolean LimitSwitchRightGet(){
+       return hangRightLimitSwitch.get();
       }
 
     //   public double getHangVelocityEQ(double speed){

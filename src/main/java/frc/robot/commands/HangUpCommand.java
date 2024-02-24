@@ -14,7 +14,7 @@ public void initialize() {
 }
 
     public void execute(){
-    if (Hanger.HangState == 0){
+   /*  if (Hanger.HangState == 0){
         if(m_HangerSub.hangerLeftMtrEnc.getPosition()  >= 140 && m_HangerSub.hangerRightMtrEnc.getPosition()  >= 140){
         Hanger.HangState = 1; 
         Hanger.HangType = "HangDown";
@@ -27,6 +27,6 @@ public void initialize() {
             m_HangerSub.hangerLeftMtr.set(0.9);
             m_HangerSub.hangerRightMtr.set(0.9);
         }
-    }
+    }*/
     }
 }

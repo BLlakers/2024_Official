@@ -13,7 +13,7 @@ public class HangDownCommand extends Command {
     }
 
     public void execute() {
-        if (Hanger.HangType == "HangDown"){
+    /*    if (Hanger.HangType == "HangDown"){
         if (m_HangerSub.hangerLeftMtrEnc.getVelocity() >= -3000 && m_HangerSub.hangerRightMtrEnc.getVelocity() >= -3000) {
             Hanger.HangState = 2;
         } else if (m_HangerSub.hangerLeftMtrEnc.getVelocity() >= -3000) {
@@ -44,5 +44,7 @@ public class HangDownCommand extends Command {
         }
         isFinished();
     }
+}
+*/
 }
 }
