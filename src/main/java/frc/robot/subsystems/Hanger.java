@@ -9,9 +9,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class Hanger extends SubsystemBase {
-    private DigitalInput hangRightMagSwitch = new DigitalInput(9);
-    private DigitalInput hangLeftMagSwitch = new DigitalInput(8);
-    private DigitalInput test = new DigitalInput(7);
+    private DigitalInput hangRightMagSwitch = new DigitalInput(8);
+    private DigitalInput hangLeftMagSwitch = new DigitalInput(7);
     private CANSparkMax hangerLeftMtr = new CANSparkMax(Constants.Hanger.LeftMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     private CANSparkMax hangerRightMtr = new CANSparkMax(Constants.Hanger.RightMtrC,
@@ -36,14 +35,17 @@ public class Hanger extends SubsystemBase {
         // navx.getRotation3d();
         // armRotationMtr1.follow(armRotationMtr2);
 
-        SmartDashboard.putNumber("Hanger/Left Hang Pos", hangerLeftMtrEnc.getPosition());
-        SmartDashboard.putNumber("Hanger/Right Hang Pos", hangerRightMtrEnc.getPosition());
+        SmartDashboard.putNumber("Hanger/Left/Hang Pos", hangerLeftMtrEnc.getPosition());
+        SmartDashboard.putNumber("Hanger/Right/Hang Pos", hangerRightMtrEnc.getPosition());
 
-        SmartDashboard.putNumber("Hanger/Left Current", hangerLeftMtr.getOutputCurrent());
-        SmartDashboard.putNumber("Hanger/Right Current", hangerRightMtr.getOutputCurrent());
-        SmartDashboard.putNumber("Hanger/Left Hang Velo", hangerLeftMtrEnc.getVelocity());
-        SmartDashboard.putNumber("Hanger/Right Hang Velo", hangerRightMtrEnc.getVelocity());
-        SmartDashboard.putBoolean("Window Sensor", test.get());
+        SmartDashboard.putNumber("Hanger/Left/Current", hangerLeftMtr.getOutputCurrent());
+        SmartDashboard.putNumber("Hanger/Right/Current", hangerRightMtr.getOutputCurrent());
+
+        SmartDashboard.putNumber("Hanger/Left/Hang Velo", hangerLeftMtrEnc.getVelocity());
+        SmartDashboard.putNumber("Hanger/Right/Hang Velo", hangerRightMtrEnc.getVelocity());
+
+        SmartDashboard.putBoolean("Hanger/Left/MagSwitch Engaged", LeftHangIsDown());
+        SmartDashboard.putBoolean("Hanger/Right/MagSwitch Engaged", RightHangIsDown());
 
     }
 

@@ -61,7 +61,7 @@
             "content": {
               "_type": "Network Table Tree",
               "_source0": "network_table:///SmartDashboard/AprilTag",
-              "_title": "SmartDashboard/AprilTag",
+              "_title": "AprilTag",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -101,7 +101,7 @@
             "content": {
               "_type": "Network Table Tree",
               "_source0": "network_table:///SmartDashboard/Shooter",
-              "_title": "/SmartDashboard/Shooter",
+              "_title": "Shooter",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -114,7 +114,7 @@
             "content": {
               "_type": "Network Table Tree",
               "_source0": "network_table:///SmartDashboard/Hanger",
-              "_title": "/SmartDashboard/Hanger",
+              "_title": "Hanger",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -127,7 +127,7 @@
             "content": {
               "_type": "Network Table Tree",
               "_source0": "network_table:///SmartDashboard/Robot",
-              "_title": "/SmartDashboard/Robot",
+              "_title": "Robot",
               "_glyph": 148,
               "_showGlyph": true
             }

@@ -38,8 +38,6 @@ public class Intake extends SubsystemBase {
     // public int IntakePos = 1;
     public static final double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
     // I set this at 410 to account for gravity orginal value was 445 -Ben
-    private Color detectedColor;
-    private double IR;
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
     public static final double PosDownAngle = 68; // Down
@@ -51,8 +49,6 @@ public class Intake extends SubsystemBase {
      * parameter. The device will be automatically initialized with default
      * parameters.
      */
-    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-
     public Intake() {
         // intakeWheelMtr1.follow(intakeWheelMtr2);
         double intakeAngleMotorPositionConversion = 2 * Math.PI; // revolutions -> radians
@@ -63,12 +59,6 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // armRotationMtr1.follow(armRotationMtr2);
-        SmartDashboard.putNumber("Intake/IR Detector/Color/IR", IR);
-        SmartDashboard.putNumber("Intake/IR Detector/Color/Red", detectedColor.red);
-        SmartDashboard.putNumber("Intake/IR Detector/Color/blue", detectedColor.blue);
-        SmartDashboard.putNumber("Intake/IR Detector/Color/green", detectedColor.green);
-
         SmartDashboard.putNumber("Intake/Position", GetIntakeMotorAngle().getDegrees());
 
         if (GetIntakeMotorAngle().getDegrees() >= Intake.PosUpAngle) {
@@ -87,7 +77,7 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean NoteIsLoaded() {
-        return m_colorSensor.getIR() > 40;
+        return false; // TODO
     }
 
     public Command LowerIntake() {
