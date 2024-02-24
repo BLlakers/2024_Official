@@ -11,11 +11,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class Shooter extends SubsystemBase {
-    private CANSparkMax m_shooterMtrLeft = new CANSparkMax(Constants.shooterMtrLeftC,
+    private CANSparkMax m_shooterMtrLeft = new CANSparkMax(Constants.Shooter.LeftMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax m_shooterMtrRight = new CANSparkMax(Constants.shooterMtrRightC,
+    private CANSparkMax m_shooterMtrRight = new CANSparkMax(Constants.Shooter.RightMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax m_shooterAngleMtr = new CANSparkMax(Constants.shooterAngleMtrC,
+    private CANSparkMax m_shooterAngleMtr = new CANSparkMax(Constants.Shooter.AngleMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
     private RelativeEncoder m_shooterMtrLeftEnc = m_shooterMtrLeft.getEncoder();
@@ -37,7 +37,7 @@ public class Shooter extends SubsystemBase {
     public static final double s_angleMotorSpeedPercentage = 0.95;
     public static final double s_positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO; // meters
     public static final double s_velocityConversionFactor = s_positionConversionFactor / 60; // meters per second
-    public static final double s_maxAngleMotorSpeed = Constants.NeoMaxSpeedRPM * s_velocityConversionFactor ;
+    public static final double s_maxAngleMotorSpeed = Constants.Conversion.NeoMaxSpeedRPM * s_velocityConversionFactor ;
 
     public Shooter() {
         // shooterMtrLeft.follow(shooterMtrRight, true);
@@ -46,10 +46,10 @@ public class Shooter extends SubsystemBase {
         m_angleMtrEnc.setVelocityConversionFactor(positionConversionFactor / 60);
         // why did dimitri do this? 
         // limit switches
-        if (Constants.shooterLimitSwitchTopDIO >= 0)
-            m_limitSwitchTop = new DigitalInput(Constants.shooterLimitSwitchTopDIO);
-        if (Constants.shooterLimitSwitchBottomDIO >= 0)
-            m_limitSwitchBottom = new DigitalInput(Constants.shooterLimitSwitchBottomDIO);
+        if (Constants.Shooter.LimitSwitchTopDIO >= 0)
+            m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
+        if (Constants.Shooter.LimitSwitchBottomDIO >= 0)
+            m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
 
         CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
     }

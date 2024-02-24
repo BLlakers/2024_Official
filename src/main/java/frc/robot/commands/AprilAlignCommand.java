@@ -15,7 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.subsystems.DriveTrain;
 
 public class AprilAlignCommand extends Command {
     private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); //TODO DO 1 PID AT A TIME !!!!!
@@ -26,16 +26,16 @@ public class AprilAlignCommand extends Command {
     private static final double OPTIMAL_RADIUS = 1.5; // meters
     private static final double MAX_RADIUS = 2;       // meters
 
-    private final DriveTrainPID m_drivetrain;
+    private final DriveTrain m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
-    private final ProfiledPIDController yController = new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS); //2 TODO DO 1 PID AT A TIME !!!!! 4/4
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS); //1 TODO DO 1 PID AT A TIME !!!!! 2/4
+    private final ProfiledPIDController xController = new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS); 
+    private final ProfiledPIDController yController = new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS); 
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS);
 
     private Pose2d goalPose;
 
-    public AprilAlignCommand(Supplier<AprilTag> aprilTagSupplier, DriveTrainPID drivetrainSubsystem) {
+    public AprilAlignCommand(Supplier<AprilTag> aprilTagSupplier, DriveTrain drivetrainSubsystem) {
         this.m_drivetrain = drivetrainSubsystem;
         this.m_aprilTagProvider = aprilTagSupplier;
 

@@ -1,16 +1,9 @@
-
 package frc.robot.commands;
-
 import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import com.revrobotics.CANSparkMax;
-
 import frc.robot.Constants;
-
-import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.RobotContainer;
 
 public class SwerveDriveCommand extends Command {
@@ -18,21 +11,11 @@ public class SwerveDriveCommand extends Command {
   DoubleSupplier m_leftX;
   DoubleSupplier m_rightX;
   DoubleSupplier m_AccelerateRT;
-  // double leftY;
-  // double leftX;
-  // double rightX;
-  DriveTrainPID m_DriveTrain;
+  DriveTrain m_DriveTrain;
   RobotContainer m_RobotContainer;
-  // double x;
-  // double y;
-  // double rot;
-  // double w1ca;
-  // double w2ca;
-  // double w3ca;
-  // double w4ca;
 
   public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX, DoubleSupplier _AccelerateRT,
-      DriveTrainPID _dTrain) {
+      DriveTrain _dTrain) {
     m_leftY = _leftY;
     m_leftX = _leftX;
     m_rightX = _rightX;
@@ -63,30 +46,26 @@ public class SwerveDriveCommand extends Command {
     Double leftX = m_leftX.getAsDouble();
     Double leftY = m_leftY.getAsDouble();
     Double rightX = m_rightX.getAsDouble();
-    // System.out.println();
 
-    // Finds the X Value of the Left Stick on the Controller and Takes Care of
-    // Joystick Drift
-    if (Math.abs(leftX) < Constants.deadzone) {
+    // Finds the X Value of the Left Stick on the Controller and Takes Care of Joystick Drift
+    if (Math.abs(leftX) < Constants.Controller.deadzone) {
       x = 0.0;
     } else {
       x = -leftX;
     }
 
-    // Finds the Y Value of the Left Stick on the Controller and Takes Care of
-    // Joystick Drift
-    if (Math.abs(leftY) < Constants.deadzone) {
+    // Finds the Y Value of the Left Stick on the Controller and Takes Care of Joystick Drift
+    if (Math.abs(leftY) < Constants.Controller.deadzone) {
       y = 0.0;
     } else {
       y = -leftY;
     }
 
-    // Finds the X Value of the Right Stick on the Controller and Takes Care of
-    // Joystick Drift
-    if (Math.abs(rightX) < Constants.deadzone) {
+    // Finds the X Value of the Right Stick on the Controller and Takes Care of Joystick Drift
+    if (Math.abs(rightX) < Constants.Controller.deadzone) {
       rot = 0.0;
     } else {
-      rot = -Math.signum(rightX) * (Math.abs(rightX) - Constants.deadzone) / (1 - Constants.deadzone);
+      rot = -Math.signum(rightX) * (Math.abs(rightX) - Constants.Controller.deadzone) / (1 - Constants.Controller.deadzone); // this calculation proportinonalizes our controller based off of our deadzone
     }
     RT = AccelerateRT;
 
@@ -96,15 +75,14 @@ public class SwerveDriveCommand extends Command {
       x /= normalizingFactor;
       y /= normalizingFactor;
     }
-    // Swerve drive uses a different Y and X than expected!
-    double xSpeed = y * DriveTrainPID.kMaxSpeed * RT;
-    double ySpeed = x * DriveTrainPID.kMaxSpeed * RT;
-    double rotSpeed = rot * DriveTrainPID.kMaxTurnAngularSpeed;
+    double xSpeed = y * DriveTrain.kMaxSpeed * RT;
+    double ySpeed = x * DriveTrain.kMaxSpeed * RT;
+    double rotSpeed = rot * DriveTrain.kMaxTurnAngularSpeed;
     SmartDashboard.putNumber("Robot/Controller/Command/X Speed", xSpeed);
     SmartDashboard.putNumber("Robot/Controller/Command/Y Speed", ySpeed);
 
     m_DriveTrain.drive(xSpeed, ySpeed, rotSpeed);
-    Pose2d pose = m_DriveTrain.getPose2d();
+    //Pose2d pose = m_DriveTrain.getPose2d(); UNUSED. Would print pose2d out
     //System.out.println(pose);
   }
 

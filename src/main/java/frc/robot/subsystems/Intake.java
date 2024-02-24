@@ -1,22 +1,10 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-import frc.robot.commands.AutoIntake;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DigitalInput;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -34,11 +22,11 @@ public class Intake extends SubsystemBase {
         PositionOther
     }
 
-    private CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.intakeAngleMtrC,
+    private CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.Intake.AngleMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax intakeWheelMtrL = new CANSparkMax(Constants.intakeWheelMtrL,
+    private CANSparkMax intakeWheelMtrL = new CANSparkMax(Constants.Intake.LeftWheelMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax intakeWheelMtrR = new CANSparkMax(Constants.intakeWheelMtrR,
+    private CANSparkMax intakeWheelMtrR = new CANSparkMax(Constants.Intake.RightWheelMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
     private State m_CurrentState = State.PositionUp;

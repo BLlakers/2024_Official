@@ -6,22 +6,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType; //TODO Was giving us weird error 
+import com.revrobotics.SparkPIDController; 
 import com.revrobotics.SparkPIDController.AccelStrategy;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,12 +27,12 @@ import frc.robot.Constants;
  */
 public class SwerveModule extends SubsystemBase {
 
-    private static final double kPositionConversionFactor = (Constants.kWheelDiameterM * Math.PI) / Constants.DriveGearRatio;
+    private static final double kPositionConversionFactor = (Constants.Conversion.kWheelDiameterM * Math.PI) / Constants.Conversion.DriveGearRatio;
     private static final double kVelocityConversionFactor = kPositionConversionFactor / 60;
 
     // kWheelCircumference used to be
     public static final double kDriveMaxSpeed = Units.feetToMeters(12.5);
-    public static final double kModuleMaxAngularVelocity = DriveTrainPID.kMaxAngularSpeed;
+    public static final double kModuleMaxAngularVelocity = DriveTrain.kMaxAngularSpeed;
     public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
     public final CANSparkMax m_driveMotor;
@@ -131,7 +124,7 @@ public class SwerveModule extends SubsystemBase {
      * Returns the current state of the module.
      * <pi> This takes a current velocity for each diffrent drive encoder and a current angle. 
      *
-     * @return The current state of each Swerve Module.
+     * @return The current state of each Swerve Module. --> The speed and angle of a Module
      */
     public SwerveModuleState getModuleState() {
         // the getVelocity() function normally returns RPM but is scaled in the
@@ -145,7 +138,7 @@ public class SwerveModule extends SubsystemBase {
      
      * This gets a current  Position (Distance per rotation in meters) for each diffrent drive encoder and a current angle from the Duty Cycle encoder. 
      *
-     * @return The current Position of each Swerve Module
+     * @return The current Position of each Swerve Module 
      */
     public SwerveModulePosition getModulePosition() {
         return new SwerveModulePosition(
@@ -154,8 +147,8 @@ public class SwerveModule extends SubsystemBase {
         );
     }  
     /**
-     * Sets the desired state for the module.
-     *
+     * Sets the desired state for the module. <p>
+     * This means the speed it should be going and the angle it should be going.
      * @param desiredState Desired state with speed and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
@@ -206,16 +199,8 @@ public class SwerveModule extends SubsystemBase {
      */
     public double closestAngleCalculator(double currentAngle, double desiredAngle) {
         double signedDiff = 0.0;
-        double rawDiff = currentAngle > desiredAngle ? currentAngle - desiredAngle : desiredAngle - currentAngle; // find
-                                                                                                                  // the
-                                                                                                                  // positive
-                                                                                                                  // raw
-                                                                                                                  // distance
-                                                                                                                  // between
-                                                                                                                  // the
-                                                                                                                  // angles
+        double rawDiff = currentAngle > desiredAngle ? currentAngle - desiredAngle : desiredAngle - currentAngle; // find the positive raw distance between the angles
         double modDiff = rawDiff % (2 * Math.PI); // constrain the difference to a full circle
-
         if (modDiff > Math.PI) { // if the angle is greater than half a rotation, go backwards
             signedDiff = ((2 * Math.PI) - modDiff); // full circle minus the angle
             if (desiredAngle > currentAngle)
@@ -227,7 +212,7 @@ public class SwerveModule extends SubsystemBase {
         }
         return signedDiff;
     }
-
+/** Tells the drive and turning motor to stop */
     public void stop() {
         m_driveMotor.set(0);
         m_turningMotor.set(0);

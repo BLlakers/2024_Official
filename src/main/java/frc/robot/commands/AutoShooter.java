@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import frc.robot.subsystems.DriveTrainPID;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 
 public class AutoShooter extends Command {
@@ -24,7 +24,7 @@ public class AutoShooter extends Command {
     public AutoShooter(
         Supplier<AprilTag> aprilTagSupplier, 
         Shooter shooterSubsystem, 
-        DriveTrainPID drivetrainSubsystem, 
+        DriveTrain drivetrainSubsystem, 
         BooleanSupplier shooterLoaded
     ) {
         m_aprilTagProvider = aprilTagSupplier;

@@ -1,25 +1,10 @@
 package frc.robot.subsystems;
 
-// TODO FILE SHOULD BE A COMMAND, NOT A SUB
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import java.util.function.Supplier;
-
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -27,9 +12,9 @@ public class Hanger extends SubsystemBase {
     private DigitalInput hangRightMagSwitch = new DigitalInput(9);
     private DigitalInput hangLeftMagSwitch = new DigitalInput(8);
     private DigitalInput test = new DigitalInput(7);
-    private CANSparkMax hangerLeftMtr = new CANSparkMax(Constants.hangerLeftMtrC,
+    private CANSparkMax hangerLeftMtr = new CANSparkMax(Constants.Hanger.LeftMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax hangerRightMtr = new CANSparkMax(Constants.hangerRightMtrC,
+    private CANSparkMax hangerRightMtr = new CANSparkMax(Constants.Hanger.RightMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
     private RelativeEncoder hangerLeftMtrEnc = hangerLeftMtr.getEncoder();
@@ -45,11 +30,6 @@ public class Hanger extends SubsystemBase {
     public Hanger() { // Limelight - get Rotation3d rel to tag. / get navx pose (Can navx get 3d?)
         ResetHangEnc();
     }
-
-
-    //public Hanger(Supplier<Rotation3d> robotOrientationSupplier){
-      //  m_robotOrientationSupplier = robotOrientationSupplier;
-   // }
 
     @Override
     public void periodic() {
