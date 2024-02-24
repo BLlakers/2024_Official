@@ -234,12 +234,12 @@ public class DriveTrainPID extends SubsystemBase {
     //updating our current position
     Pose2d currentPose = this.getPose2d();
     ChassisSpeeds currentChassisSpeeds = this.getChassisSpeeds();
-    SmartDashboard.putNumber("Robot/Odometry/Pose X", currentPose.getX());
-    SmartDashboard.putNumber("Robot/Odometry/Pose Y", currentPose.getY());
-    SmartDashboard.putNumber("Robot/Odometry/Pose Rot", currentPose.getRotation().getDegrees());
-    SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds X", currentChassisSpeeds.vxMetersPerSecond);
-    SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Y", currentChassisSpeeds.vyMetersPerSecond);
-    SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Rot",
+    SmartDashboard.putNumber("Robot/Odometry/Pose/X", currentPose.getX());
+    SmartDashboard.putNumber("Robot/Odometry/Pose/Y", currentPose.getY());
+    SmartDashboard.putNumber("Robot/Odometry/Pose/Rot", currentPose.getRotation().getDegrees());
+    SmartDashboard.putNumber("Robot/Odometry/Chassis Speed/X", currentChassisSpeeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("Robot/Odometry/Chassis Speed/Y", currentChassisSpeeds.vyMetersPerSecond);
+    SmartDashboard.putNumber("Robot/Odometry/Chassis Speed/Rot",
     Units.radiansToDegrees(currentChassisSpeeds.omegaRadiansPerSecond));
     SmartDashboard.putNumber("Robot/Odometry/navx/Rotation", navx.getRotation2d().getDegrees());
 
@@ -337,10 +337,13 @@ public class DriveTrainPID extends SubsystemBase {
  */
 
   public Command resetPose2d() {
-    return runOnce(
+    Command cmd = runOnce(
         () -> {
           resetPose(new Pose2d());
         });
+    cmd.setName("DriveTrainPID Reset Pose");
+
+    return cmd;
   }
 /**
  * 

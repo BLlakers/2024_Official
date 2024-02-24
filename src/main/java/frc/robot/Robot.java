@@ -2,7 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,24 +18,25 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Arm m_Arm;
   String codeVersion = "0.0";
-  
+  private PowerDistribution PDH = new PowerDistribution(20, PowerDistribution.ModuleType.kRev);
   // commit
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
 
     // camera stuff edited at comp
-    // UsbCamera camera = new UsbCamera("cam0", 0);
-    // camera.setFPS(15);
-    // camera.setResolution(480, 320);
+    //UsbCamera camera = new UsbCamera("cam0", 0);
+    //camera.setFPS(15);
+    //camera.setResolution(480, 320);
+    //CameraServer.addCamera(camera);
     CameraServer.startAutomaticCapture();
 
     SmartDashboard.putString("Code Version", codeVersion);
-
   }
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putData(PDH);
     CommandScheduler.getInstance().run();
   }
 

@@ -117,6 +117,8 @@ public class RobotContainer {
   List<Pose2d> currentPath = new ArrayList<Pose2d>();
 
   public RobotContainer() {
+    m_DriveTrainPID.setName("DriveTrain");
+
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
@@ -227,15 +229,8 @@ public class RobotContainer {
   }
 
   private void configureShuffleboard() {
-    // Add commands to the autonomous command chooser
-    m_chooser.setDefaultOption("Auto 1", 1);
-    m_chooser.addOption("Auto 2", 2);
-    m_chooser.addOption("Auto 3", 3);
-
-    SmartDashboard.putData(m_chooser);
-
-    // SmartDashboard.putData(m_DriveTrainPID.GetPose2d().getTranslation());
-
+    // Add commands to the autonomous command choose
+    SmartDashboard.putData(m_DriveTrainPID.resetPose2d());
   }
 
   public Command getAutonomousCommand() {
