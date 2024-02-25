@@ -170,6 +170,9 @@ public class RobotContainer {
     manipButtonRight.whileTrue(m_Intake.RaiseIntake());
     manipButtonLeft.onFalse(m_Intake.StopIntake());
     manipButtonRight.onFalse(m_Intake.StopIntake());
+    manipButtonA.whileTrue(m_Shooter.RunShooter());
+    manipButtonA.whileFalse(m_Shooter.StopShooter());
+
 
     // Shooter bindings
     m_Shooter.setDefaultCommand(new OrientShooterAngle(m_Shooter, OrientShooterAngle.s_DefaultAngle));

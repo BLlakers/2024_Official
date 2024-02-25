@@ -52,7 +52,7 @@ public class Shooter extends SubsystemBase {
         if (Constants.Shooter.LimitSwitchBottomDIO >= 0)
             m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
 
-        CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
+//CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
     }
 
     @Override
@@ -92,6 +92,9 @@ public class Shooter extends SubsystemBase {
         return runOnce(
                 () -> {
                     Shoot();
+                    /*m_shooterMtrLeft.set(1);
+                    m_shooterMtrRight.set(-1);*/
+
                 });
     }
 
@@ -124,8 +127,8 @@ public class Shooter extends SubsystemBase {
      *                         shooter motors
      */
     public void SetShootingSpeed(double maxSpeedPercent) {
-        m_shooterMtrLeft.set(-maxSpeedPercent);
-        m_shooterMtrRight.set(maxSpeedPercent);
+        m_shooterMtrLeft.set(maxSpeedPercent);
+        m_shooterMtrRight.set(-maxSpeedPercent);
     }
 
     /**
