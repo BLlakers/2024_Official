@@ -24,33 +24,24 @@ public class Intake extends SubsystemBase {
 
     private CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.Intake.AngleMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax intakeWheelMtrL = new CANSparkMax(Constants.Intake.LeftWheelMtrC,
+    private CANSparkMax intakeWheelMtr = new CANSparkMax(Constants.Intake.IntakeWheelMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax intakeWheelMtrR = new CANSparkMax(Constants.Intake.RightWheelMtrC,
-            com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
+    
 
     private State m_CurrentState = State.PositionUp;
 
     // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
     private RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
-    private RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtrL.getEncoder();
-    private RelativeEncoder intakeWheelMtr2Enc = intakeWheelMtrR.getEncoder();
+    private RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtr.getEncoder();
+
     // public int IntakePos = 1;
     public static final double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
     // I set this at 410 to account for gravity orginal value was 445 -Ben
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
     public static final double PosDownAngle = 68; // Down
     public static final double PosUpAngle = 0; // starting
     public static final double PosAmpAngle = 30; // This needs to be measured TODO
-
-    /**
-     * A Rev Color Sensor V3 object is constructed with an I2C port as a
-     * parameter. The device will be automatically initialized with default
-     * parameters.
-     */
     public Intake() {
-        // intakeWheelMtr1.follow(intakeWheelMtr2);
         double intakeAngleMotorPositionConversion = 2 * Math.PI; // revolutions -> radians
         double intakeAngleMotorVelocityConversion = intakeAngleMotorPositionConversion / 60; // rpm -> radians/second
         intakeAngleMtrEnc.setPositionConversionFactor(intakeAngleMotorPositionConversion);
@@ -104,24 +95,21 @@ public class Intake extends SubsystemBase {
     public Command RunIntakeWheels() {
         return runOnce(
                 () -> {
-                    intakeWheelMtrL.set(-.5); // inverted
-                    intakeWheelMtrR.set(-.5);
+                    intakeWheelMtr.set(-.5); // inverted
                 });
     }
 
     public Command StopIntakeWheels() {
         return runOnce(
                 () -> {
-                    intakeWheelMtrL.set(0);
-                    intakeWheelMtrR.set(0);
+                    intakeWheelMtr.set(0);
                 });
     }
 
     public Command ReverseIntakeWheels() {
         return runOnce(
                 () -> {
-                    intakeWheelMtrL.set(1);
-                    intakeWheelMtrR.set(-1);
+                    intakeWheelMtr.set(1);
                 });
     }
 

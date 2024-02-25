@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
     private DigitalInput m_limitSwitchBottom = null;
 
     // Constants to calculate the angle of the shooter
-    private static final double LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET = Units.inchesToMeters(5.4375);
+    private static final double LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET = Units.inchesToMeters(5.4375); //  3 1/8th INCH 
     private static final double LENGTH_OF_SHOOTER_LINK = Units.inchesToMeters(3.9453125);
     private static final double LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK = Units.inchesToMeters(9.6796875);
     private static final double MOTOR_ANGLE_GEAR_RATIO = 5.0;

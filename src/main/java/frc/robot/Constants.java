@@ -82,9 +82,8 @@ public final class Constants {
   }
 
   public static class Intake {
-    public final static int AngleMtrC = 16;
-    public final static int LeftWheelMtrC = 14;
-    public final static int RightWheelMtrC = 15;
+    public final static int AngleMtrC = 15;
+    public final static int IntakeWheelMtrC = 14;
   }
 
   // SHOOTER
@@ -92,8 +91,8 @@ public final class Constants {
     public final static int LeftMtrC = 11;
     public final static int RightMtrC = 12;
     public final static int AngleMtrC = 13;
-    public final static int LimitSwitchTopDIO = -1; // TODO: add the digital input channel for this limit switch
-    public final static int LimitSwitchBottomDIO = -1; // TODO: add the digital input channel for this limit
+    public final static int LimitSwitchTopDIO = 7; // TODO: add the digital input channel for this limit switch
+    public final static int LimitSwitchBottomDIO = 6 ; // TODO: add the digital input channel for this limit
   }
 
   // HANGER
