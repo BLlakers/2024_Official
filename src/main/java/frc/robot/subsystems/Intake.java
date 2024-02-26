@@ -9,9 +9,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.util.Color;
-
-import com.revrobotics.ColorSensorV3;
 
 public class Intake extends SubsystemBase {
     // tells which state the intake is in currently
@@ -33,8 +30,6 @@ public class Intake extends SubsystemBase {
 
     // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
     private RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
-    private RelativeEncoder intakeWheelMtr1Enc = intakeWheelMtrL.getEncoder();
-    private RelativeEncoder intakeWheelMtr2Enc = intakeWheelMtrR.getEncoder();
     // public int IntakePos = 1;
     public static final double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
     // I set this at 410 to account for gravity orginal value was 445 -Ben

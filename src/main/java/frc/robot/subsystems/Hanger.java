@@ -48,10 +48,7 @@ public class Hanger extends SubsystemBase {
     }
 
     public Command ResetHangCmd() {
-        return runOnce(
-                () -> {
-                    ResetHangEnc();
-                });
+        return runOnce(this::ResetHangEnc);
     }
 
     public void LeftHangUp() {

@@ -5,8 +5,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -35,6 +39,8 @@ public class Shooter extends SubsystemBase {
     private static final double HEIGHT_OFFSET_LEADSCREW = Units.inchesToMeters(6.375);
 
     // Constants
+    public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(55);
+    public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(30);
     public static final double s_angleMotorSpeedPercentage = 0.95;
     public static final double s_positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO; // meters
     public static final double s_velocityConversionFactor = s_positionConversionFactor / 60; // meters per second
@@ -45,7 +51,7 @@ public class Shooter extends SubsystemBase {
         double positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO;
         m_angleMtrEnc.setPositionConversionFactor(positionConversionFactor);
         m_angleMtrEnc.setVelocityConversionFactor(positionConversionFactor / 60);
-        // why did dimitri do this? 
+        // why did dimitri do this? -> Dimitri: This is done to have the code ready until they implement the limit switches.
         // limit switches
         if (Constants.Shooter.LimitSwitchTopDIO >= 0)
             m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
@@ -71,11 +77,16 @@ public class Shooter extends SubsystemBase {
     {
         return runOnce(
             () -> {
-                if (m_limitSwitchBottom == null)
+                if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
                     return; // don't calibrate if you don't have a limit switch
-                while (!BottomLimitSwitchTripped())
+                while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
                     SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
 
+                if (TopLimitSwitchTripped())
+                {
+                    System.err.println("Calibration failed. Shooter angling motor configuration is inverted!");
+                    return;
+                }
                 m_angleMtrEnc.setPosition(0);
             }
         );
@@ -89,13 +100,7 @@ public class Shooter extends SubsystemBase {
 
     public Command RunShooter() {
         
-        return runOnce(
-                () -> {
-                    Shoot();
-                    /*m_shooterMtrLeft.set(1);
-                    m_shooterMtrRight.set(-1);*/
-
-                });
+        return runOnce(this::Shoot);
     }
 
     public Command StopShooter() {
@@ -107,17 +112,19 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command AngleUpShooter() {
-        return run(
-                () -> {
-                    SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage);
-                });
+        Command cmd = run(() -> { SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); });
+        
+        ConditionalCommand cmdWithLimit = cmd.unless(this::TopLimitSwitchTripped);
+
+        return cmdWithLimit;
     }
 
     public Command AngleDownShooter() {
-        return run(
-                () -> {
-                    SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
-                });
+        Command cmd = run(() -> { SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage); });
+
+        ConditionalCommand cmdWithLimit = cmd.unless(this::BottomLimitSwitchTripped);
+
+        return cmdWithLimit;
     }
 
     /**
@@ -154,6 +161,7 @@ public class Shooter extends SubsystemBase {
     public void SetShooterAngleSpeed(double radiansPerSecond)
     {
         // TODO: drive the velocity given amount of rotational velocity we want to achieve
+        throw new UnsupportedOperationException("Shooter.SetShooterAngleSpeed is not yet implemented.");
     }
 
     /**
@@ -184,17 +192,14 @@ public class Shooter extends SubsystemBase {
      * @return Command to stop angling the motor
      */
     public Command AngleStop() {
-        return run(
-                () -> {
-                    AngleMotorStop();
-                });
+        return run(this::AngleMotorStop);
     }
 
     /**
      * Stop the angle motor
      */
     public void AngleMotorStop() {
-        m_shooterAngleMtr.set(0);
+        m_shooterAngleMtr.stopMotor();
     }
 
     /**
@@ -209,7 +214,7 @@ public class Shooter extends SubsystemBase {
         // geometrical equations
         double interiorLength = Math.hypot(heightOffsetOfShooterBase, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET);
         double interiorAngle = Math.atan2(heightOffsetOfShooterBase, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET); // bottom triangle
-        double exteriorAngle = Math.acos( // top triangle LAW OF COSINES
+        double exteriorAngle = Math.acos( // LAW OF COSINES
                 (
                     LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK
                     + interiorLength * interiorLength
@@ -217,7 +222,7 @@ public class Shooter extends SubsystemBase {
                 ) /
                 (2 * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * interiorLength));
 
-        double shooterAngle = exteriorAngle - interiorAngle; // all angle
+        double shooterAngle = exteriorAngle - interiorAngle;
 
         return Rotation2d.fromRadians(shooterAngle);
 

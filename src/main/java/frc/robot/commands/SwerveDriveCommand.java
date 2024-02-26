@@ -1,5 +1,6 @@
 package frc.robot.commands;
 import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -38,14 +39,11 @@ public class SwerveDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Double RT;
-    Double x;
-    Double y;
-    Double rot;
+    double RT, x, y, rot;
     double AccelerateRT = m_AccelerateRT.getAsDouble();
-    Double leftX = m_leftX.getAsDouble();
-    Double leftY = m_leftY.getAsDouble();
-    Double rightX = m_rightX.getAsDouble();
+    double leftX = m_leftX.getAsDouble();
+    double leftY = m_leftY.getAsDouble();
+    double rightX = m_rightX.getAsDouble();
 
     // Finds the X Value of the Left Stick on the Controller and Takes Care of Joystick Drift
     if (Math.abs(leftX) < Constants.Controller.deadzone) {
@@ -69,7 +67,7 @@ public class SwerveDriveCommand extends Command {
     }
     RT = AccelerateRT;
 
-    double normalizingFactor = Math.sqrt(x*x + y*y);
+    double normalizingFactor = Math.hypot(x, y);
     if (normalizingFactor > 0)
     {
       x /= normalizingFactor;
