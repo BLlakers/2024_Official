@@ -67,11 +67,12 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-
-        SmartDashboard.putNumber("Shooter/Motor Left/Speed",
-                Units.rotationsPerMinuteToRadiansPerSecond(m_shooterMtrLeftEnc.getVelocity()));
-        SmartDashboard.putNumber("Shooter/Motor Right/Speed",
-                Units.rotationsPerMinuteToRadiansPerSecond(m_shooterMtrRightEnc.getVelocity()));
+        double leftShooterMotorVel = m_shooterMtrLeftEnc.getVelocity();
+        double rightShooterMotorVel = m_shooterMtrRightEnc.getVelocity();
+        SmartDashboard.putNumber("Shooter/Motor Left/Speed", leftShooterMotorVel);
+        SmartDashboard.putNumber("Shooter/Motor Left/Speed Percentage", leftShooterMotorVel/Constants.Conversion.NeoMaxSpeedRPM);
+        SmartDashboard.putNumber("Shooter/Motor Right/Speed", rightShooterMotorVel);
+        SmartDashboard.putNumber("Shooter/Motor Right/Speed Percentage", rightShooterMotorVel/Constants.Conversion.NeoMaxSpeedRPM);
         SmartDashboard.putNumber("Shooter/Angle Motor/Encoder/Position", m_angleMtrEnc.getPosition());
         SmartDashboard.putNumber("Shooter/Aiming Angle", GetShooterAngle().getDegrees());
 
