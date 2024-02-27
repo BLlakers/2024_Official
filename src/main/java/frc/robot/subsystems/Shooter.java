@@ -44,9 +44,9 @@ public class Shooter extends SubsystemBase {
     public static final double s_angleMotorSpeedPercentage = 0.1;
     public static final double s_positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO; // meters
     public static final double s_velocityConversionFactor = s_positionConversionFactor / 60; // meters per second
-    public static final double s_maxAngleMotorSpeed = Constants.Conversion.NeoMaxSpeedRPM * s_velocityConversionFactor ;
+    public static final double s_maxAngleMotorSpeed = Constants.Conversion.NeoMaxSpeedRPM * s_velocityConversionFactor;
 
-    private static double s_LeftMotorShooterSpeed  = 0.85;
+    private static double s_LeftMotorShooterSpeed = 0.85;
     private static double s_RightMotorShooterSpeed = -0.85;
 
     public Shooter() {
@@ -54,7 +54,7 @@ public class Shooter extends SubsystemBase {
         double positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO;
         m_angleMtrEnc.setPositionConversionFactor(positionConversionFactor);
         m_angleMtrEnc.setVelocityConversionFactor(positionConversionFactor / 60);
-        // why did dimitri do this? -> Dimitri: This is done to have the code ready until they implement the limit switches.
+
         // limit switches
         // m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
         // m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
@@ -62,7 +62,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Shooter/Motor Left/Speed Setpoint", s_LeftMotorShooterSpeed);
         SmartDashboard.putNumber("Shooter/Motor Right/Speed Setpoint", s_RightMotorShooterSpeed);
 
-//CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
+        // CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
     }
 
     @Override
@@ -72,39 +72,44 @@ public class Shooter extends SubsystemBase {
                 Units.rotationsPerMinuteToRadiansPerSecond(m_shooterMtrLeftEnc.getVelocity()));
         SmartDashboard.putNumber("Shooter/Motor Right/Speed",
                 Units.rotationsPerMinuteToRadiansPerSecond(m_shooterMtrRightEnc.getVelocity()));
-        SmartDashboard.putNumber("Shooter/Lead Screw Travel", m_angleMtrEnc.getPosition());
+        SmartDashboard.putNumber("Shooter/Angle Motor/Encoder/Position", m_angleMtrEnc.getPosition());
         SmartDashboard.putNumber("Shooter/Aiming Angle", GetShooterAngle().getDegrees());
 
-        s_LeftMotorShooterSpeed  = SmartDashboard.getNumber("Shooter/Motor Left/Speed Setpoint", s_LeftMotorShooterSpeed);
-        s_RightMotorShooterSpeed = SmartDashboard.getNumber("Shooter/Motor Right/Speed Setpoint", s_RightMotorShooterSpeed);
+        SmartDashboard.putBoolean("Shooter/Top Limit Switch/Tripped", TopLimitSwitchTripped());
+        SmartDashboard.putBoolean("Shooter/Bottom Limit Switch/Tripped", BottomLimitSwitchTripped());
+
+        s_LeftMotorShooterSpeed = SmartDashboard.getNumber("Shooter/Motor Left/Speed Setpoint",
+                s_LeftMotorShooterSpeed);
+        s_RightMotorShooterSpeed = SmartDashboard.getNumber("Shooter/Motor Right/Speed Setpoint",
+                s_RightMotorShooterSpeed);
     }
 
-   // public Command CalibrateShooterAngle()
-    //{
-    //    return runOnce(
-     //       () -> {
-     //           if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
-      //              return; // don't calibrate if you don't have a limit switch
-       //         while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
-        //            SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
+    // public Command CalibrateShooterAngle()
+    // {
+    // return runOnce(
+    // () -> {
+    // if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
+    // return; // don't calibrate if you don't have a limit switch
+    // while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
+    // SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
 
-//                if (TopLimitSwitchTripped())
- //               {
-  //                  System.err.println("Calibration failed. Shooter angling motor configuration is inverted!");
-   //                 return;
-     //           }
-      //          m_angleMtrEnc.setPosition(0);
-      //      }
-      //  );
-   // }
+    // if (TopLimitSwitchTripped())
+    // {
+    // System.err.println("Calibration failed. Shooter angling motor configuration
+    // is inverted!");
+    // return;
+    // }
+    // m_angleMtrEnc.setPosition(0);
+    // }
+    // );
+    // }
 
-    public void Shoot()
-    {
+    public void Shoot() {
         SetShootingSpeed(s_LeftMotorShooterSpeed, s_RightMotorShooterSpeed);
     }
 
     public Command RunShooter() {
-        
+
         return runOnce(this::Shoot);
     }
 
@@ -118,7 +123,7 @@ public class Shooter extends SubsystemBase {
 
     public Command AngleUpShooter() {
         Command cmd = run(() -> { SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); });
-        
+
         ConditionalCommand cmdWithLimit = cmd.unless(this::TopLimitSwitchTripped);
 
         return cmdWithLimit;
@@ -167,9 +172,9 @@ public class Shooter extends SubsystemBase {
         m_shooterAngleMtr.set(maxSpeedPercent);
     }
 
-    public void SetShooterAngleSpeed(double radiansPerSecond)
-    {
-        // TODO: drive the velocity given amount of rotational velocity we want to achieve
+    public void SetShooterAngleSpeed(double radiansPerSecond) {
+        // TODO: drive the velocity given amount of rotational velocity we want to
+        // achieve
         throw new UnsupportedOperationException("Shooter.SetShooterAngleSpeed is not yet implemented.");
     }
 
@@ -204,10 +209,10 @@ public class Shooter extends SubsystemBase {
         return run(this::AngleMotorStop);
     }
     public Command ManualAngleUp(){
-        return run(()->{m_shooterAngleMtr.set(s_angleMotorSpeedPercentage);}); 
+        return run(()->{m_shooterAngleMtr.set(s_angleMotorSpeedPercentage);});
     }
     public Command ManualAngleDown(){
-        return run(()->{m_shooterAngleMtr.set(-s_angleMotorSpeedPercentage);}); 
+        return run(()->{m_shooterAngleMtr.set(-s_angleMotorSpeedPercentage);});
     }
     /**
      * Stop the angle motor
@@ -227,14 +232,13 @@ public class Shooter extends SubsystemBase {
 
         // geometrical equations
         double interiorLength = Math.hypot(heightOffsetOfShooterBase, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET);
-        double interiorAngle = Math.atan2(heightOffsetOfShooterBase, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET); // bottom triangle
+        double interiorAngle = Math.atan2(heightOffsetOfShooterBase, LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET); // bottom
+                                                                                                              // triangle
         double exteriorAngle = Math.acos( // LAW OF COSINES
-                (
-                    LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK
-                    + interiorLength * interiorLength
-                    - LENGTH_OF_SHOOTER_LINK * LENGTH_OF_SHOOTER_LINK
-                ) /
-                (2 * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * interiorLength));
+                (LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK
+                        + interiorLength * interiorLength
+                        - LENGTH_OF_SHOOTER_LINK * LENGTH_OF_SHOOTER_LINK) /
+                        (2 * LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK * interiorLength));
 
         double shooterAngle = exteriorAngle - interiorAngle;
 
