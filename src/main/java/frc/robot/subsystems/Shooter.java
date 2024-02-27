@@ -125,8 +125,7 @@ public class Shooter extends SubsystemBase {
         Command cmd = run(() -> { SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); });
 
         ConditionalCommand cmdWithLimit = cmd.unless(this::TopLimitSwitchTripped);
-
-        return cmdWithLimit;
+        return cmdWithLimit.finallyDo(this::AngleMotorStop);
     }
 
     public Command AngleDownShooter() {
@@ -134,7 +133,7 @@ public class Shooter extends SubsystemBase {
 
         ConditionalCommand cmdWithLimit = cmd.unless(this::BottomLimitSwitchTripped);
 
-        return cmdWithLimit;
+        return cmdWithLimit.finallyDo(this::AngleMotorStop);
     }
 
     /**
