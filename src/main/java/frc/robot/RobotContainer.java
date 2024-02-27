@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -75,6 +76,15 @@ public class RobotContainer {
   POVButton ManippovDownRight = new POVButton(manipController, 135);
   POVButton ManippovDownLeft = new POVButton(manipController, 225);
   POVButton ManippovUpLeft = new POVButton(manipController, 315);
+
+  // commands
+  final Command ShootNoteCommand = new InstantCommand(m_Shooter::Shoot)
+    .andThen(new WaitCommand(0.5))
+    .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
+    .andThen(new WaitCommand(0.25))
+    .finallyDo(
+       () -> { m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule(); }
+    );
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
