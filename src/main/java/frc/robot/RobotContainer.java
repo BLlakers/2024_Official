@@ -162,9 +162,9 @@ public class RobotContainer {
 
     manipButtonB.whileTrue(m_IntakeWheels.RunIntakeWheels());
     manipButtonB.whileFalse(m_IntakeWheels.StopIntakeWheels());
-    driverButtonLeft.whileTrue(m_Shooter.ManualAngleDown());// moves down
+    driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());// moves down
     driverButtonLeft.onFalse(m_Shooter.AngleStop());
-    driverButtonRight.whileTrue(m_Shooter.ManualAngleUp()); // moves up
+    driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); // moves up
     driverButtonRight.onFalse(m_Shooter.AngleStop());
     manipButtonLeft.whileTrue(m_Intake.LowerIntake()); 
     manipButtonRight.whileTrue(m_Intake.RaiseIntake());
