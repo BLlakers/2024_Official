@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     // Constants
     public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(55);
     public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(30);
-    public static final double s_angleMotorSpeedPercentage = 0.95;
+    public static final double s_angleMotorSpeedPercentage = 0.1;
     public static final double s_positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO; // meters
     public static final double s_velocityConversionFactor = s_positionConversionFactor / 60; // meters per second
     public static final double s_maxAngleMotorSpeed = Constants.Conversion.NeoMaxSpeedRPM * s_velocityConversionFactor ;
@@ -73,24 +73,24 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    public Command CalibrateShooterAngle()
-    {
-        return runOnce(
-            () -> {
-                if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
-                    return; // don't calibrate if you don't have a limit switch
-                while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
-                    SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
+   // public Command CalibrateShooterAngle()
+    //{
+    //    return runOnce(
+     //       () -> {
+     //           if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
+      //              return; // don't calibrate if you don't have a limit switch
+       //         while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
+        //            SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
 
-                if (TopLimitSwitchTripped())
-                {
-                    System.err.println("Calibration failed. Shooter angling motor configuration is inverted!");
-                    return;
-                }
-                m_angleMtrEnc.setPosition(0);
-            }
-        );
-    }
+//                if (TopLimitSwitchTripped())
+ //               {
+  //                  System.err.println("Calibration failed. Shooter angling motor configuration is inverted!");
+   //                 return;
+     //           }
+      //          m_angleMtrEnc.setPosition(0);
+      //      }
+      //  );
+   // }
 
     public void Shoot()
     {
@@ -194,7 +194,12 @@ public class Shooter extends SubsystemBase {
     public Command AngleStop() {
         return run(this::AngleMotorStop);
     }
-
+    public Command ManualAngleUp(){
+        return run(()->{m_shooterAngleMtr.set(s_angleMotorSpeedPercentage);}); 
+    }
+    public Command ManualAngleDown(){
+        return run(()->{m_shooterAngleMtr.set(-s_angleMotorSpeedPercentage);}); 
+    }
     /**
      * Stop the angle motor
      */

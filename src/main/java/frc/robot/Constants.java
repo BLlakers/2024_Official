@@ -82,9 +82,9 @@ public final class Constants {
   }
 
   public static class Intake {
-    public final static int AngleMtrC = 16;
-    public final static int LeftWheelMtrC = 14;
-    public final static int RightWheelMtrC = 15;
+    public final static int AngleMtrC = 15;
+    public final static int WheelMtrC = 14;
+   
   }
 
   // SHOOTER

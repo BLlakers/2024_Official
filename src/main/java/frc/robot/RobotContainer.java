@@ -156,26 +156,29 @@ public class RobotContainer {
     // RESETING OUR POSE 2d/ odometry
     driverButtonOptions.onTrue(m_DriveTrain.resetPose2d());
 
-    driverButtonY.whileTrue(m_Shooter.RunShooter());
-    driverButtonY.whileFalse(m_Shooter.StopShooter());
+    //driverButtonY.whileTrue(m_Shooter.RunShooter());
+    //driverButtonY.whileFalse(m_Shooter.StopShooter());
 
     manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
     manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
-    driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());// moves down
+    driverButtonLeft.whileTrue(m_Shooter.ManualAngleDown());// moves down
     driverButtonLeft.onFalse(m_Shooter.AngleStop());
-    driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); // moves up
+    driverButtonRight.whileTrue(m_Shooter.ManualAngleUp()); // moves up
     driverButtonRight.onFalse(m_Shooter.AngleStop());
-
-    manipButtonLeft.whileTrue(m_Intake.LowerIntake());
+    manipButtonLeft.whileTrue(m_Intake.LowerIntake()); 
     manipButtonRight.whileTrue(m_Intake.RaiseIntake());
+    ManippovUp.onTrue(m_Intake.autoIntakeUp());
+    ManippovDown.onTrue(m_Intake.autoIntakeDown());
     manipButtonLeft.onFalse(m_Intake.StopIntake());
     manipButtonRight.onFalse(m_Intake.StopIntake());
     manipButtonA.whileTrue(m_Shooter.RunShooter());
     manipButtonA.whileFalse(m_Shooter.StopShooter());
-
+    manipButtonY.whileTrue(m_Intake.ReverseIntakeWheels());
+    manipButtonY.whileFalse(m_Intake.StopIntakeWheels());
+    ManippovLeft.onTrue(m_Intake.resetIntakePos());
 
     // Shooter bindings
-    m_Shooter.setDefaultCommand(new OrientShooterAngle(m_Shooter, OrientShooterAngle.s_DefaultAngle));
+   // m_Shooter.setDefaultCommand(new OrientShooterAngle(m_Shooter, OrientShooterAngle.s_DefaultAngle));
 
   }
 

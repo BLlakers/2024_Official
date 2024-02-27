@@ -3,10 +3,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/**
- * My idea on how AutoIntake should be done. Uses state machine + ben's
- * Pre-Written code.
- */
+
 
 public class AutoIntake extends Command {
     private Intake m_Intake;
@@ -27,6 +24,7 @@ public class AutoIntake extends Command {
     @Override
     public void initialize() {
         m_IsAmp = false;
+        m_Intake.resetIntakeAngle();
     }
 
     public AutoIntake(Intake IntakeSub) {
@@ -76,7 +74,8 @@ public class AutoIntake extends Command {
 
         else */
         if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeDown) {
-            if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle) {
+            // if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle) {
+            if (m_Intake.intakeAngleMtrEnc.getPosition() >= Intake.PositionDown) {
                 m_Intake.LowerIntake().schedule();
             } else {
                 m_Intake.StopIntake().schedule();
@@ -89,7 +88,8 @@ public class AutoIntake extends Command {
             }
         }
         if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeUp) {
-            if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle) {
+            // if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle) {
+            if (m_Intake.intakeAngleMtrEnc.getPosition() <= Intake.PositionUp) {
                 m_Intake.RaiseIntake().schedule();
             } else {
                 m_Intake.StopIntake().schedule();

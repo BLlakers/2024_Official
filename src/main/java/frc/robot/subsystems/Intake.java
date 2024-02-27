@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -21,23 +22,24 @@ public class Intake extends SubsystemBase {
 
     private CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.Intake.AngleMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax intakeWheelMtrL = new CANSparkMax(Constants.Intake.LeftWheelMtrC,
-            com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-    private CANSparkMax intakeWheelMtrR = new CANSparkMax(Constants.Intake.RightWheelMtrC,
+    private CANSparkMax intakeWheelMtrR = new CANSparkMax(Constants.Intake.WheelMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
     private State m_CurrentState = State.PositionUp;
 
     // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
-    private RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
+    public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
     // public int IntakePos = 1;
     public static final double GEAR_RATIO = 100.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
     // I set this at 410 to account for gravity orginal value was 445 -Ben
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
-
+    private final ColorSensorV3 m_colorSensorV3 = new ColorSensorV3(i2cPort);
+    public double IR;
     public static final double PosDownAngle = 68; // Down
     public static final double PosUpAngle = 0; // starting
     public static final double PosAmpAngle = 30; // This needs to be measured TODO
+    public static final double PositionDown = 60;
+    public static final double PositionUp = 20;
 
     /**
      * A Rev Color Sensor V3 object is constructed with an I2C port as a
@@ -50,11 +52,16 @@ public class Intake extends SubsystemBase {
         double intakeAngleMotorVelocityConversion = intakeAngleMotorPositionConversion / 60; // rpm -> radians/second
         intakeAngleMtrEnc.setPositionConversionFactor(intakeAngleMotorPositionConversion);
         intakeAngleMtrEnc.setVelocityConversionFactor(intakeAngleMotorVelocityConversion);
+        resetIntakeAngle();
+         
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Intake/Position", GetIntakeMotorAngle().getDegrees());
+        IR = m_colorSensorV3.getIR();
+        SmartDashboard.putNumber("Color/Ir", IR);
+        SmartDashboard.putNumber("Intake/angle", intakeAngleMtrEnc.getPosition());
 
         if (GetIntakeMotorAngle().getDegrees() >= Intake.PosUpAngle) {
             m_CurrentState = State.PositionUp;
@@ -72,20 +79,44 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean NoteIsLoaded() {
-        return false; // TODO
+        return IR >= 6;
     }
+    
 
-    public Command LowerIntake() {
+    public Command RaiseIntake() {
         return run(
                 () -> {
-                    intakeAngleMtr.set(.17);
+                    intakeAngleMtr.set(-.35);
+
                 });
     }
 
-    public Command RaiseIntake() {
+    public Command autoIntakeUp() {
+        return run(
+                () -> {
+                    if (intakeAngleMtrEnc.getPosition() <= 20){
+                        intakeAngleMtr.set(0);
+                    } else{
+                        intakeAngleMtr.set(-.25);
+                    }
+                });
+    }   
+
+    public Command autoIntakeDown() {
+        return run(
+                () -> {
+                    if (intakeAngleMtrEnc.getPosition() >= 60){
+                        intakeAngleMtr.set(0);
+                    } else{
+                        intakeAngleMtr.set(0.25);
+                    }
+                });
+    } 
+
+    public Command LowerIntake() {
         return runOnce(
                 () -> {
-                    intakeAngleMtr.set(-.45);
+                    intakeAngleMtr.set(0.35);
                 });
     }
 
@@ -97,17 +128,20 @@ public class Intake extends SubsystemBase {
     }
 
     public Command RunIntakeWheels() {
-        return runOnce(
+        return run(
                 () -> {
-                    intakeWheelMtrL.set(-.5); // inverted
-                    intakeWheelMtrR.set(-.5);
+                    if (NoteIsLoaded()){
+                        intakeWheelMtrR.set(0);   
+                    }else {
+                        intakeWheelMtrR.set(-0.75);
+                    }
+                    
                 });
     }
 
     public Command StopIntakeWheels() {
         return runOnce(
                 () -> {
-                    intakeWheelMtrL.set(0);
                     intakeWheelMtrR.set(0);
                 });
     }
@@ -115,12 +149,23 @@ public class Intake extends SubsystemBase {
     public Command ReverseIntakeWheels() {
         return runOnce(
                 () -> {
-                    intakeWheelMtrL.set(1);
-                    intakeWheelMtrR.set(-1);
+                    intakeWheelMtrR.set(.75);
                 });
     }
 
     public Rotation2d GetIntakeMotorAngle() {
         return Rotation2d.fromRadians(intakeAngleMtrEnc.getPosition());
     }
+
+    public void resetIntakeAngle(){
+        intakeAngleMtrEnc.setPosition(0);
+    }
+
+    public Command resetIntakePos(){
+            return runOnce(
+                () -> {
+                    resetIntakeAngle();
+                });
+    }
+    
 }
