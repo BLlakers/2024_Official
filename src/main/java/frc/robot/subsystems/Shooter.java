@@ -46,6 +46,9 @@ public class Shooter extends SubsystemBase {
     public static final double s_velocityConversionFactor = s_positionConversionFactor / 60; // meters per second
     public static final double s_maxAngleMotorSpeed = Constants.Conversion.NeoMaxSpeedRPM * s_velocityConversionFactor ;
 
+    private static double s_LeftMotorShooterSpeed  = 0.85;
+    private static double s_RightMotorShooterSpeed = -0.85;
+
     public Shooter() {
         // shooterMtrLeft.follow(shooterMtrRight, true);
         double positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO;
@@ -56,19 +59,24 @@ public class Shooter extends SubsystemBase {
         // m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
         // m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
 
+        SmartDashboard.putNumber("Shooter/Motor Left/Speed Setpoint", s_LeftMotorShooterSpeed);
+        SmartDashboard.putNumber("Shooter/Motor Right/Speed Setpoint", s_RightMotorShooterSpeed);
+
 //CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
     }
 
     @Override
     public void periodic() {
 
-        SmartDashboard.putNumber("Shooter/Motor Speed Left",
+        SmartDashboard.putNumber("Shooter/Motor Left/Speed",
                 Units.rotationsPerMinuteToRadiansPerSecond(m_shooterMtrLeftEnc.getVelocity()));
-        SmartDashboard.putNumber("Shooter/Motor Speed Right",
+        SmartDashboard.putNumber("Shooter/Motor Right/Speed",
                 Units.rotationsPerMinuteToRadiansPerSecond(m_shooterMtrRightEnc.getVelocity()));
         SmartDashboard.putNumber("Shooter/Lead Screw Travel", m_angleMtrEnc.getPosition());
         SmartDashboard.putNumber("Shooter/Aiming Angle", GetShooterAngle().getDegrees());
 
+        s_LeftMotorShooterSpeed  = SmartDashboard.getNumber("Shooter/Motor Left/Speed Setpoint", s_LeftMotorShooterSpeed);
+        s_RightMotorShooterSpeed = SmartDashboard.getNumber("Shooter/Motor Right/Speed Setpoint", s_RightMotorShooterSpeed);
     }
 
    // public Command CalibrateShooterAngle()
@@ -92,8 +100,7 @@ public class Shooter extends SubsystemBase {
 
     public void Shoot()
     {
-        double speed = 0.85; // percentage
-        SetShootingSpeed(speed);
+        SetShootingSpeed(s_LeftMotorShooterSpeed, s_RightMotorShooterSpeed);
     }
 
     public Command RunShooter() {
@@ -132,8 +139,12 @@ public class Shooter extends SubsystemBase {
      *                         shooter motors
      */
     public void SetShootingSpeed(double maxSpeedPercent) {
-        m_shooterMtrLeft.set(maxSpeedPercent);
-        m_shooterMtrRight.set(-maxSpeedPercent);
+        SetShootingSpeed(maxSpeedPercent, -maxSpeedPercent);
+    }
+
+    public void SetShootingSpeed(double maxSpeedPercentLeft, double maxSpeedPercentRight) {
+        m_shooterMtrLeft.set(maxSpeedPercentLeft);
+        m_shooterMtrRight.set(maxSpeedPercentRight);
     }
 
     /**
