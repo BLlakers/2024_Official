@@ -53,10 +53,8 @@ public class Shooter extends SubsystemBase {
         m_angleMtrEnc.setVelocityConversionFactor(positionConversionFactor / 60);
         // why did dimitri do this? -> Dimitri: This is done to have the code ready until they implement the limit switches.
         // limit switches
-        if (Constants.Shooter.LimitSwitchTopDIO >= 0)
-            m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
-        if (Constants.Shooter.LimitSwitchBottomDIO >= 0)
-            m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
+        // m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
+        // m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
 
 //CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
     }

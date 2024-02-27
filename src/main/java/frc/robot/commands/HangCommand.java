@@ -50,7 +50,6 @@ public class HangCommand extends Command {
             CurrentHangState = HangState.hangUp;
             if (m_hanger.GetLeftPosition() >= 140)
                 m_hanger.LeftHangStop();
-
             else
                 m_hanger.LeftHangUp();
 

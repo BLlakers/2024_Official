@@ -30,6 +30,7 @@ public class RobotContainer {
   DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
   Limelight m_Stuff = new Limelight();
   Intake m_Intake = new Intake();
+  IntakeWheels m_IntakeWheels = new IntakeWheels();
   Shooter m_Shooter = new Shooter();
   Hanger m_Hanger = new Hanger();
   // Shooter
@@ -87,8 +88,8 @@ public class RobotContainer {
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
-    NamedCommands.registerCommand("AutoLowerIntake", new AutoIntake(m_Intake, AutoIntake.DrivingState.DriveIntakeDown));
-    NamedCommands.registerCommand("AutoRaiseIntake", new AutoIntake(m_Intake, AutoIntake.DrivingState.DriveIntakeUp));
+    NamedCommands.registerCommand("AutoLowerIntake", new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeDown));
+    NamedCommands.registerCommand("AutoRaiseIntake", new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeUp));
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Another option that allows you to specify the default auto by its name:
@@ -159,8 +160,8 @@ public class RobotContainer {
     //driverButtonY.whileTrue(m_Shooter.RunShooter());
     //driverButtonY.whileFalse(m_Shooter.StopShooter());
 
-    manipButtonB.whileTrue(m_Intake.RunIntakeWheels());
-    manipButtonB.whileFalse(m_Intake.StopIntakeWheels());
+    manipButtonB.whileTrue(m_IntakeWheels.RunIntakeWheels());
+    manipButtonB.whileFalse(m_IntakeWheels.StopIntakeWheels());
     driverButtonLeft.whileTrue(m_Shooter.ManualAngleDown());// moves down
     driverButtonLeft.onFalse(m_Shooter.AngleStop());
     driverButtonRight.whileTrue(m_Shooter.ManualAngleUp()); // moves up
@@ -173,10 +174,11 @@ public class RobotContainer {
     manipButtonRight.onFalse(m_Intake.StopIntake());
     manipButtonA.whileTrue(m_Shooter.RunShooter());
     manipButtonA.whileFalse(m_Shooter.StopShooter());
-    manipButtonY.whileTrue(m_Intake.ReverseIntakeWheels());
-    manipButtonY.whileFalse(m_Intake.StopIntakeWheels());
+    manipButtonY.whileTrue(m_IntakeWheels.ReverseIntakeWheels());
+    manipButtonY.whileFalse(m_IntakeWheels.StopIntakeWheels());
     ManippovLeft.onTrue(m_Intake.resetIntakePos());
-
+    // ManippovRight.whileTrue(m_Intake.autoAmp());
+    // ManippovRight.whileFalse(m_Intake.StopIntake());
     // Shooter bindings
    // m_Shooter.setDefaultCommand(new OrientShooterAngle(m_Shooter, OrientShooterAngle.s_DefaultAngle));
 
