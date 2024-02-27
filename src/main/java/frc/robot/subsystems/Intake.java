@@ -40,7 +40,7 @@ public class Intake extends SubsystemBase {
      */
     public Intake() {
         // intakeWheelMtr1.follow(intakeWheelMtr2);
-        double intakeAngleMotorPositionConversion = 2 * Math.PI / IntakeWheels.GEAR_RATIO; // revolutions -> radians
+        double intakeAngleMotorPositionConversion = 2 * Math.PI / Intake.GEAR_RATIO; // revolutions -> radians
         double intakeAngleMotorVelocityConversion = intakeAngleMotorPositionConversion / 60; // rpm -> radians/second
         intakeAngleMtrEnc.setPositionConversionFactor(intakeAngleMotorPositionConversion);
         intakeAngleMtrEnc.setVelocityConversionFactor(intakeAngleMotorVelocityConversion);
@@ -53,11 +53,11 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake/Angle", GetIntakeMotorAngle().getDegrees());
         SmartDashboard.putNumber("Intake/Motor/Position", intakeAngleMtrEnc.getPosition());
 
-        if (GetIntakeMotorAngle().getDegrees() >= IntakeWheels.PosUpAngle) {
+        if (GetIntakeMotorAngle().getDegrees() >= Intake.PosUpAngle) {
             m_CurrentState = State.PositionUp;
-        } else if (GetIntakeMotorAngle().getDegrees() <= IntakeWheels.PosDownAngle) {
+        } else if (GetIntakeMotorAngle().getDegrees() <= Intake.PosDownAngle) {
             m_CurrentState = State.PositionDown;
-        } else if (Math.abs(GetIntakeMotorAngle().getDegrees() - IntakeWheels.PosAmpAngle) <= 1)
+        } else if (Math.abs(GetIntakeMotorAngle().getDegrees() - Intake.PosAmpAngle) <= 1)
             m_CurrentState = State.PositionAmp;
 
         else

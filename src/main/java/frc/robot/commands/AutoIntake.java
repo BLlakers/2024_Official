@@ -82,7 +82,7 @@ public class AutoIntake extends Command {
          */
         if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeDown) {
             // if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle) {
-            if (m_Intake.intakeAngleMtrEnc.getPosition() >= IntakeWheels.PositionDown) {
+            if (m_Intake.intakeAngleMtrEnc.getPosition() >= Intake.PositionDown) {
                 m_Intake.LowerIntake().schedule();
             } else {
                 m_Intake.StopIntake().schedule();
@@ -96,7 +96,7 @@ public class AutoIntake extends Command {
         }
         if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeUp) {
             // if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle) {
-            if (m_Intake.intakeAngleMtrEnc.getPosition() <= IntakeWheels.PositionUp) {
+            if (m_Intake.intakeAngleMtrEnc.getPosition() <= Intake.PositionUp) {
                 m_Intake.RaiseIntake().schedule();
             } else {
                 m_Intake.StopIntake().schedule();
@@ -109,7 +109,7 @@ public class AutoIntake extends Command {
     public void end(boolean interrupted) {
         if (interrupted) {
 
-            while (m_Intake.GetIntakeMotorAngle().getDegrees() > IntakeWheels.PosUpAngle) {
+            while (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle) {
                 m_Intake.RaiseIntake().schedule();
             }
 
