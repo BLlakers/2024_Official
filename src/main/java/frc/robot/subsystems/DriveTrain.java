@@ -345,6 +345,11 @@ public class DriveTrain extends SubsystemBase {
           }
         });
   }
+
+  public void SetFieldRelativeEnable(boolean fieldRelative)
+  {
+    m_FieldRelativeEnable = fieldRelative;
+  }
   /**Updates our current Odometry */
   public void updateOdometry() {
     m_odometry.update(
