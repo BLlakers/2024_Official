@@ -160,22 +160,22 @@ public class RobotContainer {
     //driverButtonY.whileTrue(m_Shooter.RunShooter());
     //driverButtonY.whileFalse(m_Shooter.StopShooter());
     manipButtonLS.onTrue(new AutoIntake(m_Intake, m_IntakeWheels));
-    manipButtonB.whileTrue(m_IntakeWheels.RunIntakeWheels());
-    manipButtonB.whileFalse(m_IntakeWheels.StopIntakeWheels());
+    manipButtonB.whileTrue(m_IntakeWheels.RunIntakeWheelsCommand());
+    manipButtonB.whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     driverButtonLeft.whileTrue(m_Shooter.AngleDownShooter());// moves down
     driverButtonLeft.onFalse(m_Shooter.AngleStop());
     driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); // moves up
     driverButtonRight.onFalse(m_Shooter.AngleStop());
-    manipButtonLeft.whileTrue(m_Intake.LowerIntake()); 
-    manipButtonRight.whileTrue(m_Intake.RaiseIntake());
+    manipButtonLeft.whileTrue(m_Intake.LowerIntakeCommand()); 
+    manipButtonRight.whileTrue(m_Intake.RaiseIntakeCommand());
     ManippovUp.onTrue(m_Intake.autoIntakeUp());
     ManippovDown.onTrue(m_Intake.autoIntakeDown());
-    manipButtonLeft.onFalse(m_Intake.StopIntake());
-    manipButtonRight.onFalse(m_Intake.StopIntake());
+    manipButtonLeft.onFalse(m_Intake.StopIntakeCommand());
+    manipButtonRight.onFalse(m_Intake.StopIntakeCommand());
     manipButtonA.whileTrue(m_Shooter.RunShooter());
     manipButtonA.whileFalse(m_Shooter.StopShooter());
-    manipButtonY.whileTrue(m_IntakeWheels.ReverseIntakeWheels());
-    manipButtonY.whileFalse(m_IntakeWheels.StopIntakeWheels());
+    manipButtonY.whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand());
+    manipButtonY.whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     ManippovLeft.onTrue(m_Intake.resetIntakePos());
     // ManippovRight.whileTrue(m_Intake.autoAmp());
     // ManippovRight.whileFalse(m_Intake.StopIntake());

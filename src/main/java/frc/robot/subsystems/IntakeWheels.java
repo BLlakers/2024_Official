@@ -26,7 +26,6 @@ public class IntakeWheels extends SubsystemBase {
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensorV3 = new ColorSensorV3(i2cPort);
 
-
     /**
      * A Rev Color Sensor V3 object is constructed with an I2C port as a
      * parameter. The device will be automatically initialized with default
@@ -44,33 +43,37 @@ public class IntakeWheels extends SubsystemBase {
     }
 
     public boolean NoteIsLoaded() {
-        return m_colorSensorV3.getIR() >= 6;
+        return m_colorSensorV3.getIR() >= 15;
     }
 
-    public Command RunIntakeWheels() {
-        return run(
-                () -> {
-                    if (NoteIsLoaded()) {
-                        intakeWheelMtrR.set(0);
-                    } else {
-                        intakeWheelMtrR.set(-0.75);
-                    }
-
-                });
+    public Command RunIntakeWheelsCommand() {
+        return run(this::RunIntakeWheels);
     }
 
-    public Command StopIntakeWheels() {
-        return runOnce(
-                () -> {
-                    intakeWheelMtrR.set(0);
-                });
+    public void RunIntakeWheels() {
+        if (NoteIsLoaded()) {
+            intakeWheelMtrR.set(0);
+        } else {
+            intakeWheelMtrR.set(-0.75);
+        }
     }
 
-    public Command ReverseIntakeWheels() {
-        return runOnce(
-                () -> {
-                    intakeWheelMtrR.set(0.95);
-                });
+    public Command StopIntakeWheelsCommand() {
+        return runOnce(this::StopIntakeWheels);
+    }
+
+    public void StopIntakeWheels() {
+        intakeWheelMtrR.set(0);
+
+    }
+
+    public Command ReverseIntakeWheelsCommand() {
+        return runOnce(this::ReverseIntakeWheels);
+    }
+
+    public void ReverseIntakeWheels()
+    {
+        intakeWheelMtrR.set(0.95);
     }
 
 }

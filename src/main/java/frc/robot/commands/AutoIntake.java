@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoIntake extends Command {
@@ -54,6 +55,7 @@ public class AutoIntake extends Command {
 
     @Override
     public void execute() {
+        System.out.println(m_CurrentIntakeDrivingState);
         /*
          * if (m_IsAmp == true) {
          * m_CurrentIntakeDrivingState = DrivingState.DriveIntakeAmp;
@@ -82,42 +84,44 @@ public class AutoIntake extends Command {
          */
         if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeDown) {
             // if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle) {
-            if (m_Intake.intakeAngleMtrEnc.getPosition() >= Intake.PositionDown) {
-                m_Intake.LowerIntake().schedule();
+            if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle - 50) {
+                m_Intake.LowerIntake();
             } else {
-                m_Intake.StopIntake().schedule();
+                m_Intake.StopIntake();
             }
             if (!m_IntakeWheels.NoteIsLoaded()) {
-                m_IntakeWheels.RunIntakeWheels().schedule(); // inverted
+                m_IntakeWheels.RunIntakeWheels(); // inverted
             } else {
-                m_IntakeWheels.StopIntakeWheels().schedule();
+                m_IntakeWheels.StopIntakeWheels();
                 m_CurrentIntakeDrivingState = DrivingState.DriveIntakeUp;
             }
         }
-        if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeUp) {
+        else if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeUp) {
             // if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle) {
-            if (m_Intake.intakeAngleMtrEnc.getPosition() <= Intake.PositionUp) {
-                m_Intake.RaiseIntake().schedule();
+            if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle + 40) {
+                m_Intake.RaiseIntake();
             } else {
-                m_Intake.StopIntake().schedule();
-                m_CommandIsFinished = true;
+                m_Intake.StopIntake();
+               m_CommandIsFinished = true;
             }
         }
     }
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("m_CurrentIntakeDrivingState");
         if (interrupted) {
 
-            while (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle) {
-                m_Intake.RaiseIntake().schedule();
+            while (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosUpAngle) {
+                m_Intake.RaiseIntake();
             }
 
-            m_Intake.StopIntake().schedule();
+            m_Intake.StopIntake();
 
         }
-        m_Intake.StopIntake().schedule();
-        m_IntakeWheels.StopIntakeWheels().schedule();
+        m_Intake.StopIntake();
+        m_IntakeWheels.StopIntakeWheels();
+
     }
 
     @Override

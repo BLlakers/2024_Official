@@ -27,8 +27,8 @@ public class Intake extends SubsystemBase {
     // public int IntakePos = 1;
     public static final double GEAR_RATIO = 30.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
     
-    public static final double PosDownAngle = 68; // Down
-    public static final double PosUpAngle = 0; // starting
+    public static final double PosDownAngle = 140; // Down
+    public static final double PosUpAngle = 5; // starting
     public static final double PosAmpAngle = 30; // This needs to be measured TODO
     public static final double PositionDown = 60;
     public static final double PositionUp = 20;
@@ -53,9 +53,9 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake/Angle", GetIntakeMotorAngle().getDegrees());
         SmartDashboard.putNumber("Intake/Motor/Position", intakeAngleMtrEnc.getPosition());
 
-        if (GetIntakeMotorAngle().getDegrees() >= Intake.PosUpAngle) {
+        if (GetIntakeMotorAngle().getDegrees() <= Intake.PosUpAngle) {
             m_CurrentState = State.PositionUp;
-        } else if (GetIntakeMotorAngle().getDegrees() <= Intake.PosDownAngle) {
+        } else if (GetIntakeMotorAngle().getDegrees() >= Intake.PosDownAngle) {
             m_CurrentState = State.PositionDown;
         } else if (Math.abs(GetIntakeMotorAngle().getDegrees() - Intake.PosAmpAngle) <= 1)
             m_CurrentState = State.PositionAmp;
@@ -69,12 +69,13 @@ public class Intake extends SubsystemBase {
     }
 
 
-    public Command RaiseIntake() {
-        return run(
-                () -> {
-                    intakeAngleMtr.set(-.35);
+    public Command RaiseIntakeCommand() {
+        return run(this::RaiseIntake);
+    }
 
-                });
+    public void RaiseIntake()
+    {
+        intakeAngleMtr.set(-.35);
     }
 
     public Command autoIntakeUp() {
@@ -116,18 +117,21 @@ public class Intake extends SubsystemBase {
                 });
     }
 
-    public Command LowerIntake() {
-        return runOnce(
-                () -> {
-                    intakeAngleMtr.set(0.35);
-                });
+    public Command LowerIntakeCommand() {
+        return runOnce(this::LowerIntake);
+    }
+    public void LowerIntake()
+    {
+        intakeAngleMtr.set(0.35);
     }
 
-    public Command StopIntake() {
-        return runOnce(
-                () -> {
-                    intakeAngleMtr.set(0);
-                });
+    public Command StopIntakeCommand() {
+        return runOnce(this::StopIntake);
+    }
+
+    public void StopIntake()
+    {
+        intakeAngleMtr.set(0);
     }
 
     public Rotation2d GetIntakeMotorAngle() {
