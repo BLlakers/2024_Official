@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class AutoIntake extends Command {
     private Intake m_Intake;
     private IntakeWheels m_IntakeWheels;
-    private boolean m_IsAmp = false;
-
+    
     // determines where we want to drive the intake angle to
     public enum DrivingState {
         DriveIntakeUp,
@@ -17,12 +16,10 @@ public class AutoIntake extends Command {
 
     private DrivingState m_CurrentIntakeDrivingState;
 
-    private static final double s_IntakePositioningTolerence = 5;
     private boolean m_CommandIsFinished = false;
 
     @Override
     public void initialize() {
-        m_IsAmp = false;
         
     }
 
@@ -49,7 +46,6 @@ public class AutoIntake extends Command {
     }
 
     public void SetIsAmpFlag(boolean isAmp) {
-        this.m_IsAmp = isAmp;
     }
 
     @Override
