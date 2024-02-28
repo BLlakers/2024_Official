@@ -24,7 +24,7 @@ public class AutoIntake extends Command {
     @Override
     public void initialize() {
         m_IsAmp = false;
-        // m_Intake.resetIntakeAngle();
+        
     }
 
     public AutoIntake(Intake IntakeSub, IntakeWheels IntakeWheelsSub) {
@@ -83,26 +83,35 @@ public class AutoIntake extends Command {
          * else
          */
         if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeDown) {
+            System.out.println(0);
             // if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle) {
             if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle - 50) {
+                System.out.println(1);
                 m_Intake.LowerIntake();
             } else {
+                System.out.println(2);
                 m_Intake.StopIntake();
             }
             if (!m_IntakeWheels.NoteIsLoaded()) {
+                System.out.println(3);
                 m_IntakeWheels.RunIntakeWheels(); // inverted
             } else {
+                System.out.println(4);
                 m_IntakeWheels.StopIntakeWheels();
                 m_CurrentIntakeDrivingState = DrivingState.DriveIntakeUp;
             }
         }
         else if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeUp) {
-            // if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle) {
+              System.out.println(5);
             if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle + 40) {
+                System.out.println(6);
                 m_Intake.RaiseIntake();
+                
             } else {
+                System.out.println(7);
                 m_Intake.StopIntake();
-               m_CommandIsFinished = true;
+                m_CurrentIntakeDrivingState = DrivingState.DriveIntakeDown;
+                m_CommandIsFinished = true;
             }
         }
     }
@@ -121,6 +130,7 @@ public class AutoIntake extends Command {
         }
         m_Intake.StopIntake();
         m_IntakeWheels.StopIntakeWheels();
+        
 
     }
 
