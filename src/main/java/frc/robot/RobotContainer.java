@@ -1,7 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -98,14 +98,15 @@ public class RobotContainer {
   POVButton DebugpovUpLeft = new POVButton(debugController, 315);
 
   // commands
-  final Command ShootNoteCommand = new InstantCommand(m_Shooter::Shoot)
+  final Command ShootNoteCommand = m_Shooter.RunShooter()
       .andThen(new WaitCommand(0.5))
       .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
       .andThen(new WaitCommand(2.0))
       .finallyDo(
           () -> {
             m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule();
-          });
+          })
+      .withName("Shoot Command");
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -116,6 +117,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     m_DriveTrain.setName("DriveTrain");
+
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
@@ -236,6 +238,7 @@ public class RobotContainer {
   private void configureShuffleboard() {
     // Add commands to the shuffleboard
     SmartDashboard.putData(m_DriveTrain.resetPose2d());
+    SmartDashboard.putData(CommandScheduler.getInstance());
 
   }
 
