@@ -26,7 +26,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
   // Creates our objects from our methods for our classes
   DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
-  Limelight m_Stuff = new Limelight();
+  Limelight m_Limelight = new Limelight();
   Intake m_Intake = new Intake();
   IntakeWheels m_IntakeWheels = new IntakeWheels();
   Shooter m_Shooter = new Shooter();
@@ -200,11 +200,17 @@ public class RobotContainer {
   }
 
   private void configureShuffleboard() {
-    // Add commands to the shuffleboard
-    SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
-    SmartDashboard.putData(CommandScheduler.getInstance());
-
+    SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
+    
+    // Add subsystems
     SmartDashboard.putData(m_DriveTrain);
+    SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
+
+    SmartDashboard.putData(m_Shooter);
+    SmartDashboard.putData(m_Hanger);
+    SmartDashboard.putData(m_Intake);
+    SmartDashboard.putData(m_IntakeWheels);
+    SmartDashboard.putData(m_Limelight);
 
   }
 

@@ -4,6 +4,7 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -89,6 +90,21 @@ public class Hanger extends SubsystemBase {
 
     public double GetRightPosition() {
         return hangerRightMtrEnc.getPosition();
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder)
+    {
+        super.initSendable(builder);
+
+        builder.addDoubleProperty("Hanger/Left/Hang Pos", hangerLeftMtrEnc::getPosition, null);
+        builder.addDoubleProperty("Hanger/Right/Hang Pos", hangerRightMtrEnc::getPosition, null);
+        builder.addDoubleProperty("Hanger/Left/Current", hangerLeftMtr::getOutputCurrent, null);
+        builder.addDoubleProperty("Hanger/Right/Current", hangerRightMtr::getOutputCurrent, null);
+        builder.addDoubleProperty("Hanger/Left/Hang Velo", hangerLeftMtrEnc::getVelocity, null);
+        builder.addDoubleProperty("Hanger/Right/Hang Velo", hangerRightMtrEnc::getVelocity, null);
+        builder.addBooleanProperty("Hanger/Left/MagSwitch Engaged", this::LeftHangIsDown, null);
+        builder.addBooleanProperty("Hanger/Right/MagSwitch Engaged", this::RightHangIsDown, null);
     }
 
 }
