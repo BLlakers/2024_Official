@@ -50,6 +50,7 @@ public final class Constants {
   public static class Controller {
     public final static int DriverControllerChannel = 0;
     public final static int ManipControllerChannel = 1;
+    public final static int DebugControllerChannel = 2;
     public final static int buttonA = 1;
     public final static int buttonB = 2;
     public final static int buttonX = 3;

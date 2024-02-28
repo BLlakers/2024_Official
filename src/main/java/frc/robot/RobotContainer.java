@@ -59,6 +59,17 @@ public class RobotContainer {
   JoystickButton manipButtonLS = new JoystickButton(manipController, Constants.Controller.buttonLS);
   JoystickButton manipButtonRS = new JoystickButton(manipController, Constants.Controller.buttonRS);
 
+  XboxController debugController = new XboxController(Constants.Controller.DebugControllerChannel);
+  JoystickButton debugButtonA = new JoystickButton(debugController, Constants.Controller.buttonA);
+  JoystickButton debugButtonB = new JoystickButton(debugController, Constants.Controller.buttonB);
+  JoystickButton debugButtonX = new JoystickButton(debugController, Constants.Controller.buttonX);
+  JoystickButton debugButtonY = new JoystickButton(debugController, Constants.Controller.buttonY);
+  JoystickButton debugButtonRight = new JoystickButton(debugController, Constants.Controller.buttonRight);
+  JoystickButton debugButtonLeft = new JoystickButton(debugController, Constants.Controller.buttonLeft);
+  JoystickButton debugButtonOptions = new JoystickButton(debugController, Constants.Controller.buttonOptions);
+  JoystickButton debugButtonLS = new JoystickButton(debugController, Constants.Controller.buttonLS);
+  JoystickButton debugButtonRS = new JoystickButton(debugController, Constants.Controller.buttonRS);
+
   POVButton DriverpovUp = new POVButton(driverController, 0);
   POVButton DriverpovRight = new POVButton(driverController, 90);
   POVButton DriverpovDown = new POVButton(driverController, 180);
@@ -77,14 +88,24 @@ public class RobotContainer {
   POVButton ManippovDownLeft = new POVButton(manipController, 225);
   POVButton ManippovUpLeft = new POVButton(manipController, 315);
 
+  POVButton DebugpovUp = new POVButton(debugController, 0);
+  POVButton DebugpovRight = new POVButton(debugController, 90);
+  POVButton DebugpovDown = new POVButton(debugController, 180);
+  POVButton DebugpovLeft = new POVButton(debugController, 270);
+  POVButton DebugpovUpRight = new POVButton(debugController, 45);
+  POVButton DebugpovDownRight = new POVButton(debugController, 135);
+  POVButton DebugpovDownLeft = new POVButton(debugController, 225);
+  POVButton DebugpovUpLeft = new POVButton(debugController, 315);
+
   // commands
   final Command ShootNoteCommand = new InstantCommand(m_Shooter::Shoot)
-    .andThen(new WaitCommand(0.5))
-    .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
-    .andThen(new WaitCommand(0.25))
-    .finallyDo(
-       () -> { m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule(); }
-    );
+      .andThen(new WaitCommand(0.5))
+      .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
+      .andThen(new WaitCommand(5.0))
+      .finallyDo(
+          () -> {
+            m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule();
+          });
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -98,8 +119,10 @@ public class RobotContainer {
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
-    NamedCommands.registerCommand("AutoLowerIntake", new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeDown));
-    NamedCommands.registerCommand("AutoRaiseIntake", new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeUp));
+    NamedCommands.registerCommand("AutoLowerIntake",
+        new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeDown));
+    NamedCommands.registerCommand("AutoRaiseIntake",
+        new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeUp));
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Another option that allows you to specify the default auto by its name:
@@ -159,7 +182,8 @@ public class RobotContainer {
     // SWERVE DRIVE/ DRIVETRAIN
     m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
         () -> driverController.getLeftX(), () -> driverController.getRightX(),
-        () -> driverController.getRightTriggerAxis(), m_DriveTrain));
+        () -> driverController.getRightTriggerAxis(), m_DriveTrain,
+        () -> driverController.getLeftTriggerAxis() >= 0.5));
     // WHEEL LOCK
     driverButtonRS.onTrue(m_DriveTrain.WheelLockCommand());
     driverButtonB.onTrue(m_DriveTrain.ZeroGyro());
@@ -167,8 +191,8 @@ public class RobotContainer {
     // RESETING OUR POSE 2d/ odometry
     driverButtonOptions.onTrue(m_DriveTrain.resetPose2d());
 
-    //driverButtonY.whileTrue(m_Shooter.RunShooter());
-    //driverButtonY.whileFalse(m_Shooter.StopShooter());
+    // driverButtonY.whileTrue(m_Shooter.RunShooter());
+    // driverButtonY.whileFalse(m_Shooter.StopShooter());
     manipButtonLS.onTrue(new AutoIntake(m_Intake, m_IntakeWheels));
     manipButtonB.whileTrue(m_IntakeWheels.RunIntakeWheelsCommand());
     manipButtonB.whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
@@ -176,13 +200,13 @@ public class RobotContainer {
     driverButtonLeft.onFalse(m_Shooter.AngleStop());
     driverButtonRight.whileTrue(m_Shooter.AngleUpShooter()); // moves up
     driverButtonRight.onFalse(m_Shooter.AngleStop());
-    manipButtonLeft.whileTrue(m_Intake.LowerIntakeCommand()); 
+    manipButtonLeft.whileTrue(m_Intake.LowerIntakeCommand());
     manipButtonRight.whileTrue(m_Intake.RaiseIntakeCommand());
     ManippovUp.onTrue(m_Intake.autoIntakeUp());
     ManippovDown.onTrue(m_Intake.autoIntakeDown());
     manipButtonLeft.onFalse(m_Intake.StopIntakeCommand());
     manipButtonRight.onFalse(m_Intake.StopIntakeCommand());
-    manipButtonA.whileTrue(m_Shooter.RunShooter());
+    manipButtonA.onTrue(ShootNoteCommand);
     manipButtonA.whileFalse(m_Shooter.StopShooter());
     manipButtonY.whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand());
     manipButtonY.whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
@@ -190,7 +214,19 @@ public class RobotContainer {
     // ManippovRight.whileTrue(m_Intake.autoAmp());
     // ManippovRight.whileFalse(m_Intake.StopIntake());
     // Shooter bindings
-   // m_Shooter.setDefaultCommand(new OrientShooterAngle(m_Shooter, OrientShooterAngle.s_DefaultAngle));
+    // m_Shooter.setDefaultCommand(new OrientShooterAngle(m_Shooter,
+    // OrientShooterAngle.s_DefaultAngle));
+
+    debugButtonLeft.whileTrue(new InstantCommand(m_Hanger::LeftHangDown));
+    debugButtonLeft.onFalse(new InstantCommand(m_Hanger::LeftHangStop));
+    debugButtonA.whileTrue(new InstantCommand(m_Hanger::LeftHangUp));
+    debugButtonA.onFalse(new InstantCommand(m_Hanger::LeftHangStop));
+
+
+    debugButtonRight.whileTrue(new InstantCommand(m_Hanger::RightHangDown));
+    debugButtonRight.onFalse(new InstantCommand(m_Hanger::RightHangStop));
+    debugButtonB.whileTrue(new InstantCommand(m_Hanger::RightHangUp));
+    debugButtonB.onFalse(new InstantCommand(m_Hanger::RightHangStop));
 
   }
 

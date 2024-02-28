@@ -52,11 +52,11 @@ public class Hanger extends SubsystemBase {
     }
 
     public void LeftHangUp() {
-        hangerLeftMtr.set(0.75);
+        hangerLeftMtr.set(0.25);
     }
 
     public void LeftHangDown() {
-        hangerLeftMtr.set(-0.75);
+        hangerLeftMtr.set(-0.25);
     }
 
     public void LeftHangStop() {
@@ -64,11 +64,11 @@ public class Hanger extends SubsystemBase {
     }
 
     public void RightHangUp() {
-        hangerRightMtr.set(0.75);
+        hangerRightMtr.set(0.25);
     }
 
     public void RightHangDown() {
-        hangerRightMtr.set(-0.75);
+        hangerRightMtr.set(-0.25);
     }
 
     public void RightHangStop() {

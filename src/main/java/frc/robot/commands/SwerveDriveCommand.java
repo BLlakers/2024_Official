@@ -1,4 +1,5 @@
 package frc.robot.commands;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +16,8 @@ public class SwerveDriveCommand extends Command {
   DriveTrain m_DriveTrain;
   RobotContainer m_RobotContainer;
 
+  private BooleanSupplier m_RunHalfSpeed;
+
   public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX, DoubleSupplier _AccelerateRT,
       DriveTrain _dTrain) {
     m_leftY = _leftY;
@@ -22,6 +25,18 @@ public class SwerveDriveCommand extends Command {
     m_rightX = _rightX;
     m_DriveTrain = _dTrain;
     m_AccelerateRT = _AccelerateRT;
+    m_RunHalfSpeed = () -> false;
+    addRequirements(m_DriveTrain);
+  }
+
+  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX, DoubleSupplier _AccelerateRT,
+      DriveTrain _dTrain, BooleanSupplier _halfSpeedCondition) {
+    m_leftY = _leftY;
+    m_leftX = _leftX;
+    m_rightX = _rightX;
+    m_DriveTrain = _dTrain;
+    m_AccelerateRT = _AccelerateRT;
+    m_RunHalfSpeed = _halfSpeedCondition;
     addRequirements(m_DriveTrain);
   }
 
@@ -76,6 +91,14 @@ public class SwerveDriveCommand extends Command {
     double xSpeed = y * DriveTrain.kMaxSpeed * RT;
     double ySpeed = x * DriveTrain.kMaxSpeed * RT;
     double rotSpeed = rot * DriveTrain.kMaxTurnAngularSpeed;
+
+    if (m_RunHalfSpeed.getAsBoolean() == true)
+    {
+      xSpeed /= 2;
+      ySpeed /= 2;
+      rotSpeed /= 2;
+    }
+
     SmartDashboard.putNumber("Robot/Controller/Command/X Speed", xSpeed);
     SmartDashboard.putNumber("Robot/Controller/Command/Y Speed", ySpeed);
 
