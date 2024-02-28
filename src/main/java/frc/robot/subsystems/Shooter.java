@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-import java.util.function.BooleanSupplier;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -57,12 +55,14 @@ public class Shooter extends SubsystemBase {
 
         // limit switches
         // m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
-        // m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
+        // m_limitSwitchBottom = new
+        // DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
 
         SmartDashboard.putNumber("Shooter/Motor Left/Speed Setpoint", s_LeftMotorShooterSpeed);
         SmartDashboard.putNumber("Shooter/Motor Right/Speed Setpoint", s_RightMotorShooterSpeed);
 
-        // CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
+        // CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter
+        // angle when able
     }
 
     @Override
@@ -70,9 +70,11 @@ public class Shooter extends SubsystemBase {
         double leftShooterMotorVel = m_shooterMtrLeftEnc.getVelocity();
         double rightShooterMotorVel = m_shooterMtrRightEnc.getVelocity();
         SmartDashboard.putNumber("Shooter/Motor Left/Speed", leftShooterMotorVel);
-        SmartDashboard.putNumber("Shooter/Motor Left/Speed Percentage", leftShooterMotorVel/Constants.Conversion.NeoMaxSpeedRPM);
+        SmartDashboard.putNumber("Shooter/Motor Left/Speed Percentage",
+                leftShooterMotorVel / Constants.Conversion.NeoMaxSpeedRPM);
         SmartDashboard.putNumber("Shooter/Motor Right/Speed", rightShooterMotorVel);
-        SmartDashboard.putNumber("Shooter/Motor Right/Speed Percentage", rightShooterMotorVel/Constants.Conversion.NeoMaxSpeedRPM);
+        SmartDashboard.putNumber("Shooter/Motor Right/Speed Percentage",
+                rightShooterMotorVel / Constants.Conversion.NeoMaxSpeedRPM);
         SmartDashboard.putNumber("Shooter/Angle Motor/Encoder/Position", m_angleMtrEnc.getPosition());
         SmartDashboard.putNumber("Shooter/Aiming Angle", GetShooterAngle().getDegrees());
 
@@ -111,11 +113,16 @@ public class Shooter extends SubsystemBase {
 
     public Command RunShooter() {
 
-        return runOnce(this::Shoot);
+        return this.run(this::Shoot)
+                .finallyDo(
+                        () -> {
+                            m_shooterMtrLeft.stopMotor();
+                            m_shooterMtrRight.stopMotor();
+                        });
     }
 
     public Command StopShooter() {
-        return run(
+        return this.runOnce(
                 () -> {
                     m_shooterMtrLeft.set(0);
                     m_shooterMtrRight.set(0);
@@ -123,14 +130,18 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command AngleUpShooter() {
-        Command cmd = run(() -> { SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); });
+        Command cmd = run(() -> {
+            SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage);
+        });
 
         ConditionalCommand cmdWithLimit = cmd.unless(this::TopLimitSwitchTripped);
         return cmdWithLimit.finallyDo(this::AngleMotorStop);
     }
 
     public Command AngleDownShooter() {
-        Command cmd = run(() -> { SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage); });
+        Command cmd = run(() -> {
+            SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
+        });
 
         ConditionalCommand cmdWithLimit = cmd.unless(this::BottomLimitSwitchTripped);
 
@@ -206,14 +217,25 @@ public class Shooter extends SubsystemBase {
      * @return Command to stop angling the motor
      */
     public Command AngleStop() {
-        return run(this::AngleMotorStop);
+        return this.runOnce(this::AngleMotorStop);
     }
-    public Command ManualAngleUp(){
-        return run(()->{m_shooterAngleMtr.set(s_angleMotorSpeedPercentage);});
+
+    public Command ManualAngleUp() {
+        return this.runEnd(
+                () -> {
+                    m_shooterAngleMtr.set(s_angleMotorSpeedPercentage);
+                },
+                this::AngleMotorStop);
     }
-    public Command ManualAngleDown(){
-        return run(()->{m_shooterAngleMtr.set(-s_angleMotorSpeedPercentage);});
+
+    public Command ManualAngleDown() {
+        return this.runEnd(
+                () -> {
+                    m_shooterAngleMtr.set(-s_angleMotorSpeedPercentage);
+                },
+                this::AngleMotorStop);
     }
+
     /**
      * Stop the angle motor
      */

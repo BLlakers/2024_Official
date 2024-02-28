@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
     public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
     // public int IntakePos = 1;
     public static final double GEAR_RATIO = 30.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
-    
+
     public static final double PosDownAngle = 140; // Down
     public static final double PosUpAngle = 5; // starting
     public static final double PosAmpAngle = 30; // This needs to be measured TODO
@@ -68,69 +68,70 @@ public class Intake extends SubsystemBase {
         return m_CurrentState;
     }
 
-
     public Command RaiseIntakeCommand() {
-        return run(this::RaiseIntake);
+        return this.runEnd(this::RaiseIntake, this::StopIntake);
     }
 
-    public void RaiseIntake()
-    {
+    public void RaiseIntake() {
         intakeAngleMtr.set(-.35);
     }
 
     public Command autoIntakeUp() {
-        return run(
+        return this.runEnd(
                 () -> {
                     if (GetIntakeMotorAngle().getDegrees() <= 30) {
                         intakeAngleMtr.set(0);
                     } else {
                         intakeAngleMtr.set(-.25);
                     }
-                });
+                },
+                this::StopIntake);
     }
 
     public Command autoAmp() {
-        return run(() -> {
-            double angleLo = 67.5;
-            double angleHi = 72.5;
-            
-            double angle = GetIntakeMotorAngle().getDegrees();
-            if (angle < angleLo) {
-                intakeAngleMtr.set(0.25);
-            } else if (angle > angleHi) {
-                intakeAngleMtr.set(-0.25);
-            } else if (angle > angleLo && angle < angleHi) {
-                intakeAngleMtr.set(0);
+        return this.runEnd(
+                () -> {
+                    double angleLo = 67.5;
+                    double angleHi = 72.5;
 
-            }
-        }); // pos amp
+                    double angle = GetIntakeMotorAngle().getDegrees();
+                    if (angle < angleLo) {
+                        intakeAngleMtr.set(0.25);
+                    } else if (angle > angleHi) {
+                        intakeAngleMtr.set(-0.25);
+                    } else if (angle > angleLo && angle < angleHi) {
+                        intakeAngleMtr.set(0);
+
+                    }
+                },
+                this::StopIntake); // pos amp
     }
 
     public Command autoIntakeDown() {
-        return run(
+        return this.runEnd(
                 () -> {
                     if (GetIntakeMotorAngle().getDegrees() >= 90) {
                         intakeAngleMtr.set(0);
-                    } else{
+                    } else {
                         intakeAngleMtr.set(0.25);
                     }
-                });
+                },
+                this::StopIntake);
     }
 
     public Command LowerIntakeCommand() {
-        return runOnce(this::LowerIntake);
+        return this.runEnd(this::LowerIntake, this::StopIntake);
     }
-    public void LowerIntake()
-    {
+
+    public void LowerIntake() {
         intakeAngleMtr.set(0.35);
     }
 
     public Command StopIntakeCommand() {
-        return runOnce(this::StopIntake);
+        return this.runOnce(this::StopIntake);
     }
 
-    public void StopIntake()
-    {
+    public void StopIntake() {
         intakeAngleMtr.set(0);
     }
 
@@ -143,10 +144,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command resetIntakePos() {
-        return runOnce(
-                () -> {
-                    resetIntakeAngle();
-                });
+        return runOnce(this::resetIntakeAngle);
     }
 
 }
