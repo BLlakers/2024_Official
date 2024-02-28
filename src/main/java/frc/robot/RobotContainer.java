@@ -17,7 +17,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 import frc.robot.commands.*;
@@ -39,10 +41,12 @@ public class RobotContainer {
    * - the manipulator controller (port 1)
    * - the debug controller (port 2)
    */
+
   CommandXboxController driverController = new CommandXboxController(Constants.Controller.DriverControllerChannel);
   CommandXboxController manipController = new CommandXboxController(Constants.Controller.ManipControllerChannel);
+  XboxController manipControllerTest = new XboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController = new CommandXboxController(Constants.Controller.DebugControllerChannel);
-
+  JoystickButton manipbButton = new JoystickButton(manipControllerTest, 0);
   // commands
   final Command ShootNoteCommand = m_Shooter.RunShooter()
       .andThen(new WaitCommand(0.5))
@@ -126,60 +130,64 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    /** Swerve Drive Controller Command
+    /**
+     * Swerve Drive Controller Command
      * 
-     *  Controls:
-     *  - Left Stick: Steering
-     *  - Right Stick: Rotate the robot 
-     *  - Right Trigger: provide gas
-     *  - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
+     * Controls:
+     * - Left Stick: Steering
+     * - Right Stick: Rotate the robot
+     * - Right Trigger: provide gas
+     * - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
      */
-    m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
-        () -> driverController.getLeftX(), () -> driverController.getRightX(),
-        () -> driverController.getRightTriggerAxis(), m_DriveTrain,
-        () -> driverController.getLeftTriggerAxis() >= 0.5));
-
+    /*
+     * m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() ->
+     * driverController.getLeftY(),
+     * () -> driverController.getLeftX(), () -> driverController.getRightX(),
+     * () -> driverController.getRightTriggerAxis(), m_DriveTrain,
+     * () -> driverController.getLeftTriggerAxis() >= 0.5));
+     */
     // Driver Controller commands
     // - DriveTrain commands (outside of actual driving)
     driverController.a().onTrue(m_DriveTrain.toggleFieldRelativeEnable());
     driverController.b().onTrue(m_DriveTrain.ZeroGyro());
     driverController.start().onTrue(m_DriveTrain.resetPose2d());// RESETING OUR POSE 2d/ odometry
     driverController.rightStick().onTrue(m_DriveTrain.WheelLockCommand()); // lock wheels
-
-    driverController.leftBumper() // Angle down the shooter
-        .whileTrue(m_Shooter.AngleDownShooter())
-        .onFalse(m_Shooter.AngleStop());
-    driverController.rightBumper() // Angle up the shooter
-        .whileTrue(m_Shooter.AngleUpShooter())
-        .onFalse(m_Shooter.AngleStop());
-
     // Manipulator Controller commands
     // - Intake commands
-    manipController.povLeft().onTrue(m_Intake.resetIntakePos()); // reset the intake encoder position
-
-    manipController.leftStick() // toggle the intake between it's different states
-        .onTrue(new AutoIntake(m_Intake, m_IntakeWheels));
-    manipController.b() // Run the intake wheels for intaking a note
-        .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
-        .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
-    manipController.y() // eject the intake command
+    /*
+     * manipController.b() // Run the intake wheels for intaking a note
+     * .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
+     * .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+     */
+    manipController.leftStick() // eject the intake command
         .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
 
-    manipController.leftBumper() // lower the intake arm
+    manipController.povLeft() // lower the intake arm
         .whileTrue(m_Intake.LowerIntakeCommand())
         .onFalse(m_Intake.StopIntakeCommand());
-    manipController.rightBumper() // raise the intake arm
+    manipController.povRight() // raise the intake arm
         .whileTrue(m_Intake.RaiseIntakeCommand())
         .onFalse(m_Intake.StopIntakeCommand());
-
+    manipController.leftBumper() // Angle down the shooter
+        .whileTrue(m_Shooter.AngleDownShooter())
+        .onFalse(m_Shooter.AngleStop());
+    manipController.rightBumper() // Angle up the shooter
+        .whileTrue(m_Shooter.AngleUpShooter())
+        .onFalse(m_Shooter.AngleStop());
+    manipController.x().onTrue(m_Intake.resetIntakePos());
+    // reset the intake encoder position
+    manipController.b() // toggle the intake between it's different states
+        .whileTrue(new AutoIntake(m_Intake, m_IntakeWheels));
     manipController.povUp().onTrue(m_Intake.autoIntakeUp());
     manipController.povDown().onTrue(m_Intake.autoIntakeDown());
 
     // - Shooter commands
     manipController.a() // Shoot the note
-        .onTrue(ShootNoteCommand)
+        .whileTrue(ShootNoteCommand)
         .whileFalse(m_Shooter.StopShooter());
+    // manipController.y().onTrue(new HangCommand(m_Hanger, manipbButton
+    // )).onFalse(m_Hanger.HangStopCommand());
 
     // Debug controller
     // - Manual hanger commands

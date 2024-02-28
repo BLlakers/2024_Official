@@ -92,8 +92,7 @@ public class SwerveDriveCommand extends Command {
     double ySpeed = x * DriveTrain.kMaxSpeed * RT;
     double rotSpeed = rot * DriveTrain.kMaxTurnAngularSpeed;
 
-    if (m_RunHalfSpeed.getAsBoolean() == true)
-    {
+    if (m_RunHalfSpeed.getAsBoolean() == true){
       xSpeed /= 2;
       ySpeed /= 2;
       rotSpeed /= 2;

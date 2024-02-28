@@ -10,11 +10,11 @@ import frc.robot.subsystems.*;
 public class HangCommand extends Command {
     private Hanger m_hanger;
     private JoystickButton m_ControllerButton;
-    private Supplier<Rotation3d> m_robotOrientationSupplier;
-    private PIDController m_hangingController = new PIDController(1, 0, 0);
+    // private Supplier<Rotation3d> m_robotOrientationSupplier;
+    // private PIDController m_hangingController = new PIDController(1, 0, 0);
 
-    private static final double GOAL_HEIGHT = 0.5; // meters
-    private static final double GOAL_ORIENTATION = 0.0; // radians
+    // private static final double GOAL_HEIGHT = 0.5; // meters
+    // private static final double GOAL_ORIENTATION = 0.0; // radians
 
     // Calibrate THESE!!! TODO
     double speed = 0.5;
