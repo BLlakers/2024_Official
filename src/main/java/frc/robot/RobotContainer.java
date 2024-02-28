@@ -101,7 +101,7 @@ public class RobotContainer {
   final Command ShootNoteCommand = new InstantCommand(m_Shooter::Shoot)
       .andThen(new WaitCommand(0.5))
       .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
-      .andThen(new WaitCommand(5.0))
+      .andThen(new WaitCommand(2.0))
       .finallyDo(
           () -> {
             m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule();
@@ -119,10 +119,13 @@ public class RobotContainer {
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
+    NamedCommands.registerCommand("Shoot", ShootNoteCommand);
     NamedCommands.registerCommand("AutoLowerIntake",
         new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeDown));
     NamedCommands.registerCommand("AutoRaiseIntake",
         new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeUp));
+    NamedCommands.registerCommand("Intake", 
+        new AutoIntake(m_Intake, m_IntakeWheels));    
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Another option that allows you to specify the default auto by its name:

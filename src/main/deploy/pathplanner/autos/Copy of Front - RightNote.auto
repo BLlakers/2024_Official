@@ -5,7 +5,7 @@
       "x": 1.28,
       "y": 5.559932574410603
     },
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Front - RightNote"
+                  "pathName": "Copy of Front - RightNote"
                 }
               },
               {
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Front - RightNote - MidNote"
+                  "pathName": "Copy of Front - RightNote - MidNote"
                 }
               }
             ]
@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left note"
+                  "pathName": "Copy of Left note"
                 }
               },
               {
