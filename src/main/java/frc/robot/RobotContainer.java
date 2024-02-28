@@ -46,7 +46,7 @@ public class RobotContainer {
   CommandXboxController manipController = new CommandXboxController(Constants.Controller.ManipControllerChannel);
   XboxController manipControllerTest = new XboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController = new CommandXboxController(Constants.Controller.DebugControllerChannel);
-    JoystickButton manipbButton = new JoystickButton(manipControllerTest, 0);
+  JoystickButton manipbButton = new JoystickButton(manipControllerTest, 0);
   // commands
   final Command ShootNoteCommand = m_Shooter.RunShooter()
       .andThen(new WaitCommand(0.5))
@@ -130,19 +130,22 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    /** Swerve Drive Controller Command
+    /**
+     * Swerve Drive Controller Command
      * 
-     *  Controls:
-     *  - Left Stick: Steering
-     *  - Right Stick: Rotate the robot 
-     *  - Right Trigger: provide gas
-     *  - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
+     * Controls:
+     * - Left Stick: Steering
+     * - Right Stick: Rotate the robot
+     * - Right Trigger: provide gas
+     * - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
      */
-    /*m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
-        () -> driverController.getLeftX(), () -> driverController.getRightX(),
-        () -> driverController.getRightTriggerAxis(), m_DriveTrain,
-        () -> driverController.getLeftTriggerAxis() >= 0.5));
-*/
+    /*
+     * m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() ->
+     * driverController.getLeftY(),
+     * () -> driverController.getLeftX(), () -> driverController.getRightX(),
+     * () -> driverController.getRightTriggerAxis(), m_DriveTrain,
+     * () -> driverController.getLeftTriggerAxis() >= 0.5));
+     */
     // Driver Controller commands
     // - DriveTrain commands (outside of actual driving)
     driverController.a().onTrue(m_DriveTrain.toggleFieldRelativeEnable());
@@ -151,37 +154,40 @@ public class RobotContainer {
     driverController.rightStick().onTrue(m_DriveTrain.WheelLockCommand()); // lock wheels
     // Manipulator Controller commands
     // - Intake commands
-    /*manipController.b() // Run the intake wheels for intaking a note
-        .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
-        .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());*/
+    /*
+     * manipController.b() // Run the intake wheels for intaking a note
+     * .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
+     * .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+     */
     manipController.leftStick() // eject the intake command
         .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
 
     manipController.povLeft() // lower the intake arm
-    .whileTrue(m_Intake.LowerIntakeCommand())
-    .onFalse(m_Intake.StopIntakeCommand());
+        .whileTrue(m_Intake.LowerIntakeCommand())
+        .onFalse(m_Intake.StopIntakeCommand());
     manipController.povRight() // raise the intake arm
-    .whileTrue(m_Intake.RaiseIntakeCommand())
-    .onFalse(m_Intake.StopIntakeCommand());
+        .whileTrue(m_Intake.RaiseIntakeCommand())
+        .onFalse(m_Intake.StopIntakeCommand());
     manipController.leftBumper() // Angle down the shooter
-    .whileTrue(m_Shooter.AngleDownShooter())
-    .onFalse(m_Shooter.AngleStop());
+        .whileTrue(m_Shooter.AngleDownShooter())
+        .onFalse(m_Shooter.AngleStop());
     manipController.rightBumper() // Angle up the shooter
-    .whileTrue(m_Shooter.AngleUpShooter())
-    .onFalse(m_Shooter.AngleStop());
+        .whileTrue(m_Shooter.AngleUpShooter())
+        .onFalse(m_Shooter.AngleStop());
     manipController.x().onTrue(m_Intake.resetIntakePos());
     // reset the intake encoder position
     manipController.b() // toggle the intake between it's different states
-        .onTrue(new AutoIntake(m_Intake, m_IntakeWheels));
+        .whileTrue(new AutoIntake(m_Intake, m_IntakeWheels));
     manipController.povUp().onTrue(m_Intake.autoIntakeUp());
     manipController.povDown().onTrue(m_Intake.autoIntakeDown());
 
     // - Shooter commands
     manipController.a() // Shoot the note
-        .onTrue(ShootNoteCommand)
+        .whileTrue(ShootNoteCommand)
         .whileFalse(m_Shooter.StopShooter());
-    //manipController.y().onTrue(new HangCommand(m_Hanger, manipbButton )).onFalse(m_Hanger.HangStopCommand());
+    // manipController.y().onTrue(new HangCommand(m_Hanger, manipbButton
+    // )).onFalse(m_Hanger.HangStopCommand());
 
     // Debug controller
     // - Manual hanger commands
