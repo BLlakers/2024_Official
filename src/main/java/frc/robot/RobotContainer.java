@@ -201,8 +201,10 @@ public class RobotContainer {
 
   private void configureShuffleboard() {
     // Add commands to the shuffleboard
-    SmartDashboard.putData(m_DriveTrain.resetPose2d());
+    SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
     SmartDashboard.putData(CommandScheduler.getInstance());
+
+    SmartDashboard.putData(m_DriveTrain);
 
   }
 

@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.SendableBuilder;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController; 
@@ -73,9 +74,9 @@ public class SwerveModule extends SubsystemBase {
         double driveEncPos = m_driveEncoder.getPosition();
         double driveEncVel = m_driveEncoder.getVelocity();
 
-        SmartDashboard.putNumber("Robot/Swerve/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/Angle", turnEncVal);
-        SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Pos" , driveEncPos);
-        SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Vel" , driveEncVel);
+        SmartDashboard.putNumber("Robot/" + getName() + "/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/Angle", turnEncVal);
+        SmartDashboard.putNumber("Robot/" + getName() + "/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Pos" , driveEncPos);
+        SmartDashboard.putNumber("Robot/" + getName() + "/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Vel" , driveEncVel);
         
         super.periodic();
     }
@@ -171,8 +172,8 @@ public class SwerveModule extends SubsystemBase {
         double driveMotorPercentPower = optimizedState.speedMetersPerSecond / kDriveMaxSpeed;
         double turnMotorPercentPower = 1.6 * rotateMotorPercentPower;
 
-        SmartDashboard.putNumber("Robot/Swerve/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/DrivePercent", driveMotorPercentPower);
-        SmartDashboard.putNumber("Robot/Swerve/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/DrivePercent", turnMotorPercentPower);
+        SmartDashboard.putNumber("Robot/" + getName() + "/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/DrivePercent", driveMotorPercentPower);
+        SmartDashboard.putNumber("Robot/" + getName() + "/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/DrivePercent", turnMotorPercentPower);
 
         m_driveMotor.set(driveMotorPercentPower);
         m_turningMotor.set(turnMotorPercentPower);
@@ -216,6 +217,21 @@ public class SwerveModule extends SubsystemBase {
     public void stop() {
         m_driveMotor.set(0);
         m_turningMotor.set(0);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder)
+    {
+        super.initSendable(builder);
+
+        builder.publishConstInteger("TurnMotor/ID", m_turningMotor.getDeviceId());
+        builder.publishConstInteger("DriveMotor/ID", m_driveMotor.getDeviceId());
+        
+        builder.addDoubleProperty("TurnMotor/Angle", () -> Units.radiansToDegrees(m_turningEncoder.getDistance()), null);
+        builder.addDoubleProperty("DriveMotor/Pos" , m_driveEncoder::getPosition, null);
+        builder.addDoubleProperty("DriveMotor/Vel" , m_driveEncoder::getVelocity, null);
+
+        builder.setSafeState(this::stop);
     }
     
 }
