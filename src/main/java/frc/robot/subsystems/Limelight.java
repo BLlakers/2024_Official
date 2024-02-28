@@ -11,11 +11,12 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
     public DoubleArraySubscriber m_aprilTagPoseTopic;
-    private AprilTag m_currentAprilTag = new AprilTag(-1, null);
+    private AprilTag m_currentAprilTag = new AprilTag(-1, new Pose3d());
     public Limelight()
     {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -56,5 +57,16 @@ public class Limelight extends SubsystemBase {
             aprilTagId,
             aprilTagPose
         );
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder)
+    {
+        super.initSendable(builder);
+
+        builder.addDoubleProperty("AprilTag/tagID",  () -> m_currentAprilTag.ID, null);
+        builder.addDoubleProperty("AprilTag/pose/X", m_currentAprilTag.pose::getX, null);
+        builder.addDoubleProperty("AprilTag/pose/Y", m_currentAprilTag.pose::getY, null);
+        builder.addDoubleProperty("AprilTag/pose/Z", m_currentAprilTag.pose::getZ, null);
     }
 }

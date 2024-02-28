@@ -3,8 +3,11 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -14,7 +17,19 @@ public class Intake extends SubsystemBase {
         PositionUp,
         PositionDown,
         PositionAmp,
-        PositionOther
+        PositionOther;
+
+        @Override
+        public String toString()
+        {
+            Map<State, String> stateMap = new HashMap<State, String>();
+            stateMap.put(State.PositionUp, "Position Up");
+            stateMap.put(State.PositionDown, "Position Down");
+            stateMap.put(State.PositionOther, "Position Other");
+            stateMap.put(State.PositionAmp, "Position Amplifier");
+
+            return stateMap.get(this);
+        }
     }
 
     private CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.Intake.AngleMtrC,
@@ -45,13 +60,12 @@ public class Intake extends SubsystemBase {
         intakeAngleMtrEnc.setPositionConversionFactor(intakeAngleMotorPositionConversion);
         intakeAngleMtrEnc.setVelocityConversionFactor(intakeAngleMotorVelocityConversion);
         resetIntakeAngle();
-
+        setName("Intake Angle");
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Intake/Angle", GetIntakeMotorAngle().getDegrees());
-        SmartDashboard.putNumber("Intake/Motor/Position", intakeAngleMtrEnc.getPosition());
+        super.periodic();
 
         if (GetIntakeMotorAngle().getDegrees() <= Intake.PosUpAngle) {
             m_CurrentState = State.PositionUp;
@@ -59,7 +73,6 @@ public class Intake extends SubsystemBase {
             m_CurrentState = State.PositionDown;
         } else if (Math.abs(GetIntakeMotorAngle().getDegrees() - Intake.PosAmpAngle) <= 1)
             m_CurrentState = State.PositionAmp;
-
         else
             m_CurrentState = State.PositionOther;
     }
@@ -145,6 +158,17 @@ public class Intake extends SubsystemBase {
 
     public Command resetIntakePos() {
         return runOnce(this::resetIntakeAngle);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder)
+    {
+        super.initSendable(builder);
+
+        builder.addDoubleProperty("Angle", () -> this.GetIntakeMotorAngle().getDegrees(), null);
+        builder.addDoubleProperty("Motor/Position", intakeAngleMtrEnc::getPosition, null);
+        builder.addDoubleProperty("Motor/Velocity", intakeAngleMtrEnc::getVelocity, null);
+        builder.addStringProperty("State", () -> this.GetIntakeState().toString(), null);
     }
 
 }

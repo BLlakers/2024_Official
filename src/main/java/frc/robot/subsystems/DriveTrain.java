@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -207,9 +206,9 @@ public class DriveTrain extends SubsystemBase {
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot) {
 
-    SmartDashboard.putNumber("Robot/Command/X Speed", xSpeed);
-    SmartDashboard.putNumber("Robot/Command/Y Speed", ySpeed);
-    SmartDashboard.putBoolean("Robot/Field Oriented?", m_FieldRelativeEnable);
+    SmartDashboard.putNumber(getName() + "/Command/X Speed", xSpeed);
+    SmartDashboard.putNumber(getName() + "/Command/Y Speed", ySpeed);
+    SmartDashboard.putNumber(getName() + "/Command/Rot Speed", rot);
 
     Rotation2d robotRotation = new Rotation2d(navx.getRotation2d().getRadians());
 
@@ -247,19 +246,7 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // updates our Odometry
     updateOdometry();
-    // updating our current position
-    Pose2d currentPose = this.getPose2d();
-    ChassisSpeeds currentChassisSpeeds = this.getChassisSpeeds();
-    SmartDashboard.putNumber("Robot/Odometry/Pose X", currentPose.getX());
-    SmartDashboard.putNumber("Robot/Odometry/Pose Y", currentPose.getY());
-    SmartDashboard.putNumber("Robot/Odometry/Pose Rot", currentPose.getRotation().getDegrees());
-    SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds X", currentChassisSpeeds.vxMetersPerSecond);
-    SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Y", currentChassisSpeeds.vyMetersPerSecond);
-    SmartDashboard.putNumber("Robot/Odometry/Chassis Speeds Rot",
-        Units.radiansToDegrees(currentChassisSpeeds.omegaRadiansPerSecond));
-    SmartDashboard.putNumber("Robot/Odometry/navx/Orientation", navx.getRotation2d().getDegrees());
 
     super.periodic();
   }
@@ -454,6 +441,7 @@ public class DriveTrain extends SubsystemBase {
     builder.addDoubleProperty("Odometry/ChassisSpeeds/Rot",
         () -> Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond), null);
     builder.addDoubleProperty("Odometry/navx/Orientation", () -> navx.getRotation2d().getDegrees(), null);
+    builder.addBooleanProperty("FieldRelativeEnabled",() -> this.m_FieldRelativeEnable, (boolean fre) -> m_FieldRelativeEnable = fre);
 
     SmartDashboard.putData("DriveTrain/" + m_frontLeft.getName(), m_frontLeft);
     SmartDashboard.putData("DriveTrain/" + m_frontRight.getName(), m_frontRight);

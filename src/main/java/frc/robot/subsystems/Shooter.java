@@ -4,9 +4,9 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.revrobotics.CANSparkMax;
@@ -48,6 +48,8 @@ public class Shooter extends SubsystemBase {
     private static double s_RightMotorShooterSpeed = -0.85;
 
     public Shooter() {
+        setName("Shooter");
+        
         // shooterMtrLeft.follow(shooterMtrRight, true);
         double positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO;
         m_angleMtrEnc.setPositionConversionFactor(positionConversionFactor);
@@ -55,36 +57,10 @@ public class Shooter extends SubsystemBase {
 
         // limit switches
         // m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
-        // m_limitSwitchBottom = new
-        // DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
+        // m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
 
-        SmartDashboard.putNumber("Shooter/Motor Left/Speed Setpoint", s_LeftMotorShooterSpeed);
-        SmartDashboard.putNumber("Shooter/Motor Right/Speed Setpoint", s_RightMotorShooterSpeed);
+        // CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
 
-        // CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter
-        // angle when able
-    }
-
-    @Override
-    public void periodic() {
-        double leftShooterMotorVel = m_shooterMtrLeftEnc.getVelocity();
-        double rightShooterMotorVel = m_shooterMtrRightEnc.getVelocity();
-        SmartDashboard.putNumber("Shooter/Motor Left/Speed", leftShooterMotorVel);
-        SmartDashboard.putNumber("Shooter/Motor Left/Speed Percentage",
-                leftShooterMotorVel / Constants.Conversion.NeoMaxSpeedRPM);
-        SmartDashboard.putNumber("Shooter/Motor Right/Speed", rightShooterMotorVel);
-        SmartDashboard.putNumber("Shooter/Motor Right/Speed Percentage",
-                rightShooterMotorVel / Constants.Conversion.NeoMaxSpeedRPM);
-        SmartDashboard.putNumber("Shooter/Angle Motor/Encoder/Position", m_angleMtrEnc.getPosition());
-        SmartDashboard.putNumber("Shooter/Aiming Angle", GetShooterAngle().getDegrees());
-
-        SmartDashboard.putBoolean("Shooter/Top Limit Switch/Tripped", TopLimitSwitchTripped());
-        SmartDashboard.putBoolean("Shooter/Bottom Limit Switch/Tripped", BottomLimitSwitchTripped());
-
-        s_LeftMotorShooterSpeed = SmartDashboard.getNumber("Shooter/Motor Left/Speed Setpoint",
-                s_LeftMotorShooterSpeed);
-        s_RightMotorShooterSpeed = SmartDashboard.getNumber("Shooter/Motor Right/Speed Setpoint",
-                s_RightMotorShooterSpeed);
     }
 
     // public Command CalibrateShooterAngle()
@@ -275,6 +251,25 @@ public class Shooter extends SubsystemBase {
      */
     public double GetHeightAlongLeadScrew() {
         return m_angleMtrEnc.getPosition() + HEIGHT_OFFSET_LEADSCREW;
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder)
+    {
+        super.initSendable(builder);
+
+        builder.addDoubleProperty("Motor Left/Speed", m_shooterMtrLeftEnc::getVelocity, null);
+        builder.addDoubleProperty("Motor Left/Speed Percentage", () -> m_shooterMtrLeftEnc.getVelocity()/Constants.Conversion.NeoMaxSpeedRPM, null);
+        builder.addDoubleProperty("Motor Right/Speed", m_shooterMtrRightEnc::getVelocity, null);
+        builder.addDoubleProperty("Motor Right/Speed Percentage", () -> m_shooterMtrLeftEnc.getVelocity()/Constants.Conversion.NeoMaxSpeedRPM, null);
+        builder.addDoubleProperty("Angle Motor/Encoder/Position", m_angleMtrEnc::getPosition, null);
+        builder.addDoubleProperty("Aiming Angle", () -> this.GetShooterAngle().getDegrees(), null);
+
+        builder.addDoubleProperty("Motor Left/Speed Setpoint", () -> s_LeftMotorShooterSpeed, (double s) -> s_LeftMotorShooterSpeed=s);
+        builder.addDoubleProperty("Motor Right/Speed Setpoint", () -> s_RightMotorShooterSpeed, (double s) -> s_RightMotorShooterSpeed=s);
+
+        builder.addBooleanProperty("Top Limit Switch/Tripped", this::TopLimitSwitchTripped, null);
+        builder.addBooleanProperty("Bottom Limit Switch/Tripped", this::BottomLimitSwitchTripped, null);
     }
 
 }

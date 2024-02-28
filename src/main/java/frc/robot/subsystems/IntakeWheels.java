@@ -3,26 +3,16 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
+
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.I2C;
 
 public class IntakeWheels extends SubsystemBase {
-    // tells which state the intake is in currently
-    public enum State {
-        PositionUp,
-        PositionDown,
-        PositionAmp,
-        PositionOther
-    }
-
     private CANSparkMax intakeWheelMtrR = new CANSparkMax(Constants.Intake.WheelMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
-    // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
-    // public int IntakePos = 1;
-    // I set this at 410 to account for gravity orginal value was 445 -Ben
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensorV3 = new ColorSensorV3(i2cPort);
 
@@ -32,14 +22,8 @@ public class IntakeWheels extends SubsystemBase {
      * parameters.
      */
     public IntakeWheels() {
+        setName("Intake Wheels");
 
-    }
-
-    @Override
-    public void periodic() {
-        double IR = m_colorSensorV3.getIR();
-        SmartDashboard.putNumber("Intake/Color Sensor/IR", IR);
-        SmartDashboard.putBoolean("Intake/Note is Loaded", NoteIsLoaded());
     }
 
     public boolean NoteIsLoaded() {
@@ -74,6 +58,15 @@ public class IntakeWheels extends SubsystemBase {
     public void ReverseIntakeWheels()
     {
         intakeWheelMtrR.set(0.95);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder)
+    {
+        super.initSendable(builder);
+
+        builder.addIntegerProperty("Color Sensor/IR", m_colorSensorV3::getIR, null);
+        builder.addBooleanProperty("Note is Loaded", this::NoteIsLoaded, null);
     }
 
 }

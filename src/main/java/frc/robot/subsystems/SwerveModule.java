@@ -67,19 +67,7 @@ public class SwerveModule extends SubsystemBase {
      * kModuleMaxAngularAcceleration));
      * }
      */
-    @Override
-    public void periodic() {
-        // m_turningEncoder.getCountsPerRevolution();
-        double turnEncVal =  Units.radiansToDegrees(m_turningEncoder.getDistance());
-        double driveEncPos = m_driveEncoder.getPosition();
-        double driveEncVel = m_driveEncoder.getVelocity();
-
-        SmartDashboard.putNumber("Robot/" + getName() + "/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/Angle", turnEncVal);
-        SmartDashboard.putNumber("Robot/" + getName() + "/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Pos" , driveEncPos);
-        SmartDashboard.putNumber("Robot/" + getName() + "/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/Vel" , driveEncVel);
-        
-        super.periodic();
-    }
+    
     /**
      * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
      * and turning encoder.
