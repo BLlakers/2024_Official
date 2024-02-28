@@ -139,22 +139,22 @@ public class DriveTrain extends SubsystemBase {
     m_frontRight = new SwerveModule(
         Constants.Port.frDriveMtrC,
         Constants.Port.frSteerMtrC,
-        Constants.Port.frTurnEncoderC,
+        Constants.Port.frTurnEncoderDIOC,
         frTurnOffset);
     m_frontLeft = new SwerveModule(
         Constants.Port.flDriveMtrC,
         Constants.Port.flSteerMtrC,
-        Constants.Port.flTurnEncoderC,
+        Constants.Port.flTurnEncoderDIOC,
         flTurnOffset);
     m_backLeft = new SwerveModule(
         Constants.Port.blDriveMtrC,
         Constants.Port.blSteerMtrC,
-        Constants.Port.blTurnEncoderC,
+        Constants.Port.blTurnEncoderDIOC,
         blTurnOffset);
     m_backRight = new SwerveModule(
         Constants.Port.brDriveMtrC,
         Constants.Port.brSteerMtrC,
-        Constants.Port.brTurnEncoderC,
+        Constants.Port.brTurnEncoderDIOC,
         brTurnOffset); // 0.05178
 
     m_frontLeft.setName("Swerve Module/Front Left");

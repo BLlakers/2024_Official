@@ -17,9 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 import frc.robot.commands.*;
@@ -44,9 +42,7 @@ public class RobotContainer {
 
   CommandXboxController driverController = new CommandXboxController(Constants.Controller.DriverControllerChannel);
   CommandXboxController manipController = new CommandXboxController(Constants.Controller.ManipControllerChannel);
-  XboxController manipControllerTest = new XboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController = new CommandXboxController(Constants.Controller.DebugControllerChannel);
-  JoystickButton manipbButton = new JoystickButton(manipControllerTest, 0);
   // commands
   final Command ShootNoteCommand = m_Shooter.RunShooter()
       .andThen(new WaitCommand(0.5))
@@ -186,8 +182,7 @@ public class RobotContainer {
     manipController.a() // Shoot the note
         .whileTrue(ShootNoteCommand)
         .whileFalse(m_Shooter.StopShooter());
-    // manipController.y().onTrue(new HangCommand(m_Hanger, manipbButton
-    // )).onFalse(m_Hanger.HangStopCommand());
+    manipController.y().onTrue(new HangCommand(m_Hanger, manipController.y())).onFalse(m_Hanger.HangStopCommand());
 
     // Debug controller
     // - Manual hanger commands

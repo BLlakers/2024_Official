@@ -74,10 +74,12 @@ public final class Constants {
     public final static int frDriveMtrC = 6;
     public final static int brDriveMtrC = 7;
     public final static int brSteerMtrC = 8;
-    public final static int blTurnEncoderC = 0;
-    public final static int flTurnEncoderC = 1;
-    public final static int frTurnEncoderC = 2;
-    public final static int brTurnEncoderC = 3;
+    public final static int blTurnEncoderDIOC = 0;
+    public final static int flTurnEncoderDIOC = 1;
+    public final static int frTurnEncoderDIOC = 2;
+    public final static int brTurnEncoderDIOC = 3;
+    public final static int hangerLeftMagSwitchDIOC = 7;
+    public final static int hangerRightMagSwitchDIOC = 8;
     public final static int PHChannel = 30; // REV Pneumatic Hub
     public final static int PDHChannel = 20; // REV Power Distribution Hub
   }

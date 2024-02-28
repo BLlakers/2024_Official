@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-import frc.robot.commands.HangCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -10,8 +9,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class Hanger extends SubsystemBase {
-    private DigitalInput hangRightMagSwitch = new DigitalInput(8);
-    private DigitalInput hangLeftMagSwitch = new DigitalInput(7);
+    private DigitalInput hangLeftMagSwitch = new DigitalInput(Constants.Port.hangerLeftMagSwitchDIOC);
+    private DigitalInput hangRightMagSwitch = new DigitalInput(Constants.Port.hangerRightMagSwitchDIOC);
     private CANSparkMax hangerLeftMtr = new CANSparkMax(Constants.Hanger.LeftMtrC,
             com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
     private CANSparkMax hangerRightMtr = new CANSparkMax(Constants.Hanger.RightMtrC,

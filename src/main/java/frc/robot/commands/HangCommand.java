@@ -1,15 +1,13 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.Command;
-import java.util.function.Supplier;
+
+import java.util.function.BooleanSupplier;
 import frc.robot.subsystems.*;
 
 public class HangCommand extends Command {
     private Hanger m_hanger;
-    private JoystickButton m_ControllerButton;
+    private BooleanSupplier m_ControllerButton;
     // private Supplier<Rotation3d> m_robotOrientationSupplier;
     // private PIDController m_hangingController = new PIDController(1, 0, 0);
 
@@ -33,7 +31,7 @@ public class HangCommand extends Command {
     // m_robotOrientationSupplier = robotOrientationSupplier;
     // }
 
-    public HangCommand(Hanger hang, JoystickButton button) {
+    public HangCommand(Hanger hang, BooleanSupplier button) {
         m_ControllerButton = button;
         m_hanger = hang;
         addRequirements(m_hanger);
