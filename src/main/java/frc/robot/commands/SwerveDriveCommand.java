@@ -101,7 +101,7 @@ public class SwerveDriveCommand extends Command {
     SmartDashboard.putNumber("Robot/Controller/Command/X Speed", xSpeed);
     SmartDashboard.putNumber("Robot/Controller/Command/Y Speed", ySpeed);
 
-    m_DriveTrain.drive(xSpeed*.5, ySpeed*.5, rotSpeed*.5);
+    m_DriveTrain.drive(xSpeed*.8, ySpeed*.8, rotSpeed*.8);
     //Pose2d pose = m_DriveTrain.getPose2d(); UNUSED. Would print pose2d out
     //System.out.println(pose);
   }
