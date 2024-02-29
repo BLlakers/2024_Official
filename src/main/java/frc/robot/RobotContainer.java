@@ -63,7 +63,7 @@ public class RobotContainer {
         m_Shooter.StopShooter(),
         m_IntakeWheels.StopIntakeWheelsCommand());
 
-  final Command AutoIntakeCommand = new AutoIntake(m_Intake, m_IntakeWheels);
+  final AutoIntake AutoIntakeCommand = new AutoIntake(m_Intake, m_IntakeWheels);
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -185,7 +185,7 @@ public class RobotContainer {
     manipController.start().onTrue(m_Intake.resetIntakePos());
     // reset the intake encoder position
    manipController.b() // toggle the intake between it's different states
-       .whileTrue(AutoIntakeCommand);
+       .toggleOnTrue(AutoIntakeCommand);
     // manipController.b().whileTrue(m_IntakeWheels.RunIntakeWheelsCommand()).whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
   //manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     
