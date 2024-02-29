@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    //System.out.println(m_robotContainer.m_DriveTrainPID.m_frontRight.m_turningEncoder.getAbsolutePosition());
+    System.out.println(m_robotContainer.m_DriveTrain.m_frontLeft.m_turningEncoder.getAbsolutePosition());
     // how we get encoder offsets
   }
 

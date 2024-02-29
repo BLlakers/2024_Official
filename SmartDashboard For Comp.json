@@ -11,10 +11,10 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "6,0": {
+          "7,0": {
             "size": [
-              4,
-              4
+              3,
+              6
             ],
             "content": {
               "_type": "Camera Stream",
@@ -35,7 +35,7 @@
           "0,0": {
             "size": [
               5,
-              4
+              6
             ],
             "content": {
               "_type": "Camera Stream",
@@ -55,7 +55,7 @@
           },
           "5,0": {
             "size": [
-              1,
+              2,
               2
             ],
             "content": {
@@ -68,13 +68,13 @@
           },
           "5,2": {
             "size": [
-              1,
-              2
+              2,
+              3
             ],
             "content": {
               "_type": "Network Table Tree",
-              "_source0": "network_table:///SmartDashboard/Robot/Odometry/Pose",
-              "_title": "SmartDashboard/Robot/Odometry/Pose",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/Odometry",
+              "_title": "DriveTrain/Odometry",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -164,9 +164,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.800000011920929,
-    "y": 0.800000011920929,
-    "width": 1534.4000244140625,
-    "height": 814.4000244140625
+    "x": -7.199999809265137,
+    "y": -7.199999809265137,
+    "width": 1550.4000244140625,
+    "height": 830.4000244140625
   }
 }

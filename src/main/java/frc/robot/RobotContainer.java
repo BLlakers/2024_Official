@@ -47,12 +47,20 @@ public class RobotContainer {
   final Command ShootNoteCommand = m_Shooter.RunShooter()
       .andThen(new WaitCommand(0.5))
       .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
-      .andThen(new WaitCommand(2.0))
+      .andThen(new WaitCommand(1.0))
       .finallyDo(
           () -> {
             m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule();
           })
       .withName("Shoot Command");
+
+  final Command AutoShootNote  = new SequentialCommandGroup(
+        m_Shooter.RunShooter(),
+        new WaitCommand(0.25),
+        m_IntakeWheels.ReverseIntakeWheelsCommand(),
+        new WaitCommand(0.5),
+        m_Shooter.StopShooter(),
+        m_IntakeWheels.StopIntakeWheelsCommand());
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -67,7 +75,7 @@ public class RobotContainer {
     configureShuffleboard();
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
-    NamedCommands.registerCommand("Shoot", ShootNoteCommand);
+    NamedCommands.registerCommand("Shoot", AutoShootNote);
     NamedCommands.registerCommand("AutoLowerIntake",
         new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeDown));
     NamedCommands.registerCommand("AutoRaiseIntake",
@@ -135,13 +143,13 @@ public class RobotContainer {
      * - Right Trigger: provide gas
      * - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
      */
-    /*
-     * m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() ->
-     * driverController.getLeftY(),
-     * () -> driverController.getLeftX(), () -> driverController.getRightX(),
-     * () -> driverController.getRightTriggerAxis(), m_DriveTrain,
-     * () -> driverController.getLeftTriggerAxis() >= 0.5));
-     */
+    
+      m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() ->
+      driverController.getLeftY(),
+      () -> driverController.getLeftX(), () -> driverController.getRightX(),
+      () -> driverController.getRightTriggerAxis(), m_DriveTrain,
+      () -> driverController.getLeftTriggerAxis() >= 0.5));
+     
     // Driver Controller commands
     // - DriveTrain commands (outside of actual driving)
     driverController.a().onTrue(m_DriveTrain.toggleFieldRelativeEnable());
@@ -222,7 +230,6 @@ public class RobotContainer {
     // return new PathPlannerAuto("New Auto");
     return new SequentialCommandGroup(
         new InstantCommand(() -> m_DriveTrain.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
-        new WaitCommand(3.0),
         autoChooser.getSelected());
 
   }

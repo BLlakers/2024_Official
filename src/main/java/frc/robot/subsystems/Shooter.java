@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
 
+import javax.naming.OperationNotSupportedException;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -49,38 +51,35 @@ public class Shooter extends SubsystemBase {
 
     public Shooter() {
         setName("Shooter");
-        
+
         // shooterMtrLeft.follow(shooterMtrRight, true);
         double positionConversionFactor = LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO;
         m_angleMtrEnc.setPositionConversionFactor(positionConversionFactor);
         m_angleMtrEnc.setVelocityConversionFactor(positionConversionFactor / 60);
 
         // limit switches
-        // m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
+        m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
         // m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
-
-        // CalibrateShooterAngle().schedule(); // schedule to calibrate the shooter angle when able
 
     }
 
-    // public Command CalibrateShooterAngle()
-    // {
-    // return runOnce(
-    // () -> {
-    // if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
-    // return; // don't calibrate if you don't have a limit switch
-    // while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
-    // SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
+    // public Command CalibrateShooterAngle() {
+    //     // throw new OperationNotSupportedException("This is untested code. Wait for Dimitri");
+    //     return this.startEnd(
+    //             () -> {
+    //                 if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
+    //                     return; // don't calibrate if you don't have a limit switch
+    //                 while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
+    //                     SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); // drive up
 
-    // if (TopLimitSwitchTripped())
-    // {
-    // System.err.println("Calibration failed. Shooter angling motor configuration
-    // is inverted!");
-    // return;
-    // }
-    // m_angleMtrEnc.setPosition(0);
-    // }
-    // );
+    //                 if (BottomLimitSwitchTripped()) {
+    //                     System.err.println("Calibration failed. Shooter angling motor configuration is inverted!");
+    //                     return;
+    //                 }
+    //                 m_angleMtrEnc.setPosition(0);
+    //             },
+    //             this::AngleMotorStop
+    //     );
     // }
 
     public void Shoot() {
@@ -89,12 +88,7 @@ public class Shooter extends SubsystemBase {
 
     public Command RunShooter() {
 
-        return this.run(this::Shoot)
-                .finallyDo(
-                        () -> {
-                            m_shooterMtrLeft.stopMotor();
-                            m_shooterMtrRight.stopMotor();
-                        });
+        return this.runOnce(this::Shoot);
     }
 
     public Command StopShooter() {
@@ -173,7 +167,11 @@ public class Shooter extends SubsystemBase {
     public boolean TopLimitSwitchTripped() {
         if (m_limitSwitchTop == null)
             return false;
-        return m_limitSwitchTop.get();
+        boolean tripped = m_limitSwitchTop.get();
+
+        if (tripped)
+            m_angleMtrEnc.setPosition(0); // calibrate the position
+        return tripped;
     }
 
     /**
@@ -254,19 +252,22 @@ public class Shooter extends SubsystemBase {
     }
 
     @Override
-    public void initSendable(SendableBuilder builder)
-    {
+    public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
 
         builder.addDoubleProperty("Motor Left/Speed", m_shooterMtrLeftEnc::getVelocity, null);
-        builder.addDoubleProperty("Motor Left/Speed Percentage", () -> m_shooterMtrLeftEnc.getVelocity()/Constants.Conversion.NeoMaxSpeedRPM, null);
+        builder.addDoubleProperty("Motor Left/Speed Percentage",
+                () -> m_shooterMtrLeftEnc.getVelocity() / Constants.Conversion.NeoMaxSpeedRPM, null);
         builder.addDoubleProperty("Motor Right/Speed", m_shooterMtrRightEnc::getVelocity, null);
-        builder.addDoubleProperty("Motor Right/Speed Percentage", () -> m_shooterMtrLeftEnc.getVelocity()/Constants.Conversion.NeoMaxSpeedRPM, null);
+        builder.addDoubleProperty("Motor Right/Speed Percentage",
+                () -> m_shooterMtrLeftEnc.getVelocity() / Constants.Conversion.NeoMaxSpeedRPM, null);
         builder.addDoubleProperty("Angle Motor/Encoder/Position", m_angleMtrEnc::getPosition, null);
         builder.addDoubleProperty("Aiming Angle", () -> this.GetShooterAngle().getDegrees(), null);
 
-        builder.addDoubleProperty("Motor Left/Speed Setpoint", () -> s_LeftMotorShooterSpeed, (double s) -> s_LeftMotorShooterSpeed=s);
-        builder.addDoubleProperty("Motor Right/Speed Setpoint", () -> s_RightMotorShooterSpeed, (double s) -> s_RightMotorShooterSpeed=s);
+        builder.addDoubleProperty("Motor Left/Speed Setpoint", () -> s_LeftMotorShooterSpeed,
+                (double s) -> s_LeftMotorShooterSpeed = s);
+        builder.addDoubleProperty("Motor Right/Speed Setpoint", () -> s_RightMotorShooterSpeed,
+                (double s) -> s_RightMotorShooterSpeed = s);
 
         builder.addBooleanProperty("Top Limit Switch/Tripped", this::TopLimitSwitchTripped, null);
         builder.addBooleanProperty("Bottom Limit Switch/Tripped", this::BottomLimitSwitchTripped, null);

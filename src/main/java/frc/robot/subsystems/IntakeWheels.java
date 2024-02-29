@@ -31,7 +31,7 @@ public class IntakeWheels extends SubsystemBase {
     }
 
     public Command RunIntakeWheelsCommand() {
-        return this.runEnd(this::RunIntakeWheels, this::StopIntakeWheels);
+        return this.runOnce(this::RunIntakeWheels);
     }
 
     public void RunIntakeWheels() {
@@ -52,7 +52,7 @@ public class IntakeWheels extends SubsystemBase {
     }
 
     public Command ReverseIntakeWheelsCommand() {
-        return this.runEnd(this::ReverseIntakeWheels, this::StopIntakeWheels);
+        return this.runOnce(this::ReverseIntakeWheels);
     }
 
     public void ReverseIntakeWheels()

@@ -1,4 +1,4 @@
-package frc.robot;
+   package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
@@ -95,7 +95,7 @@ public final class Constants {
     public final static int LeftMtrC = 11;
     public final static int RightMtrC = 12;
     public final static int AngleMtrC = 13;
-    public final static int LimitSwitchTopDIO = -1; // TODO: add the digital input channel for this limit switch
+    public final static int LimitSwitchTopDIO = 4;
     public final static int LimitSwitchBottomDIO = -1; // TODO: add the digital input channel for this limit
   }
 

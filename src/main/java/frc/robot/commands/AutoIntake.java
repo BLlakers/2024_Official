@@ -16,16 +16,17 @@ public class AutoIntake extends Command {
 
     private DrivingState m_CurrentIntakeDrivingState;
 
-    private boolean m_CommandIsFinished = false;
+    private boolean m_CommandIsFinished;
 
     @Override
     public void initialize() {
-        
+        m_CommandIsFinished = false;
     }
 
     public AutoIntake(Intake IntakeSub, IntakeWheels IntakeWheelsSub) {
         m_Intake = IntakeSub;
         m_IntakeWheels = IntakeWheelsSub;
+        m_CommandIsFinished = false;
 
         if (m_Intake.GetIntakeState() == Intake.State.PositionUp)
             m_CurrentIntakeDrivingState = DrivingState.DriveIntakeDown;
@@ -39,6 +40,7 @@ public class AutoIntake extends Command {
     public AutoIntake(Intake IntakeSub, IntakeWheels IntakeWheelsSub, DrivingState forcedDrivingState) {
         m_Intake = IntakeSub;
         m_IntakeWheels = IntakeWheelsSub;
+        m_CommandIsFinished = false;
 
         m_CurrentIntakeDrivingState = forcedDrivingState;
 

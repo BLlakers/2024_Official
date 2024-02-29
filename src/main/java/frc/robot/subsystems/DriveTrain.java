@@ -209,6 +209,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber(getName() + "/Command/X Speed", xSpeed);
     SmartDashboard.putNumber(getName() + "/Command/Y Speed", ySpeed);
     SmartDashboard.putNumber(getName() + "/Command/Rot Speed", rot);
+    SmartDashboard.putBoolean(getName() + "/Command/RobotRelative", m_FieldRelativeEnable);
 
     Rotation2d robotRotation = new Rotation2d(navx.getRotation2d().getRadians());
 
