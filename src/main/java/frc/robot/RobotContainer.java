@@ -63,6 +63,8 @@ public class RobotContainer {
         m_Shooter.StopShooter(),
         m_IntakeWheels.StopIntakeWheelsCommand());
 
+  final Command AutoIntakeCommand = new AutoIntake(m_Intake, m_IntakeWheels);
+
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
   // Creating 2d field in Sim/ShuffleBoard
@@ -182,9 +184,9 @@ public class RobotContainer {
         .onFalse(m_Hanger.HangStopCommand());
     manipController.start().onTrue(m_Intake.resetIntakePos());
     // reset the intake encoder position
-   // manipController.b() // toggle the intake between it's different states
-   //     .whileTrue(new AutoIntake(m_Intake, m_IntakeWheels));
-    manipController.b().whileTrue(m_IntakeWheels.RunIntakeWheelsCommand()).whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+   manipController.b() // toggle the intake between it's different states
+       .toggleOnTrue(AutoIntakeCommand);
+    // manipController.b().whileTrue(m_IntakeWheels.RunIntakeWheelsCommand()).whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
   //manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     
     manipController.povUp().onTrue(m_Intake.autoIntakeUp());
