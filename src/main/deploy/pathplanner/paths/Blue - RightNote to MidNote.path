@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.39,
-        "y": 4.39
+        "x": 2.3445732483476367,
+        "y": 4.309587848847595
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1396894623705576,
-        "y": 4.699506218072627
+        "x": 2.094262710718194,
+        "y": 4.619094066920223
       },
       "isLocked": false,
       "linkedName": "Blue - RightNotePickup"
     },
     {
       "anchor": {
-        "x": 2.35,
-        "y": 5.55
+        "x": 2.3679949214391995,
+        "y": 5.445538993788401
       },
       "prevControl": {
-        "x": 1.9927708649121687,
-        "y": 5.006964692635552
+        "x": 2.010765786351368,
+        "y": 4.9025036864239535
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Front Starting Postition",
+  "folder": null,
   "previewStartingState": {
     "rotation": -35.0,
     "velocity": 0

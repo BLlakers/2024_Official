@@ -36,12 +36,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    System.out.println(m_robotContainer.m_DriveTrain.m_frontLeft.m_turningEncoder.getAbsolutePosition());
+    // System.out.println(m_robotContainer.m_DriveTrain.m_frontLeft.m_turningEncoder.getAbsolutePosition());
     // how we get encoder offsets
   }
 
   @Override
   public void autonomousInit() {
+    m_robotContainer.m_Intake.resetIntakeAngle();
     m_robotContainer.m_DriveTrain.m_FieldRelativeEnable = false;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {

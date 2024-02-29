@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.35,
-        "y": 5.55
+        "x": 2.3679949214391995,
+        "y": 5.445538993788401
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0206605315774735,
-        "y": 6.034183692299009
+        "x": 2.038655453016673,
+        "y": 5.92972268608741
       },
       "isLocked": false,
       "linkedName": "Blue - MidNotePickup"
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Front Starting Postition",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0
