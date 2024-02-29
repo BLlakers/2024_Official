@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-import javax.naming.OperationNotSupportedException;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -63,24 +61,24 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    // public Command CalibrateShooterAngle() {
-    //     // throw new OperationNotSupportedException("This is untested code. Wait for Dimitri");
-    //     return this.startEnd(
-    //             () -> {
-    //                 if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
-    //                     return; // don't calibrate if you don't have a limit switch
-    //                 while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
-    //                     SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); // drive up
+    public Command CalibrateShooterAngle() {
+        throw new UnsupportedOperationException("This is untested code. Wait for Dimitri");
+        // return this.startEnd(
+        //         () -> {
+        //             if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
+        //                 return; // don't calibrate if you don't have a limit switch
+        //             while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
+        //                 SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); // drive up
 
-    //                 if (BottomLimitSwitchTripped()) {
-    //                     System.err.println("Calibration failed. Shooter angling motor configuration is inverted!");
-    //                     return;
-    //                 }
-    //                 m_angleMtrEnc.setPosition(0);
-    //             },
-    //             this::AngleMotorStop
-    //     );
-    // }
+        //             if (BottomLimitSwitchTripped()) {
+        //                 System.err.println("Calibration failed. Shooter angling motor configuration is inverted!");
+        //                 return;
+        //             }
+        //             m_angleMtrEnc.setPosition(0);
+        //         },
+        //         this::AngleMotorStop
+        // );
+    }
 
     public void Shoot() {
         SetShootingSpeed(s_LeftMotorShooterSpeed, s_RightMotorShooterSpeed);
