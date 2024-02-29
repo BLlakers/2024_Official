@@ -185,7 +185,7 @@ public class RobotContainer {
     manipController.start().onTrue(m_Intake.resetIntakePos());
     // reset the intake encoder position
    manipController.b() // toggle the intake between it's different states
-       .toggleOnTrue(AutoIntakeCommand);
+       .whileTrue(AutoIntakeCommand);
     // manipController.b().whileTrue(m_IntakeWheels.RunIntakeWheelsCommand()).whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
   //manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     
