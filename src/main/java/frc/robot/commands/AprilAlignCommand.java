@@ -22,9 +22,9 @@ public class AprilAlignCommand extends Command {
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
 
-    private static final double MIN_RADIUS = 0.75;    // meters
+    private static final double MIN_RADIUS = 1.25;    // meters
     private static final double OPTIMAL_RADIUS = 1.5; // meters
-    private static final double MAX_RADIUS = 2;       // meters
+    private static final double MAX_RADIUS = 1.75;    // meters
 
     private final DriveTrain m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
