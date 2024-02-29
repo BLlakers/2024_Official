@@ -32,7 +32,7 @@ public class SwerveModule extends SubsystemBase {
     private static final double kVelocityConversionFactor = kPositionConversionFactor / 60;
 
     // kWheelCircumference used to be
-    public static final double kDriveMaxSpeed = Units.feetToMeters(12.5);
+    public static final double kDriveMaxSpeed = Units.feetToMeters(12.1); // max free speed of a MK3
     public static final double kModuleMaxAngularVelocity = DriveTrain.kMaxAngularSpeed;
     public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 

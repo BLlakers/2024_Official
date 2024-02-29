@@ -42,7 +42,7 @@ public final class Constants {
     public final static double NeoMaxSpeedRPM = 5820;
     public final static double MagEncoderCountsPerRev = 4096;
     public final static double MagRevPerEncoderCounts = 1 / MagEncoderCountsPerRev;
-    public final static double DriveGearRatio = 8.14;
+    public final static double DriveGearRatio = 8.16; // 8.14 SDS MK4
     public final static double TurnGearRatio = 12.8;
     public final static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
   }
@@ -126,6 +126,6 @@ public final class Constants {
     public static final double brTurnEncoderOffset = 0.625;
   }
 
-  public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
+  public static final RobotVersion defaultRobotVersion = RobotVersion.v2023;
 
 }

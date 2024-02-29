@@ -3,9 +3,9 @@
   "robotLength": 0.74,
   "holonomicMode": true,
   "pathFolders": [
-    "Front Starting Postition",
+    "Front Starting Postition Blue",
     "Left Starting Position Blue",
-    "Right Starting Position"
+    "Right Starting Position Blue"
   ],
   "autoFolders": [
     "Front Blue Autos ",
