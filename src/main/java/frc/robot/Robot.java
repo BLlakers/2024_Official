@@ -1,6 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +22,9 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     CameraServer.startAutomaticCapture();
 
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
+
     SmartDashboard.putString("Code Version", codeVersion);
   }
 
@@ -31,7 +36,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-
+    DataLogManager.getLog().stop();
   }
 
   @Override
@@ -56,6 +61,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    DataLogManager.getLog().resume();
     m_robotContainer.m_DriveTrain.m_FieldRelativeEnable = true;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

@@ -10,12 +10,16 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController; 
 import com.revrobotics.SparkPIDController.AccelStrategy;
 import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,6 +47,15 @@ public class SwerveModule extends SubsystemBase {
 
     public final RelativeEncoder m_driveEncoder;
     public final DutyCycleEncoder m_turningEncoder;
+
+    // Logging
+    private final DoubleLogEntry m_logDrivePos,
+                                m_logDriveVel, 
+                                m_logDriveCmdVel,
+                                m_logDriveCmdPct,
+                                m_logTurnPos,
+                                m_logTurnCmdPos,
+                                m_logTurnCmdPct;
 
 
     // Gains are for example purposes only - must be determined for your own robot!
@@ -108,7 +121,32 @@ public class SwerveModule extends SubsystemBase {
         // to be continuous.
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
+        // configure logging
+        DataLog log = DataLogManager.getLog();
+
+        m_logDrivePos = new DoubleLogEntry(log, getName() + "/DriveMotor/Encoder/Position");
+        m_logDriveVel = new DoubleLogEntry(log, getName() + "/DriveMotor/Encoder/Velocity");
+        m_logDriveCmdVel = new DoubleLogEntry(log, getName() + "/DriveMotor/Command/Velocity");
+        m_logDriveCmdPct = new DoubleLogEntry(log, getName() + "/DriveMotor/Command/Percent");
+
+        m_logTurnPos = new DoubleLogEntry(log, getName() + "/TurnMotor/Encoder/Position");
+        m_logTurnCmdPos = new DoubleLogEntry(log, getName() + "/TurnMotor/Command/Position");
+        m_logTurnCmdPct = new DoubleLogEntry(log, getName() + "/TurnMotor/Command/Percent");
+
     }
+
+    @Override
+    public void periodic(){
+        // Handle logging
+        SwerveModuleState state = getModuleState();
+        SwerveModulePosition position = getModulePosition();
+        
+        m_logDrivePos.append(position.distanceMeters);
+        m_logDriveVel.append(state.speedMetersPerSecond);
+        m_logTurnPos.append(position.angle.getDegrees());
+    }
+
+
     /**
      * Returns the current state of the module.
      * <pi> This takes a current velocity for each diffrent drive encoder and a current angle. 
@@ -160,8 +198,14 @@ public class SwerveModule extends SubsystemBase {
         double driveMotorPercentPower = optimizedState.speedMetersPerSecond / kDriveMaxSpeed;
         double turnMotorPercentPower = 1.6 * rotateMotorPercentPower;
 
-        SmartDashboard.putNumber("Robot/" + getName() + "/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/DrivePercent", driveMotorPercentPower);
-        SmartDashboard.putNumber("Robot/" + getName() + "/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/DrivePercent", turnMotorPercentPower);
+        SmartDashboard.putNumber(getName() + "/DriveMotor/Command", driveMotorPercentPower);
+        SmartDashboard.putNumber(getName() + "/TurnMotor/Command", turnMotorPercentPower);
+        
+        m_logDriveCmdVel.append(optimizedState.speedMetersPerSecond);
+        m_logTurnCmdPos.append(optimizedState.angle.getDegrees());
+
+        m_logDriveCmdPct.append(driveMotorPercentPower);
+        m_logTurnCmdPct.append(turnMotorPercentPower);
 
         m_driveMotor.set(driveMotorPercentPower);
         m_turningMotor.set(turnMotorPercentPower);
@@ -203,6 +247,9 @@ public class SwerveModule extends SubsystemBase {
     }
 /** Tells the drive and turning motor to stop */
     public void stop() {
+        m_logDriveCmdPct.append(0);
+        m_logTurnCmdPct.append(0);
+
         m_driveMotor.set(0);
         m_turningMotor.set(0);
     }

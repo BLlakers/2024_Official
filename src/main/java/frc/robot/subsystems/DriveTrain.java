@@ -6,7 +6,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -60,6 +64,19 @@ public class DriveTrain extends SubsystemBase {
   // Creates an odometry object. Odometry tells the robot its position on the
   // field.
   private final SwerveDriveOdometry m_odometry;
+
+  // Logging Variables
+  private DoubleLogEntry m_logPose_x,
+                         m_logPose_y,
+                         m_logPose_rot,
+                         m_logSpeed_x,
+                         m_logSpeed_y,
+                         m_logSpeed_rot,
+                         m_logCmd_x,
+                         m_logCmd_y,
+                         m_logCmd_rot;
+
+  private BooleanLogEntry m_logFieldRelative, m_logWheelLock;
 
   /**
    * Flips our position on the field depending on the alliance we are on. Used for
@@ -173,6 +190,28 @@ public class DriveTrain extends SubsystemBase {
     addChild(m_backRight.getName(), m_backRight);
 
     addChild("navx", navx);
+
+    // Configure Log Entries
+    DataLog log = DataLogManager.getLog();
+
+    m_logPose_x = new DoubleLogEntry(log, getName() + "/Odometry/Pose/X");
+    m_logPose_y = new DoubleLogEntry(log, getName() + "/Odometry/Pose/Y");
+    m_logPose_rot = new DoubleLogEntry(log, getName() + "/Odometry/Pose/Rot");
+
+    m_logSpeed_x = new DoubleLogEntry(log, getName() + "/Odometry/Speed/X");
+    m_logSpeed_y = new DoubleLogEntry(log, getName() + "/Odometry/Speed/Y");
+    m_logSpeed_rot = new DoubleLogEntry(log, getName() + "/Odometry/Speed/Rot");
+
+    m_logCmd_x = new DoubleLogEntry(log, getName() + "/Command/SpeedX");
+    m_logCmd_y = new DoubleLogEntry(log, getName() + "/Command/SpeedY");
+    m_logCmd_rot = new DoubleLogEntry(log, getName() + "/Command/SpeedRot");
+
+    m_logFieldRelative = new BooleanLogEntry(log, getName() + "/FieldRelativeEnable");
+    m_logFieldRelative.append(m_FieldRelativeEnable); // append the first one
+
+    m_logWheelLock = new BooleanLogEntry(log, getName() + "/WheelLock");
+    m_logWheelLock.append(m_WheelLock);
+
   }
 
   /**
@@ -211,6 +250,12 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber(getName() + "/Command/Rot Speed", rot);
     SmartDashboard.putBoolean(getName() + "/Command/RobotRelative", m_FieldRelativeEnable);
 
+    // Log the commanded speeds
+    m_logCmd_x.append(xSpeed);
+    m_logCmd_y.append(ySpeed);
+    m_logCmd_rot.append(rot);
+
+    // Command the robot
     Rotation2d robotRotation = new Rotation2d(navx.getRotation2d().getRadians());
 
     // SmartDashboard.putNumber ( "inputRotiation", robotRotation.getDegrees());
@@ -247,9 +292,22 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    super.periodic();
+    
     updateOdometry();
 
-    super.periodic();
+    // log data
+    Pose2d currentPose = getPose2d();
+    ChassisSpeeds currentSpeeds = getChassisSpeeds();
+    
+    m_logPose_x.append(currentPose.getX());
+    m_logPose_y.append(currentPose.getY());
+    m_logPose_rot.append(currentPose.getRotation().getDegrees());
+
+    m_logSpeed_x.append(currentSpeeds.vxMetersPerSecond);
+    m_logSpeed_y.append(currentSpeeds.vyMetersPerSecond);
+    m_logSpeed_rot.append(Units.radiansToDegrees(currentSpeeds.omegaRadiansPerSecond));
+    
   }
 
   /**
@@ -273,6 +331,7 @@ public class DriveTrain extends SubsystemBase {
           } else if (m_WheelLock == false) {
             m_WheelLock = true;
           }
+          m_logWheelLock.append(m_WheelLock);
         });
   }
 
@@ -391,16 +450,17 @@ public class DriveTrain extends SubsystemBase {
           // one-time action goes here
           // WP - Add code here to toggle the gripper solenoid
           if (m_FieldRelativeEnable == true) {
-            m_FieldRelativeEnable = false;
+            SetFieldRelativeEnable(false);
             // System.out.println("I am Here 2");
           } else if (m_FieldRelativeEnable == false) {
-            m_FieldRelativeEnable = true;
+            SetFieldRelativeEnable(true);
             // System.out.println("I am Here 3");
           }
         });
   }
 
   public void SetFieldRelativeEnable(boolean fieldRelative) {
+    m_logFieldRelative.append(fieldRelative);
     m_FieldRelativeEnable = fieldRelative;
   }
 
