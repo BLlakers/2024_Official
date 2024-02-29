@@ -87,7 +87,7 @@ public class AutoIntake extends Command {
          */
         if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeDown) {
             // if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle) {
-            if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle - 50) {
+            if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle - 40) {
                 m_Intake.LowerIntake();
             } else {
                 m_Intake.StopIntake();

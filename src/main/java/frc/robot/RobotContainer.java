@@ -57,7 +57,7 @@ public class RobotContainer {
 
   final Command AutoShootNote  = new SequentialCommandGroup(
         m_Shooter.RunShooter(),
-        new WaitCommand(0.25),
+        new WaitCommand(0.5),
         m_IntakeWheels.ReverseIntakeWheelsCommand(),
         new WaitCommand(0.5),
         m_Shooter.StopShooter(),

@@ -27,7 +27,7 @@ public class IntakeWheels extends SubsystemBase {
     }
 
     public boolean NoteIsLoaded() {
-        return m_colorSensorV3.getIR() >= 10;
+        return m_colorSensorV3.getIR() >= 30;
     }
 
     public Command RunIntakeWheelsCommand() {
@@ -38,7 +38,7 @@ public class IntakeWheels extends SubsystemBase {
         if (NoteIsLoaded()) {
             intakeWheelMtrR.set(0);
         } else {
-            intakeWheelMtrR.set(-0.65);
+            intakeWheelMtrR.set(-0.75);
         }
     }
 
