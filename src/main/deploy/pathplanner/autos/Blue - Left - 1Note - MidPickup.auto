@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.28,
-      "y": 5.559932574410603
+      "x": 0.75,
+      "y": 6.56
     },
-    "rotation": 0.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Front - MidNote"
+                  "pathName": "Blue - Left - toMidNote"
                 }
               },
               {
@@ -45,6 +45,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Left Blue Auto",
   "choreoAuto": false
 }

@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7518994781213513,
+        "y": 6.56
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4779713439640514,
+        "y": 6.7005300385479245
+      },
+      "isLocked": false,
+      "linkedName": "Blue - LeftStartingPose"
+    },
+    {
+      "anchor": {
+        "x": 2.35,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 1.6536338921465275,
+        "y": 5.3635631379679305
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue - MidNotePickup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 90.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Left Starting Position Blue",
+  "previewStartingState": {
+    "rotation": 60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

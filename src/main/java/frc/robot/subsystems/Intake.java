@@ -81,7 +81,7 @@ public class Intake extends SubsystemBase {
         return m_CurrentState;
     }
 
-    public Command RaiseIntakeCommand() {
+    public Command ManualRaiseIntakeCommand() {
         return this.runEnd(this::RaiseIntake, this::StopIntake);
     }
 
@@ -132,7 +132,7 @@ public class Intake extends SubsystemBase {
                 this::StopIntake);
     }
 
-    public Command LowerIntakeCommand() {
+    public Command ManualLowerIntakeCommand() {
         return this.runEnd(this::LowerIntake, this::StopIntake);
     }
 

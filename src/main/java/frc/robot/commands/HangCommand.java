@@ -46,16 +46,18 @@ public class HangCommand extends Command {
     public void execute() {
         if (m_ControllerButton.getAsBoolean() == true) {
             CurrentHangState = HangState.hangUp;
-            if (m_hanger.GetLeftPosition() >= 140)
+            if (m_hanger.GetLeftPosition() >= 140) {
                 m_hanger.LeftHangStop();
-            else
+            }
+            else {
                 m_hanger.LeftHangUp();
-
-            if (m_hanger.GetRightPosition() >= 140)
+            }
+            if (m_hanger.GetRightPosition() >= 140) {
                 m_hanger.RightHangStop();
-
-            else
-                m_hanger.RightHangUp();
+            }
+            else {
+                m_hanger.RightHangUp(); 
+            }
         } else {
             CurrentHangState = HangState.hangDown;
             if (m_hanger.RightHangIsDown() == true) {

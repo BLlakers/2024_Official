@@ -44,6 +44,7 @@ public class RobotContainer {
   CommandXboxController manipController = new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController = new CommandXboxController(Constants.Controller.DebugControllerChannel);
   // commands
+  
   final Command ShootNoteCommand = m_Shooter.RunShooter()
       .andThen(new WaitCommand(0.5))
       .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
@@ -52,7 +53,7 @@ public class RobotContainer {
           () -> {
             m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule();
           })
-      .withName("Shoot Command");
+      .withName("Shoot Command"); 
 
   final Command AutoShootNote  = new SequentialCommandGroup(
         m_Shooter.RunShooter(),
@@ -163,34 +164,38 @@ public class RobotContainer {
      * .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
      * .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
      */
-    manipController.leftStick() // eject the intake command
+    manipController.y() // eject the intake command
         .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
 
     manipController.povLeft() // lower the intake arm
-        .whileTrue(m_Intake.LowerIntakeCommand())
+        .whileTrue(m_Intake.ManualLowerIntakeCommand())
         .onFalse(m_Intake.StopIntakeCommand());
     manipController.povRight() // raise the intake arm
-        .whileTrue(m_Intake.RaiseIntakeCommand())
+        .whileTrue(m_Intake.ManualRaiseIntakeCommand())
         .onFalse(m_Intake.StopIntakeCommand());
     manipController.leftBumper() // Angle down the shooter
-        .whileTrue(m_Shooter.AngleDownShooter())
-        .onFalse(m_Shooter.AngleStop());
+        .whileTrue(m_Hanger.LowerHangAuto())
+        .onFalse(m_Hanger.HangStopCommand());
     manipController.rightBumper() // Angle up the shooter
-        .whileTrue(m_Shooter.AngleUpShooter())
-        .onFalse(m_Shooter.AngleStop());
-    manipController.x().onTrue(m_Intake.resetIntakePos());
+        .whileTrue(m_Hanger.RaiseHangAuto())
+        .onFalse(m_Hanger.HangStopCommand());
+    manipController.start().onTrue(m_Intake.resetIntakePos());
     // reset the intake encoder position
-    manipController.b() // toggle the intake between it's different states
-        .whileTrue(new AutoIntake(m_Intake, m_IntakeWheels));
+   // manipController.b() // toggle the intake between it's different states
+   //     .whileTrue(new AutoIntake(m_Intake, m_IntakeWheels));
+    manipController.b().whileTrue(m_IntakeWheels.RunIntakeWheelsCommand()).whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+  //manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+    
     manipController.povUp().onTrue(m_Intake.autoIntakeUp());
+    
     manipController.povDown().onTrue(m_Intake.autoIntakeDown());
 
     // - Shooter commands
     manipController.a() // Shoot the note
         .whileTrue(ShootNoteCommand)
         .whileFalse(m_Shooter.StopShooter());
-    manipController.y().onTrue(new HangCommand(m_Hanger, manipController.y())).onFalse(m_Hanger.HangStopCommand());
+    //manipController.y().onTrue(new HangCommand(m_Hanger, manipController.y())).onFalse(m_Hanger.HangStopCommand());
 
     // Debug controller
     // - Manual hanger commands

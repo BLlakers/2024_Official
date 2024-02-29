@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.28,
-      "y": 5.559932574410603
+      "x": 1.27,
+      "y": 5.55
     },
-    "rotation": 180.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Front - RightNote"
+                  "pathName": "Blue - Front - toMidNote"
                 }
               },
               {
@@ -55,32 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Front - RightNote - MidNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
+                  "pathName": "Blue - MidNote to LeftNote"
                 }
               }
             ]
@@ -95,6 +70,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Front Blue Autos ",
   "choreoAuto": false
 }

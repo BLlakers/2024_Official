@@ -19,6 +19,9 @@ public class Hanger extends SubsystemBase {
     private RelativeEncoder hangerLeftMtrEnc = hangerLeftMtr.getEncoder();
     private RelativeEncoder hangerRightMtrEnc = hangerRightMtr.getEncoder();
 
+    double hangSpeedUp = 0.75;
+    double hangSpeedDown = -0.75;
+
     public Hanger() { // Limelight - get Rotation3d rel to tag. / get navx pose (Can navx get 3d?)
         setName("Hanger");
         ResetHangEnc();
@@ -34,11 +37,11 @@ public class Hanger extends SubsystemBase {
     }
 
     public void LeftHangUp() {
-        hangerLeftMtr.set(0.25);
+        hangerLeftMtr.set(hangSpeedUp);
     }
 
     public void LeftHangDown() {
-        hangerLeftMtr.set(-0.25);
+        hangerLeftMtr.set(hangSpeedDown);
     }
 
     public void LeftHangStop() {
@@ -55,11 +58,11 @@ public class Hanger extends SubsystemBase {
     }
 
     public void RightHangUp() {
-        hangerRightMtr.set(0.25);
+        hangerRightMtr.set(hangSpeedUp);
     }
 
     public void RightHangDown() {
-        hangerRightMtr.set(-0.25);
+        hangerRightMtr.set(hangSpeedDown);
     }
 
     public void RightHangStop() {
@@ -81,6 +84,38 @@ public class Hanger extends SubsystemBase {
     public double GetRightPosition() {
         return hangerRightMtrEnc.getPosition();
     }
+    /** Raises hang when Held. Will stop at top position*/
+    public Command RaiseHangAuto(){ 
+        return run(
+            ()-> {
+    if (GetLeftPosition() >= 140) {
+        hangerLeftMtr.set(0);
+    } else {
+     hangerLeftMtr.set(hangSpeedUp);
+    } if (GetRightPosition() >= 140) {
+      hangerRightMtr.set(0);
+    }
+    else {
+       hangerRightMtr.set(hangSpeedUp); 
+    }});}
+     /** Lowers hang when Held. Will stop when it hits the limit switch*/
+   public Command LowerHangAuto(){
+    return run(()-> {
+        if (RightHangIsDown() == true) {
+            RightHangStop();
+        } else {
+           RightHangDown();
+        }
+
+        if (LeftHangIsDown() == true) {
+            LeftHangStop();
+        } else {
+          LeftHangDown();
+        
+        }
+    });
+    }
+
 
     @Override
     public void initSendable(SendableBuilder builder)
