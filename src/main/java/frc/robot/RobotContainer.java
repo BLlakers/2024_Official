@@ -177,13 +177,13 @@ public class RobotContainer {
         .whileTrue(ShootNoteCommand)
         .whileFalse(m_Shooter.StopShooter());
     manipController.x() // eject the intake command
-        .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
+        .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand().onlyWhile(() -> !m_IntakeWheels.NoteIsLoaded()))
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     // reset the intake encoder position
     manipController.b() // toggle the intake between it's different states
         .toggleOnTrue(AutoIntakeNoteCommand);
-    manipController.y()
-        .toggleOnTrue(AutoEjectNoteCommand);
+    // manipController.y()
+    //     .toggleOnTrue(AutoEjectNoteCommand);
     // manipController.b().whileTrue(m_IntakeWheels.RunIntakeWheelsCommand()).whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     // manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
 
@@ -196,7 +196,7 @@ public class RobotContainer {
         .whileTrue(m_Intake.ManualRaiseIntakeCommand())
         .onFalse(m_Intake.StopIntakeCommand());
 
-    manipController.leftTrigger(0.5) // eject the intake command
+    manipController.y() // eject the intake command
         .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     manipController.rightTrigger(0.5)

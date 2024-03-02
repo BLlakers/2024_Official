@@ -38,7 +38,7 @@ public class IntakeWheels extends SubsystemBase {
         if (NoteIsLoaded()) {
             intakeWheelMtrR.set(0);
         } else {
-            intakeWheelMtrR.set(-0.75);
+            intakeWheelMtrR.set(-0.65);
         }
     }
 
