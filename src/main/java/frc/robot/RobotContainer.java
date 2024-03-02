@@ -164,30 +164,18 @@ public class RobotContainer {
     driverController.start().onTrue(m_DriveTrain.resetPose2d());// RESETING OUR POSE 2d/ odometry
     driverController.rightStick().onTrue(m_DriveTrain.WheelLockCommand()); // lock wheels
     // Manipulator Controller commands
-    // - Intake commands
-    /*
-     * manipController.b() // Run the intake wheels for intaking a note
-     * .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
-     * .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
-     */
-
-    manipController.leftTrigger(0.5) // eject the intake command
-        .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
-        .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
-
-    manipController.povLeft() // lower the intake arm
-        .whileTrue(m_Intake.ManualLowerIntakeCommand())
-        .onFalse(m_Intake.StopIntakeCommand());
-    manipController.povRight() // raise the intake arm
-        .whileTrue(m_Intake.ManualRaiseIntakeCommand())
-        .onFalse(m_Intake.StopIntakeCommand());
     manipController.leftBumper() // Angle down the shooter
         .whileTrue(m_Hanger.LowerHangAuto())
         .onFalse(m_Hanger.HangStopCommand());
     manipController.rightBumper() // Angle up the shooter
         .whileTrue(m_Hanger.RaiseHangAuto())
         .onFalse(m_Hanger.HangStopCommand());
+
     manipController.start().onTrue(m_Intake.resetIntakePos());
+
+    manipController.a() // Shoot the note
+        .whileTrue(ShootNoteCommand)
+        .whileFalse(m_Shooter.StopShooter());
     manipController.x() // eject the intake command
         .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
@@ -200,19 +188,20 @@ public class RobotContainer {
     // manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
 
     manipController.povUp().onTrue(m_Intake.autoIntakeUp());
-
     manipController.povDown().onTrue(m_Intake.autoIntakeDown());
+    manipController.povLeft() // lower the intake arm
+        .whileTrue(m_Intake.ManualLowerIntakeCommand())
+        .onFalse(m_Intake.StopIntakeCommand());
+    manipController.povRight() // raise the intake arm
+        .whileTrue(m_Intake.ManualRaiseIntakeCommand())
+        .onFalse(m_Intake.StopIntakeCommand());
 
+    manipController.leftTrigger(0.5) // eject the intake command
+        .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
+        .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     manipController.rightTrigger(0.5)
         .onTrue(m_Shooter.RunShooter())
         .onFalse(m_Shooter.StopShooter());
-
-    // - Shooter commands
-    manipController.a() // Shoot the note
-        .whileTrue(ShootNoteCommand)
-        .whileFalse(m_Shooter.StopShooter());
-    // manipController.y().onTrue(new HangCommand(m_Hanger,
-    // manipController.y())).onFalse(m_Hanger.HangStopCommand());
 
     // Debug controller
     // - Manual hanger commands
