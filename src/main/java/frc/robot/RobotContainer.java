@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -44,7 +45,7 @@ public class RobotContainer {
   CommandXboxController manipController = new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController = new CommandXboxController(Constants.Controller.DebugControllerChannel);
   // commands
-  
+
   final Command ShootNoteCommand = m_Shooter.RunShooter()
       .andThen(new WaitCommand(0.5))
       .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
@@ -53,17 +54,21 @@ public class RobotContainer {
           () -> {
             m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule();
           })
-      .withName("Shoot Command"); 
+      .withName("Shoot Command");
 
-  final Command AutoShootNote  = new SequentialCommandGroup(
-        m_Shooter.RunShooter(),
-        new WaitCommand(0.5),
-        m_IntakeWheels.ReverseIntakeWheelsCommand(),
-        new WaitCommand(0.5),
-        m_Shooter.StopShooter(),
-        m_IntakeWheels.StopIntakeWheelsCommand());
+  final Command AutoShootNote = new SequentialCommandGroup(
+      m_Shooter.RunShooter(),
+      new WaitCommand(0.5),
+      m_IntakeWheels.ReverseIntakeWheelsCommand(),
+      new WaitCommand(0.5),
+      m_Shooter.StopShooter(),
+      m_IntakeWheels.StopIntakeWheelsCommand());
 
-  final AutoIntake AutoIntakeCommand = new AutoIntake(m_Intake, m_IntakeWheels);
+  final AutoIntake AutoIntakeNoteCommand = new AutoIntake(m_Intake, m_IntakeWheels);
+  final Command AutoEjectNoteCommand = m_Intake.autoIntakeDown()
+      .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
+      .andThen(Commands.waitSeconds(0.5))
+      .andThen(m_IntakeWheels.StopIntakeWheelsCommand());
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -146,13 +151,12 @@ public class RobotContainer {
      * - Right Trigger: provide gas
      * - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
      */
-    
-      m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() ->
-      driverController.getLeftY(),
-      () -> driverController.getLeftX(), () -> driverController.getRightX(),
-      () -> driverController.getRightTriggerAxis(), m_DriveTrain,
-      () -> driverController.getLeftTriggerAxis() >= 0.5));
-     
+
+    m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
+        () -> driverController.getLeftX(), () -> driverController.getRightX(),
+        () -> driverController.getRightTriggerAxis(), m_DriveTrain,
+        () -> driverController.getLeftTriggerAxis() >= 0.5));
+
     // Driver Controller commands
     // - DriveTrain commands (outside of actual driving)
     driverController.a().onTrue(m_DriveTrain.toggleFieldRelativeEnable());
@@ -166,7 +170,8 @@ public class RobotContainer {
      * .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
      * .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
      */
-    manipController.y() // eject the intake command
+
+    manipController.a() // eject the intake command
         .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
 
@@ -183,21 +188,27 @@ public class RobotContainer {
         .whileTrue(m_Hanger.RaiseHangAuto())
         .onFalse(m_Hanger.HangStopCommand());
     manipController.start().onTrue(m_Intake.resetIntakePos());
+    manipController.x() // eject the intake command
+        .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand())
+        .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     // reset the intake encoder position
-   manipController.b() // toggle the intake between it's different states
-       .toggleOnTrue(AutoIntakeCommand);
+    manipController.b() // toggle the intake between it's different states
+        .toggleOnTrue(AutoIntakeNoteCommand);
+    manipController.y()
+        .toggleOnTrue(AutoEjectNoteCommand);
     // manipController.b().whileTrue(m_IntakeWheels.RunIntakeWheelsCommand()).whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
-  //manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
-    
+    // manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+
     manipController.povUp().onTrue(m_Intake.autoIntakeUp());
-    
+
     manipController.povDown().onTrue(m_Intake.autoIntakeDown());
 
     // - Shooter commands
     manipController.a() // Shoot the note
         .whileTrue(ShootNoteCommand)
         .whileFalse(m_Shooter.StopShooter());
-    //manipController.y().onTrue(new HangCommand(m_Hanger, manipController.y())).onFalse(m_Hanger.HangStopCommand());
+    // manipController.y().onTrue(new HangCommand(m_Hanger,
+    // manipController.y())).onFalse(m_Hanger.HangStopCommand());
 
     // Debug controller
     // - Manual hanger commands
@@ -219,7 +230,7 @@ public class RobotContainer {
 
   private void configureShuffleboard() {
     SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
-    
+
     // Add subsystems
     SmartDashboard.putData(m_DriveTrain);
     SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
@@ -237,8 +248,9 @@ public class RobotContainer {
     // return new PathPlannerAuto("New Auto");
 
     // return new SequentialCommandGroup(
-    //     new InstantCommand(() -> m_DriveTrain.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
-    //     autoChooser.getSelected());
+    // new InstantCommand(() -> m_DriveTrain.resetPose(new Pose2d(1.00, 5.00, new
+    // Rotation2d(0)))),
+    // autoChooser.getSelected());
 
     return autoChooser.getSelected();
 

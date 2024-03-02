@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.11,
-      "y": 4.7
+      "x": 1.27,
+      "y": 5.55
     },
-    "rotation": -35.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Right - toRightNote"
+                        "pathName": "Blue - Front - toRightNote"
                       }
                     }
                   ]
@@ -52,38 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - RightBackToRight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Blue - Right - toLastCenterNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Blue - LastCenterBackToRight"
+            "pathName": "Blue - RightBackToFront"
           }
         },
         {
@@ -95,6 +64,6 @@
       ]
     }
   },
-  "folder": "Right BlueAutos",
+  "folder": "Front Blue Autos ",
   "choreoAuto": false
 }
