@@ -203,6 +203,10 @@ public class RobotContainer {
 
     manipController.povDown().onTrue(m_Intake.autoIntakeDown());
 
+    manipController.rightTrigger(0.5)
+        .onTrue(m_Shooter.RunShooter())
+        .onFalse(m_Shooter.StopShooter());
+
     // - Shooter commands
     manipController.a() // Shoot the note
         .whileTrue(ShootNoteCommand)
@@ -229,7 +233,7 @@ public class RobotContainer {
     debugController.povUp()
         .whileTrue(m_Shooter.ManualAngleUp())
         .whileFalse(m_Shooter.AngleStop());
-      
+
     debugController.povDown()
         .whileTrue(m_Shooter.ManualAngleDown())
         .whileFalse(m_Shooter.AngleStop());
