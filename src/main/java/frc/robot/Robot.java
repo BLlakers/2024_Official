@@ -62,6 +62,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
+    m_robotContainer.AutoIntakeNoteCommand.cancel();
+    
   }
 
   @Override

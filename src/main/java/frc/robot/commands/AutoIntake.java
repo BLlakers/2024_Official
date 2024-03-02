@@ -115,15 +115,6 @@ public class AutoIntake extends Command {
     @Override
     public void end(boolean interrupted) {
         System.out.println("m_CurrentIntakeDrivingState");
-        if (interrupted) {
-
-            while (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosUpAngle) {
-                m_Intake.RaiseIntake();
-            }
-
-            m_Intake.StopIntake();
-
-        }
         m_Intake.StopIntake();
         m_IntakeWheels.StopIntakeWheels();
         
