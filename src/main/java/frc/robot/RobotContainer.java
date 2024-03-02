@@ -226,6 +226,14 @@ public class RobotContainer {
         .whileTrue(new InstantCommand(m_Hanger::RightHangUp, m_Hanger))
         .onFalse(new InstantCommand(m_Hanger::RightHangStop, m_Hanger));
 
+    debugController.povUp()
+        .whileTrue(m_Shooter.ManualAngleUp())
+        .whileFalse(m_Shooter.AngleStop());
+      
+    debugController.povDown()
+        .whileTrue(m_Shooter.ManualAngleDown())
+        .whileFalse(m_Shooter.AngleStop());
+
   }
 
   private void configureShuffleboard() {
