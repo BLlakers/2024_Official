@@ -171,7 +171,7 @@ public class RobotContainer {
      * .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
      */
 
-    manipController.a() // eject the intake command
+    manipController.leftTrigger(0.5) // eject the intake command
         .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
 
