@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 6.56
+      "x": 15.27,
+      "y": 5.55
     },
-    "rotation": 60.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Left - toLeftNote"
+                        "pathName": "Red - Front - MidNotePickup"
                       }
                     }
                   ]
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - LeftBackToLeft"
+            "pathName": "Red - MidBackToFront"
           }
         },
         {
@@ -66,21 +66,28 @@
           "data": {
             "commands": [
               {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Red - Front - LeftNotePickup"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": []
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Blue - Left - to2ndCenterNote"
                 }
               }
             ]
@@ -89,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - 2ndCenterBackToLeft"
+            "pathName": "Red - LeftBackToFront"
           }
         },
         {
@@ -101,6 +108,6 @@
       ]
     }
   },
-  "folder": "Left Blue Auto",
+  "folder": "Front Red Autos",
   "choreoAuto": false
 }

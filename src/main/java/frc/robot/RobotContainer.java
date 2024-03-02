@@ -235,9 +235,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // loads New Auto auto file
     // return new PathPlannerAuto("New Auto");
-    return new SequentialCommandGroup(
-        new InstantCommand(() -> m_DriveTrain.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
-        autoChooser.getSelected());
+
+    // return new SequentialCommandGroup(
+    //     new InstantCommand(() -> m_DriveTrain.resetPose(new Pose2d(1.00, 5.00, new Rotation2d(0)))),
+    //     autoChooser.getSelected());
+
+    return autoChooser.getSelected();
 
   }
 }

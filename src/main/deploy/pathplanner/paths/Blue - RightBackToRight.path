@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 2.4031274310765443,
-        "y": 5.515804013063089
+        "y": 4.286166175756032
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9526888906844835,
-        "y": 5.165415439390078
+        "x": 1.8410072768790318,
+        "y": 4.391563704668065
       },
       "isLocked": false,
-      "linkedName": "Blue - MidNotePickup"
+      "linkedName": "Blue - RightNotePickup"
     },
     {
       "anchor": {
-        "x": 2.4031274310765443,
-        "y": 4.286166175756032
+        "x": 1.1149354110405783,
+        "y": 4.6960454548583845
       },
       "prevControl": {
-        "x": 1.9126888906844834,
-        "y": 4.662476649889106
+        "x": 1.618501382509183,
+        "y": 4.157346973752435
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue - RightNotePickup"
+      "linkedName": "Blue - RightStartingPose"
     }
   ],
   "rotationTargets": [],
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Right Starting Position Blue",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -35.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

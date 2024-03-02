@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.547148467218551,
-        "y": 6.56
+        "x": 2.537562767433229,
+        "y": 6.6503194544850635
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9020668288550244,
-        "y": 6.835548722251376
+        "x": 1.8924811290697023,
+        "y": 6.92586817673644
       },
       "isLocked": false,
       "linkedName": "Blue - LeftNotePickup"
     },
     {
       "anchor": {
-        "x": 0.7518994781213513,
-        "y": 6.56
+        "x": 1.1149354110405783,
+        "y": 6.405827590542485
       },
       "prevControl": {
-        "x": 1.3707054194783954,
-        "y": 7.028186819903613
+        "x": 1.7337413523976222,
+        "y": 6.874014410446098
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.0,
+    "rotation": 35.0,
     "rotateFast": false
   },
   "reversed": false,
