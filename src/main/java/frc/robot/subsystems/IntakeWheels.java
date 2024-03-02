@@ -34,11 +34,16 @@ public class IntakeWheels extends SubsystemBase {
         return this.runOnce(this::RunIntakeWheels);
     }
 
+    public Command RunIntakeWheelsCtsCommand()
+    {
+        return this.run(this::RunIntakeWheels);
+    }
+
     public void RunIntakeWheels() {
         if (NoteIsLoaded()) {
             intakeWheelMtrR.set(0);
         } else {
-            intakeWheelMtrR.set(-0.65);
+            intakeWheelMtrR.set(-0.45);
         }
     }
 

@@ -177,7 +177,7 @@ public class RobotContainer {
         .whileTrue(ShootNoteCommand)
         .whileFalse(m_Shooter.StopShooter());
     manipController.x() // eject the intake command
-        .whileTrue(m_IntakeWheels.RunIntakeWheelsCommand().onlyWhile(() -> !m_IntakeWheels.NoteIsLoaded()))
+        .whileTrue(m_IntakeWheels.RunIntakeWheelsCtsCommand().onlyWhile(() -> !m_IntakeWheels.NoteIsLoaded()))
         .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
     // reset the intake encoder position
     manipController.b() // toggle the intake between it's different states
