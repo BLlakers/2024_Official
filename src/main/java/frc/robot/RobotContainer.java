@@ -64,7 +64,7 @@ public class RobotContainer {
       m_Shooter.StopShooter(),
       m_IntakeWheels.StopIntakeWheelsCommand());
 
-  final Command AutoIntakeNoteCommand = (new AutoIntake(m_Intake, m_IntakeWheels)).withTimeout(7);
+  final Command AutoIntakeNoteCommand = new AutoIntake(m_Intake, m_IntakeWheels);
   final Command AutoEjectNoteCommand = m_Intake.autoIntakeDown()
       .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
       .andThen(Commands.waitSeconds(0.5))
