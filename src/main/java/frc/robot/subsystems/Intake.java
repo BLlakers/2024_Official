@@ -61,7 +61,7 @@ public class Intake extends SubsystemBase {
         intakeAngleMtrEnc.setPositionConversionFactor(intakeAngleMotorPositionConversion);
         intakeAngleMtrEnc.setVelocityConversionFactor(intakeAngleMotorVelocityConversion);
         resetIntakeAngle();
-        setName("Intake Angle");
+        setName("Intake/Angle");
     }
 
     @Override
