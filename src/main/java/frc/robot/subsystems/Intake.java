@@ -37,6 +37,8 @@ public class Intake extends SubsystemBase {
 
     private State m_CurrentState = State.PositionUp;
 
+    private IntakeWheels m_IntakeWheels = new IntakeWheels();
+
     // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
     public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
     // public int IntakePos = 1;
@@ -77,6 +79,11 @@ public class Intake extends SubsystemBase {
             m_CurrentState = State.PositionOther;
     }
 
+    public IntakeWheels GetIntakeWheels()
+    {
+        return m_IntakeWheels;
+    }
+
     public State GetIntakeState() {
         return m_CurrentState;
     }
@@ -87,6 +94,11 @@ public class Intake extends SubsystemBase {
 
     public void RaiseIntake() {
         intakeAngleMtr.set(-.35);
+    }
+
+    public boolean NoteIsLoaded()
+    {
+        return m_IntakeWheels.NoteIsLoaded();
     }
 
     public Command autoIntakeUp() {

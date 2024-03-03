@@ -14,7 +14,6 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -29,7 +28,6 @@ public class RobotContainer {
   DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
   Limelight m_Limelight = new Limelight();
   Intake m_Intake = new Intake();
-  IntakeWheels m_IntakeWheels = new IntakeWheels();
   Shooter m_Shooter = new Shooter();
   Hanger m_Hanger = new Hanger();
   // Shooter
@@ -44,31 +42,31 @@ public class RobotContainer {
   CommandXboxController driverController = new CommandXboxController(Constants.Controller.DriverControllerChannel);
   CommandXboxController manipController = new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController = new CommandXboxController(Constants.Controller.DebugControllerChannel);
+  
   // commands
-
   final Command ShootNoteCommand = m_Shooter.RunShooter()
       .andThen(new WaitCommand(0.5))
-      .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
+      .andThen(m_Intake.GetIntakeWheels().ReverseIntakeWheelsCommand())
       .andThen(new WaitCommand(1.0))
       .finallyDo(
           () -> {
-            m_Shooter.StopShooter().alongWith(m_IntakeWheels.StopIntakeWheelsCommand()).schedule();
+            m_Shooter.StopShooter().alongWith(m_Intake.GetIntakeWheels().StopIntakeWheelsCommand()).schedule();
           })
       .withName("Shoot Command");
 
   final Command AutoShootNote = new SequentialCommandGroup(
       m_Shooter.RunShooter(),
       new WaitCommand(0.5),
-      m_IntakeWheels.ReverseIntakeWheelsCommand(),
+      m_Intake.GetIntakeWheels().ReverseIntakeWheelsCommand(),
       new WaitCommand(0.5),
       m_Shooter.StopShooter(),
-      m_IntakeWheels.StopIntakeWheelsCommand());
+      m_Intake.GetIntakeWheels().StopIntakeWheelsCommand());
 
-  final Command AutoIntakeNoteCommand = new AutoIntake(m_Intake, m_IntakeWheels);
+  final Command AutoIntakeNoteCommand = new AutoIntake(m_Intake, m_Intake.GetIntakeWheels());
   final Command AutoEjectNoteCommand = m_Intake.autoIntakeDown()
-      .andThen(m_IntakeWheels.ReverseIntakeWheelsCommand())
+      .andThen(m_Intake.GetIntakeWheels().ReverseIntakeWheelsCommand())
       .andThen(Commands.waitSeconds(0.5))
-      .andThen(m_IntakeWheels.StopIntakeWheelsCommand());
+      .andThen(m_Intake.GetIntakeWheels().StopIntakeWheelsCommand());
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -85,11 +83,11 @@ public class RobotContainer {
     // Build an auto chooser. This will use Commands.none() as the default option.
     NamedCommands.registerCommand("Shoot", AutoShootNote);
     NamedCommands.registerCommand("AutoLowerIntake",
-        new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeDown));
+        new AutoIntake(m_Intake, m_Intake.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeDown));
     NamedCommands.registerCommand("AutoRaiseIntake",
-        new AutoIntake(m_Intake, m_IntakeWheels, AutoIntake.DrivingState.DriveIntakeUp));
+        new AutoIntake(m_Intake, m_Intake.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeUp));
     NamedCommands.registerCommand("Intake",
-        new AutoIntake(m_Intake, m_IntakeWheels));
+        new AutoIntake(m_Intake, m_Intake.GetIntakeWheels()));
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Another option that allows you to specify the default auto by its name:
@@ -177,8 +175,8 @@ public class RobotContainer {
         .whileTrue(ShootNoteCommand)
         .whileFalse(m_Shooter.StopShooter());
     manipController.x() // eject the intake command
-        .whileTrue(m_IntakeWheels.RunIntakeWheelsCtsCommand().onlyWhile(() -> !m_IntakeWheels.NoteIsLoaded()))
-        .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+        .whileTrue(m_Intake.GetIntakeWheels().RunIntakeWheelsCtsCommand().onlyWhile(() -> !m_Intake.NoteIsLoaded()))
+        .whileFalse(m_Intake.GetIntakeWheels().StopIntakeWheelsCommand());
     // reset the intake encoder position
     // manipController.b() // toggle the intake between it's different states
     //     .toggleOnTrue(AutoIntakeNoteCommand);
@@ -197,8 +195,8 @@ public class RobotContainer {
         .onFalse(m_Intake.StopIntakeCommand());
 
     manipController.y() // eject the intake command
-        .whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand())
-        .whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+        .whileTrue(m_Intake.GetIntakeWheels().ReverseIntakeWheelsCommand())
+        .whileFalse(m_Intake.GetIntakeWheels().StopIntakeWheelsCommand());
     manipController.rightTrigger(0.5)
         .onTrue(m_Shooter.RunShooter())
         .onFalse(m_Shooter.StopShooter());
@@ -239,7 +237,7 @@ public class RobotContainer {
     SmartDashboard.putData(m_Shooter);
     SmartDashboard.putData(m_Hanger);
     SmartDashboard.putData(m_Intake);
-    SmartDashboard.putData(m_IntakeWheels);
+    SmartDashboard.putData(m_Intake.GetIntakeWheels());
     SmartDashboard.putData(m_Limelight);
 
   }

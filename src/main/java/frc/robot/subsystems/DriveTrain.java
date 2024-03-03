@@ -263,7 +263,7 @@ public class DriveTrain extends SubsystemBase {
    */
   public Command WheelLockCommand() {
 
-    return runOnce(
+    return this.runOnce(
         () -> {
 
           // one-time action goes here
@@ -288,7 +288,7 @@ public class DriveTrain extends SubsystemBase {
     // Inline construction of command goes here.
     // Subsystem::RunOnce implicitly requires `this` subsystem.
 
-    return runOnce(
+    return this.runOnce(
         () -> {
           navx.reset();
 
@@ -368,7 +368,7 @@ public class DriveTrain extends SubsystemBase {
    */
 
   public Command resetPose2d() {
-    return runOnce(
+    return this.runOnce(
         () -> {
           resetPose(new Pose2d());
         });
@@ -385,7 +385,7 @@ public class DriveTrain extends SubsystemBase {
    */
   public Command toggleFieldRelativeEnable() {
 
-    return runOnce(
+    return this.runOnce(
         () -> {
           // System.out.println("I am Here");
           // one-time action goes here
@@ -423,7 +423,7 @@ public class DriveTrain extends SubsystemBase {
    * Runnable Command. Runs the {@link #stopModules()} Command.
    */
   public Command Break() {
-    return run(
+    return this.run(
         () -> {
           stopModules();
         });

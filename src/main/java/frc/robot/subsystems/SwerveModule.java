@@ -160,8 +160,8 @@ public class SwerveModule extends SubsystemBase {
         double driveMotorPercentPower = optimizedState.speedMetersPerSecond / kDriveMaxSpeed;
         double turnMotorPercentPower = 1.6 * rotateMotorPercentPower;
 
-        SmartDashboard.putNumber("Robot/" + getName() + "/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/DrivePercent", driveMotorPercentPower);
-        SmartDashboard.putNumber("Robot/" + getName() + "/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/DrivePercent", turnMotorPercentPower);
+        SmartDashboard.putNumber("DriveTrain/" + getName() + "/Drive Encoder/ID: " + m_driveMotor.getDeviceId() + "/DrivePercent", driveMotorPercentPower);
+        SmartDashboard.putNumber("DriveTrain/" + getName() + "/Turn Encoder/ID: " + m_turningMotor.getDeviceId() + "/DrivePercent", turnMotorPercentPower);
 
         m_driveMotor.set(driveMotorPercentPower);
         m_turningMotor.set(turnMotorPercentPower);

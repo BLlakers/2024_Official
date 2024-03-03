@@ -47,12 +47,14 @@ public class Hanger extends SubsystemBase {
     public void LeftHangStop() {
         hangerLeftMtr.set(0);
     }
+
     public void HangStop() {
         hangerLeftMtr.set(0);
         hangerRightMtr.set(0);
     }
-    public Command HangStopCommand(){
-        return run(()-> {
+
+    public Command HangStopCommand() {
+        return run(() -> {
             HangStop();
         });
     }
@@ -84,42 +86,47 @@ public class Hanger extends SubsystemBase {
     public double GetRightPosition() {
         return hangerRightMtrEnc.getPosition();
     }
-    /** Raises hang when Held. Will stop at top position*/
-    public Command RaiseHangAuto(){ 
-        return run(
-            ()-> {
-    if (GetLeftPosition() >= 140) {
-        hangerLeftMtr.set(0);
-    } else {
-     hangerLeftMtr.set(hangSpeedUp);
-    } if (GetRightPosition() >= 140) {
-      hangerRightMtr.set(0);
-    }
-    else {
-       hangerRightMtr.set(hangSpeedUp); 
-    }});}
-     /** Lowers hang when Held. Will stop when it hits the limit switch*/
-   public Command LowerHangAuto(){
-    return run(()-> {
-        if (RightHangIsDown() == true) {
-            RightHangStop();
-        } else {
-           RightHangDown();
-        }
 
-        if (LeftHangIsDown() == true) {
-            LeftHangStop();
-        } else {
-          LeftHangDown();
-        
-        }
-    });
+    /** Raises hang when Held. Will stop at top position */
+    public Command RaiseHangAuto() {
+        return this.runEnd(
+                () -> {
+                    if (GetLeftPosition() >= 140) {
+                        hangerLeftMtr.set(0);
+                    } else {
+                        hangerLeftMtr.set(hangSpeedUp);
+                    }
+                    if (GetRightPosition() >= 140) {
+                        hangerRightMtr.set(0);
+                    } else {
+                        hangerRightMtr.set(hangSpeedUp);
+                    }
+                },
+                this::HangStop);
     }
 
+    /** Lowers hang when Held. Will stop when it hits the limit switch */
+    public Command LowerHangAuto() {
+        return this.runEnd(
+                () -> {
+                    if (RightHangIsDown() == true) {
+                        RightHangStop();
+                    } else {
+                        RightHangDown();
+                    }
+
+                    if (LeftHangIsDown() == true) {
+                        LeftHangStop();
+                    } else {
+                        LeftHangDown();
+
+                    }
+                },
+                this::HangStop);
+    }
 
     @Override
-    public void initSendable(SendableBuilder builder)
-    {
+    public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
 
         builder.addDoubleProperty("Left/Hang Pos", hangerLeftMtrEnc::getPosition, null);
