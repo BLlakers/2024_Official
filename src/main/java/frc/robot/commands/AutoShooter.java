@@ -18,7 +18,7 @@ public class AutoShooter extends Command {
     private final BooleanSupplier m_shooterLoaded;
 
     private final OrientShooterAngle m_orientShooterAngleCommand;
-    private final AprilAlignCommand m_aprilAlignCommand;
+    private final AprilAlignToSpeakerRadiallyCommand m_aprilAlignCommand;
 
     private static final Transform3d APRILTAG_TO_SHOOTINGTARGET = new Transform3d(); // TODO: update should be top of shooter 
 
@@ -32,7 +32,7 @@ public class AutoShooter extends Command {
         m_shooter = shooterSubsystem;
         m_shooterLoaded = shooterLoaded;
 
-        m_aprilAlignCommand = new AprilAlignCommand(aprilTagSupplier, drivetrainSubsystem);
+        m_aprilAlignCommand = new AprilAlignToSpeakerRadiallyCommand(aprilTagSupplier, drivetrainSubsystem);
         m_orientShooterAngleCommand = new OrientShooterAngle(shooterSubsystem, this::CalculateShooterAngle);
 
         m_orientShooterAngleCommand.unless(m_aprilAlignCommand::isFinished);

@@ -17,7 +17,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain;
 
-public class AprilAlignCommand extends Command {
+public class AprilAlignToSpeakerRadiallyCommand extends Command {
     private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); //TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
@@ -35,7 +35,7 @@ public class AprilAlignCommand extends Command {
 
     private Pose2d goalPose;
 
-    public AprilAlignCommand(Supplier<AprilTag> aprilTagSupplier, DriveTrain drivetrainSubsystem) {
+    public AprilAlignToSpeakerRadiallyCommand(Supplier<AprilTag> aprilTagSupplier, DriveTrain drivetrainSubsystem) {
         this.m_drivetrain = drivetrainSubsystem;
         this.m_aprilTagProvider = aprilTagSupplier;
 
