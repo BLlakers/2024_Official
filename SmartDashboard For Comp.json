@@ -69,12 +69,27 @@
           "5,2": {
             "size": [
               2,
-              3
+              1
             ],
             "content": {
-              "_type": "Network Table Tree",
-              "_source0": "network_table:///SmartDashboard/DriveTrain/Odometry",
-              "_title": "DriveTrain/Odometry",
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Intake Wheels/Note is Loaded",
+              "_title": "SmartDashboard/Intake Wheels/Note is Loaded",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Auto Chooser",
+              "_title": "SmartDashboard/Auto Chooser",
               "_glyph": 148,
               "_showGlyph": false
             }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4,
-        "y": 5.515804013063089
+        "x": 2.5079619390008028,
+        "y": 5.525487974052871
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3148545445446325,
-        "y": 6.502049962616655
+        "x": 2.4228164835454353,
+        "y": 6.511733923606437
       },
       "isLocked": false,
       "linkedName": "Blue - MidNotePickup"
