@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.27,
-      "y": 5.55
+      "x": 1.11,
+      "y": 4.7
     },
-    "rotation": 0.0
+    "rotation": -35.0
   },
   "command": {
     "type": "sequential",
@@ -28,22 +28,9 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.25
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Blue - Front - toRightNote"
-                      }
-                    }
-                  ]
+                  "pathName": "Blue - Right - toLastCenterNote"
                 }
               }
             ]
@@ -52,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - RightBackToFront"
+            "pathName": "Blue - LastCenterBackToRight"
           }
         },
         {
@@ -64,6 +51,6 @@
       ]
     }
   },
-  "folder": "Front Blue Autos ",
+  "folder": "Opp Autos",
   "choreoAuto": false
 }

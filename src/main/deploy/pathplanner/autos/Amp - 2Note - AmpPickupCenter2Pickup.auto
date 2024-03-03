@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 15.45,
+      "x": 1.11,
       "y": 6.41
     },
-    "rotation": 135.0
+    "rotation": 35.0
   },
   "command": {
     "type": "sequential",
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Red - Right - toRightNote"
+                        "pathName": "Blue - Left - toLeftNote"
                       }
                     }
                   ]
@@ -52,7 +52,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red - RightBackToRight"
+            "pathName": "Blue - LeftBackToLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue - Left - to2ndCenterNote"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue - 2ndCenterBackToLeft"
           }
         },
         {
@@ -64,6 +95,6 @@
       ]
     }
   },
-  "folder": "Right Red Auto",
+  "folder": "Amp Autos",
   "choreoAuto": false
 }

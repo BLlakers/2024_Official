@@ -12,14 +12,26 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Blue - Front - toRightNote"
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
           }
         }
       ]
     }
   },
-  "folder": "Front Blue Autos ",
+  "folder": null,
   "choreoAuto": false
 }

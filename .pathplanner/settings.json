@@ -11,12 +11,9 @@
     "Right Starting Position Blue"
   ],
   "autoFolders": [
-    "Front Blue Autos ",
-    "Front Red Autos",
-    "Left Blue Auto",
-    "Left Red Autos",
-    "Right Red Auto",
-    "Right BlueAutos"
+    "Amp Autos",
+    "Front Autos ",
+    "Opp Autos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
