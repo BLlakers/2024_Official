@@ -57,26 +57,28 @@ public class Shooter extends SubsystemBase {
 
         // limit switches
         m_limitSwitchTop = new DigitalInput(Constants.Shooter.LimitSwitchTopDIO);
-        // m_limitSwitchBottom = new DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
+        // m_limitSwitchBottom = new
+        // DigitalInput(Constants.Shooter.LimitSwitchBottomDIO);
 
     }
 
     public Command CalibrateShooterAngle() {
         throw new UnsupportedOperationException("This is untested code. Wait for Dimitri");
         // return this.startEnd(
-        //         () -> {
-        //             if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
-        //                 return; // don't calibrate if you don't have a limit switch
-        //             while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
-        //                 SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); // drive up
+        // () -> {
+        // if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
+        // return; // don't calibrate if you don't have a limit switch
+        // while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
+        // SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); // drive up
 
-        //             if (BottomLimitSwitchTripped()) {
-        //                 System.err.println("Calibration failed. Shooter angling motor configuration is inverted!");
-        //                 return;
-        //             }
-        //             m_angleMtrEnc.setPosition(0);
-        //         },
-        //         this::AngleMotorStop
+        // if (BottomLimitSwitchTripped()) {
+        // System.err.println("Calibration failed. Shooter angling motor configuration
+        // is inverted!");
+        // return;
+        // }
+        // m_angleMtrEnc.setPosition(0);
+        // },
+        // this::AngleMotorStop
         // );
     }
 
@@ -86,19 +88,21 @@ public class Shooter extends SubsystemBase {
 
     public Command RunShooter() {
 
-        return this.runOnce(this::Shoot);
+        return this.runEnd(this::Shoot, this::StopShooter);
     }
 
-    public Command StopShooter() {
-        return this.runOnce(
-                () -> {
-                    m_shooterMtrLeft.set(0);
-                    m_shooterMtrRight.set(0);
-                });
+    public Command StopShooterCommand() {
+        return this.runOnce(this::StopShooter);
+    }
+
+    public void StopShooter() {
+
+        m_shooterMtrLeft.stopMotor();
+        m_shooterMtrRight.stopMotor();
     }
 
     public Command AngleUpShooter() {
-        Command cmd = run(() -> {
+        Command cmd = this.run(() -> {
             SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage);
         });
 
@@ -107,7 +111,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command AngleDownShooter() {
-        Command cmd = run(() -> {
+        Command cmd = this.run(() -> {
             SetShooterAngleSpeedPercentage(-s_angleMotorSpeedPercentage);
         });
 

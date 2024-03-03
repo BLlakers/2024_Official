@@ -20,8 +20,7 @@ public class Intake extends SubsystemBase {
         PositionOther;
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             Map<State, String> stateMap = new HashMap<State, String>();
             stateMap.put(State.PositionUp, "Position Up");
             stateMap.put(State.PositionDown, "Position Down");
@@ -79,8 +78,7 @@ public class Intake extends SubsystemBase {
             m_CurrentState = State.PositionOther;
     }
 
-    public IntakeWheels GetIntakeWheels()
-    {
+    public IntakeWheels GetIntakeWheels() {
         return m_IntakeWheels;
     }
 
@@ -96,8 +94,7 @@ public class Intake extends SubsystemBase {
         intakeAngleMtr.set(-.35);
     }
 
-    public boolean NoteIsLoaded()
-    {
+    public boolean NoteIsLoaded() {
         return m_IntakeWheels.NoteIsLoaded();
     }
 
@@ -173,9 +170,10 @@ public class Intake extends SubsystemBase {
     }
 
     @Override
-    public void initSendable(SendableBuilder builder)
-    {
+    public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
+
+        m_IntakeWheels.initSendable(builder);
 
         builder.addDoubleProperty("Angle", () -> this.GetIntakeMotorAngle().getDegrees(), null);
         builder.addDoubleProperty("Motor/Position", intakeAngleMtrEnc::getPosition, null);

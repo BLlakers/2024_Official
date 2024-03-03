@@ -93,9 +93,9 @@ public class AutoIntake extends Command {
                 m_Intake.StopIntake();
             }
             if (!m_IntakeWheels.NoteIsLoaded()) {
-                m_IntakeWheels.RunIntakeWheels(); // inverted
+                m_IntakeWheels.IntakeNote(); // inverted
             } else {
-                m_IntakeWheels.StopIntakeWheels();
+                m_IntakeWheels.Stop();
                 m_CurrentIntakeDrivingState = DrivingState.DriveIntakeUp;
             }
         }
@@ -116,7 +116,7 @@ public class AutoIntake extends Command {
     public void end(boolean interrupted) {
         System.out.println("m_CurrentIntakeDrivingState");
         m_Intake.StopIntake();
-        m_IntakeWheels.StopIntakeWheels();
+        m_IntakeWheels.Stop();
         
 
     }

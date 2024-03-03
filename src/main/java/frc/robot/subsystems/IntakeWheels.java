@@ -16,13 +16,16 @@ public class IntakeWheels extends SubsystemBase {
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensorV3 = new ColorSensorV3(i2cPort);
 
+    private static final double s_IntakeSpeed = 0.55;
+    private static final double s_EjectSpeed = 0.95;
+
     /**
      * A Rev Color Sensor V3 object is constructed with an I2C port as a
      * parameter. The device will be automatically initialized with default
      * parameters.
      */
     public IntakeWheels() {
-        setName("Intake Wheels");
+        setName("Intake/Wheels");
 
     }
 
@@ -30,48 +33,53 @@ public class IntakeWheels extends SubsystemBase {
         return m_colorSensorV3.getIR() >= 50;
     }
 
-    public Command RunIntakeWheelsCommand() {
-        return this.runOnce(this::RunIntakeWheels);
+    public Command PowerOnIntakeWheelsCommand() {
+        return this.runOnce(this::IntakeNote);
     }
 
-    public Command RunIntakeWheelsCtsCommand()
-    {
-        return this.run(this::RunIntakeWheels);
+    public Command IntakeNoteCommand() {
+        return this.runEnd(this::IntakeNote, this::Stop);
     }
 
-    public void RunIntakeWheels() {
+    public void IntakeNote() {
         if (NoteIsLoaded()) {
             intakeWheelMtrR.set(0);
         } else {
-            intakeWheelMtrR.set(-0.55);
+            intakeWheelMtrR.set(-s_IntakeSpeed);
         }
     }
 
-    public Command StopIntakeWheelsCommand() {
-        return this.runOnce(this::StopIntakeWheels);
+    public Command StopCommand() {
+        return this.runOnce(this::Stop);
     }
 
-    public void StopIntakeWheels() {
+    public void Stop() {
         intakeWheelMtrR.set(0);
 
     }
 
-    public Command ReverseIntakeWheelsCommand() {
-        return this.runOnce(this::ReverseIntakeWheels);
+    public Command PowerOnEjectIntakeWheelsCommand() {
+        return this.runOnce(this::EjectNote);
     }
 
-    public void ReverseIntakeWheels()
-    {
-        intakeWheelMtrR.set(0.95);
+    public Command EjectNoteCommand() {
+        return this.runEnd(this::EjectNote, this::Stop);
+    }
+
+    public void EjectNote() {
+        intakeWheelMtrR.set(s_EjectSpeed);
     }
 
     @Override
-    public void initSendable(SendableBuilder builder)
-    {
+    public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
 
         builder.addIntegerProperty("Color Sensor/IR", m_colorSensorV3::getIR, null);
-        builder.addBooleanProperty("Note is Loaded", this::NoteIsLoaded, null);
+        builder.addIntegerProperty("Color Sensor/Blue", m_colorSensorV3::getBlue, null);
+        builder.addIntegerProperty("Color Sensor/Red", m_colorSensorV3::getRed, null);
+        builder.addIntegerProperty("Color Sensor/Green", m_colorSensorV3::getGreen, null);
+        builder.addIntegerProperty("Color Sensor/Proximity", m_colorSensorV3::getProximity, null);
+        builder.addBooleanProperty("Note/Is Loaded", this::NoteIsLoaded, null);
     }
 
 }
