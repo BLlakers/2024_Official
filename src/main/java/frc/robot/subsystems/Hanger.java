@@ -33,7 +33,7 @@ public class Hanger extends SubsystemBase {
     }
 
     public Command ResetHangCmd() {
-        return runOnce(this::ResetHangEnc);
+        return this.runOnce(this::ResetHangEnc);
     }
 
     public void LeftHangUp() {
@@ -54,9 +54,7 @@ public class Hanger extends SubsystemBase {
     }
 
     public Command HangStopCommand() {
-        return run(() -> {
-            HangStop();
-        });
+        return this.runOnce(this::HangStop);
     }
 
     public void RightHangUp() {
@@ -89,40 +87,23 @@ public class Hanger extends SubsystemBase {
 
     /** Raises hang when Held. Will stop at top position */
     public Command RaiseHangAuto() {
-        return this.runEnd(
-                () -> {
-                    if (GetLeftPosition() >= 140) {
-                        hangerLeftMtr.set(0);
-                    } else {
-                        hangerLeftMtr.set(hangSpeedUp);
-                    }
-                    if (GetRightPosition() >= 140) {
-                        hangerRightMtr.set(0);
-                    } else {
-                        hangerRightMtr.set(hangSpeedUp);
-                    }
-                },
-                this::HangStop);
+        return this.runEnd(this::RightHangUp, this::RightHangStop)
+        .until(() -> this.GetRightPosition() >= 140)
+        .alongWith(
+            this.runEnd(this::LeftHangUp, this::LeftHangStop)
+            .until(() -> this.GetLeftPosition() >= 140)
+        ).finallyDo(this::HangStop);
     }
 
     /** Lowers hang when Held. Will stop when it hits the limit switch */
     public Command LowerHangAuto() {
-        return this.runEnd(
-                () -> {
-                    if (RightHangIsDown() == true) {
-                        RightHangStop();
-                    } else {
-                        RightHangDown();
-                    }
-
-                    if (LeftHangIsDown() == true) {
-                        LeftHangStop();
-                    } else {
-                        LeftHangDown();
-
-                    }
-                },
-                this::HangStop);
+        return this.runEnd(this::RightHangDown, this::RightHangStop)
+        .until(this::RightHangIsDown)
+        .alongWith(
+            this.runEnd(this::LeftHangDown, this::LeftHangStop)
+            .until(this::LeftHangIsDown)
+        ).finallyDo(this::HangStop);
+        
     }
 
     @Override

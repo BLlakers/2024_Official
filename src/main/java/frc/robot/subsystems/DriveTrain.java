@@ -61,34 +61,6 @@ public class DriveTrain extends SubsystemBase {
   // field.
   private final SwerveDriveOdometry m_odometry;
 
-  /**
-   * Flips our position on the field depending on the alliance we are on. Used for
-   * Auto.
-   */
-  public boolean flipFieldPose() {
-    // Boolean supplier that controls when the path will be mirrored for the red
-    // alliance
-    // This will flip the path being followed to the red side of the field.
-    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      return alliance.get() == DriverStation.Alliance.Red;
-    }
-    return false;
-  }
-
-  /**
-   * Gets our current position in meters on the field.
-   * 
-   * @return A current position on the field.
-   * 
-   *         <pi> A translation2d (X and Y on the field) -> {@link #m_kinematics}
-   *         + A rotation2d (Rot X and Y on the field) -> {@link #nav}
-   */
-  public Pose2d getPose2d() {
-    return m_odometry.getPoseMeters();
-  }
-
   // Constructor
   /**
    * Our driveTrain Constructor.
@@ -173,6 +145,18 @@ public class DriveTrain extends SubsystemBase {
     addChild(m_backRight.getName(), m_backRight);
 
     addChild("navx", navx);
+  }
+
+  /**
+   * Gets our current position in meters on the field.
+   * 
+   * @return A current position on the field.
+   * 
+   *         <pi> A translation2d (X and Y on the field) -> {@link #m_kinematics}
+   *         + A rotation2d (Rot X and Y on the field) -> {@link #nav}
+   */
+  public Pose2d getPose2d() {
+    return m_odometry.getPoseMeters();
   }
 
   /**
@@ -430,19 +414,19 @@ public class DriveTrain extends SubsystemBase {
   }
 
   @Override
-  public void initSendable(SendableBuilder builder)
-  {
+  public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("Odometry/Pose/X", () -> getPose2d().getX(),null);
-    builder.addDoubleProperty("Odometry/Pose/Y", () -> getPose2d().getY(),null);
-    builder.addDoubleProperty("Odometry/Pose/Rot", () -> getPose2d().getRotation().getDegrees(),null);
-    builder.addDoubleProperty("Odometry/ChassisSpeeds/X", () -> getChassisSpeeds().vxMetersPerSecond,null);
-    builder.addDoubleProperty("Odometry/ChassisSpeeds/Y", () -> getChassisSpeeds().vyMetersPerSecond,null);
+    builder.addDoubleProperty("Odometry/Pose/X", () -> getPose2d().getX(), null);
+    builder.addDoubleProperty("Odometry/Pose/Y", () -> getPose2d().getY(), null);
+    builder.addDoubleProperty("Odometry/Pose/Rot", () -> getPose2d().getRotation().getDegrees(), null);
+    builder.addDoubleProperty("Odometry/ChassisSpeeds/X", () -> getChassisSpeeds().vxMetersPerSecond, null);
+    builder.addDoubleProperty("Odometry/ChassisSpeeds/Y", () -> getChassisSpeeds().vyMetersPerSecond, null);
     builder.addDoubleProperty("Odometry/ChassisSpeeds/Rot",
         () -> Units.radiansToDegrees(getChassisSpeeds().omegaRadiansPerSecond), null);
     builder.addDoubleProperty("Odometry/navx/Orientation", () -> navx.getRotation2d().getDegrees(), null);
-    builder.addBooleanProperty("FieldRelativeEnabled",() -> this.m_FieldRelativeEnable, (boolean fre) -> m_FieldRelativeEnable = fre);
+    builder.addBooleanProperty("FieldRelativeEnabled", () -> this.m_FieldRelativeEnable,
+        (boolean fre) -> m_FieldRelativeEnable = fre);
 
     SmartDashboard.putData("DriveTrain/" + m_frontLeft.getName(), m_frontLeft);
     SmartDashboard.putData("DriveTrain/" + m_frontRight.getName(), m_frontRight);

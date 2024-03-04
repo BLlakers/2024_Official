@@ -38,7 +38,8 @@ public class IntakeWheels extends SubsystemBase {
     }
 
     public Command IntakeNoteCommand() {
-        return this.runEnd(this::IntakeNote, this::Stop);
+        return this.runEnd(this::IntakeNote, this::Stop)
+            .until(this::NoteIsLoaded);
     }
 
     public void IntakeNote() {

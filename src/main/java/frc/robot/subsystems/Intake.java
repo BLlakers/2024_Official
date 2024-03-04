@@ -38,6 +38,9 @@ public class Intake extends SubsystemBase {
 
     private IntakeWheels m_IntakeWheels = new IntakeWheels();
 
+    private static final double s_AngleDownStopDegrees = 90;
+    private static final double s_AngleUpStopDegrees = 30;
+
     // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
     public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
     // public int IntakePos = 1;
@@ -99,23 +102,20 @@ public class Intake extends SubsystemBase {
     }
 
     public Command autoIntakeUp() {
-        return this.runEnd(
+        return this.run(
                 () -> {
-                    if (GetIntakeMotorAngle().getDegrees() <= 30) {
-                        intakeAngleMtr.set(0);
-                    } else {
-                        intakeAngleMtr.set(-.25);
-                    }
-                },
-                this::StopIntake);
+                    intakeAngleMtr.set(-0.25);
+                })
+                .onlyWhile(() -> GetIntakeMotorAngle().getDegrees() > Intake.s_AngleUpStopDegrees)
+                .finallyDo(this::StopIntake);
     }
 
     public Command autoAmp() {
+        double angleLo = 67.5;
+        double angleHi = 72.5;
+
         return this.runEnd(
                 () -> {
-                    double angleLo = 67.5;
-                    double angleHi = 72.5;
-
                     double angle = GetIntakeMotorAngle().getDegrees();
                     if (angle < angleLo) {
                         intakeAngleMtr.set(0.25);
@@ -130,15 +130,13 @@ public class Intake extends SubsystemBase {
     }
 
     public Command autoIntakeDown() {
-        return this.runEnd(
+        return this.run(
                 () -> {
-                    if (GetIntakeMotorAngle().getDegrees() >= 90) {
-                        intakeAngleMtr.set(0);
-                    } else {
-                        intakeAngleMtr.set(0.25);
-                    }
-                },
-                this::StopIntake);
+                    intakeAngleMtr.set(0.25);
+                })
+                .onlyWhile(() -> GetIntakeMotorAngle().getDegrees() < Intake.s_AngleDownStopDegrees)
+                .finallyDo(this::StopIntake);
+
     }
 
     public Command ManualLowerIntakeCommand() {

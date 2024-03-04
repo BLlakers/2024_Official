@@ -64,22 +64,10 @@ public class Shooter extends SubsystemBase {
 
     public Command CalibrateShooterAngle() {
         throw new UnsupportedOperationException("This is untested code. Wait for Dimitri");
-        // return this.startEnd(
-        // () -> {
-        // if (m_limitSwitchBottom == null || m_limitSwitchBottom.getChannel() < 0)
-        // return; // don't calibrate if you don't have a limit switch
-        // while (!BottomLimitSwitchTripped() || !TopLimitSwitchTripped())
-        // SetShooterAngleSpeedPercentage(s_angleMotorSpeedPercentage); // drive up
-
-        // if (BottomLimitSwitchTripped()) {
-        // System.err.println("Calibration failed. Shooter angling motor configuration
-        // is inverted!");
-        // return;
-        // }
-        // m_angleMtrEnc.setPosition(0);
-        // },
-        // this::AngleMotorStop
-        // );
+        // return this.AngleUpShooter()
+        //         .finallyDo(() -> {
+        //             m_angleMtrEnc.setPosition(0);
+        //         });
     }
 
     public void Shoot() {
