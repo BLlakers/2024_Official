@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -15,13 +16,22 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
-    public DoubleArraySubscriber m_aprilTagPoseTopic;
+    private DoubleArraySubscriber m_aprilTagPoseTopic;
+    private IntegerPublisher m_priorityTagIdPub;
     private AprilTag m_currentAprilTag = new AprilTag(-1, new Pose3d());
     public Limelight()
     {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         m_aprilTagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[] {0, 0, 0, 0, 0, 0});
+        m_priorityTagIdPub = table.getIntegerTopic("priorityid").publish();
     }
+
+    public void SetTagIDToTrack(int tagID)
+    {
+        m_priorityTagIdPub.accept(tagID);
+    }
+
+
     @Override
     public void periodic() {      
         m_currentAprilTag = getCurrentAprilTag();

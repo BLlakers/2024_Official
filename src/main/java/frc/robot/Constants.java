@@ -65,6 +65,13 @@ public final class Constants {
     public final static double RTdeadzone = .01;
   }
 
+  public static class AprilTagID {
+    public final static int BlueSpeakerCenter = -1;
+    public final static int RedSpeakerCenter = -1;
+    public final static int BlueStageCenter = -1;
+    public final static int RedStageCenter = -1;
+  }
+
   public static class Port {
     public final static int blSteerMtrC = 1;
     public final static int blDriveMtrC = 2;
