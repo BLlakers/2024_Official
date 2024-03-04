@@ -88,18 +88,26 @@ public class Hanger extends SubsystemBase {
 
     /** Raises hang when Held. Will stop at top position */
     public Command RaiseHangAuto() {
-        return Commands.parallel(
-            this.runEnd(this::RightHangUp, this::RightHangStop).until(() -> this.GetRightPosition() >= 140),
-            this.runEnd(this::LeftHangUp, this::LeftHangStop).until(() -> this.GetLeftPosition() >= 140)
+        Command cmd = Commands.parallel(
+            Commands.runEnd(this::RightHangUp, this::RightHangStop).until(() -> this.GetRightPosition() >= 140),
+            Commands.runEnd(this::LeftHangUp, this::LeftHangStop).until(() -> this.GetLeftPosition() >= 140)
         ).finallyDo(this::HangStop);
+
+        cmd.addRequirements(this);
+
+        return cmd;
     }
 
     /** Lowers hang when Held. Will stop when it hits the limit switch */
     public Command LowerHangAuto() {
-        return Commands.parallel(
-            this.runEnd(this::RightHangDown, this::RightHangStop).until(this::RightHangIsDown),
-            this.runEnd(this::LeftHangDown, this::LeftHangStop).until(this::LeftHangIsDown)
+        Command cmd = Commands.parallel(
+            Commands.runEnd(this::RightHangDown, this::RightHangStop).until(this::RightHangIsDown),
+            Commands.runEnd(this::LeftHangDown, this::LeftHangStop).until(this::LeftHangIsDown)
         ).finallyDo(this::HangStop);
+
+        cmd.addRequirements(this);
+
+        return cmd;
         
     }
 
