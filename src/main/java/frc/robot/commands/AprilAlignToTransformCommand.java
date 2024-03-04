@@ -8,11 +8,13 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 
 public class AprilAlignToTransformCommand extends Command {
@@ -25,15 +27,27 @@ public class AprilAlignToTransformCommand extends Command {
   private final ProfiledPIDController m_yController = new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS);
   private final ProfiledPIDController m_rotController = new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS);
 
-  public static final Transform2d TRANSFORM_HANGER_LEFT = new Transform2d(); // TODO: find based on field
+  public static final Transform2d TRANSFORM_HANGER_LEFT = new Transform2d(
+    Units.inchesToMeters(12 + 4 + 5/8),
+    Units.inchesToMeters(85.9/2) - Math.abs(Constants.Drive.SMFrontRightLocation.getX() - 6), 
+    new Rotation2d()
+  );
   public static final Transform2d TRANSFORM_HANGER_RIGHT = new Transform2d(
       TRANSFORM_HANGER_LEFT.getX(),
       -TRANSFORM_HANGER_LEFT.getY(), // Inverts the y-direction alignment to get right hanger position
       TRANSFORM_HANGER_LEFT.getRotation());
 
-  public static final Transform2d TRANSFORM_SPEAKER_FRONT = new Transform2d(); // TODO
-  public static final Transform2d TRANSFORM_SPEAKER_LEFT = new Transform2d(); // TODO
-  public static final Transform2d TRANSFORM_SPEAKER_RIGHT = new Transform2d(); // TODO
+  public static final Transform2d TRANSFORM_SPEAKER_FRONT = new Transform2d(
+    Units.inchesToMeters(3*12 + 1/2),
+    0, 
+    new Rotation2d()
+  );
+  public static final Transform2d TRANSFORM_SPEAKER_LEFT = TRANSFORM_SPEAKER_FRONT.plus(
+    new Transform2d(0, 0, Rotation2d.fromDegrees(60))
+  ); // rotate by 60 degrees
+  public static final Transform2d TRANSFORM_SPEAKER_RIGHT = TRANSFORM_SPEAKER_FRONT.plus(
+    new Transform2d(0, 0, Rotation2d.fromDegrees(-60))
+  ); // rotate by 60 degrees
 
   // subsystems
   private DriveTrain m_drivetrain;

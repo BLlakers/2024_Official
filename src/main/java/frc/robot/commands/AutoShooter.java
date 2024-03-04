@@ -8,7 +8,9 @@ import java.util.function.Supplier;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 
@@ -20,7 +22,13 @@ public class AutoShooter extends Command {
     private final OrientShooterAngle m_orientShooterAngleCommand;
     private final AprilAlignToSpeakerRadiallyCommand m_aprilAlignCommand;
 
-    private static final Transform3d APRILTAG_TO_SHOOTINGTARGET = new Transform3d(); // TODO: update should be top of shooter 
+    private static final Transform3d APRILTAG_TO_SHOOTINGTARGET = new Transform3d(
+        Units.inchesToMeters(6), // x: back of target (needs to be tuned)
+        0, // y
+        // (height of low edge speader - height of april tag)
+        Units.inchesToMeters((6*12 + 6) - (4*12 + 3 + 7/8)), // z
+        new Rotation3d()
+    );
 
     public AutoShooter(
         Supplier<AprilTag> aprilTagSupplier, 
@@ -51,12 +59,27 @@ public class AutoShooter extends Command {
     }
 
     public double CalculateShooterAngle() {
-        Pose3d botToTargetPose = m_aprilTagProvider.get().pose.transformBy(APRILTAG_TO_SHOOTINGTARGET);
+        Pose3d botToTargetPose  = m_aprilTagProvider.get().pose.transformBy(APRILTAG_TO_SHOOTINGTARGET);
+        double distanceToTarget = botToTargetPose.getTranslation().toTranslation2d().getNorm();
+        
+        Transform3d bufferTransform = CalculateBufferFromDistanceToTarget(distanceToTarget);
+
+        Pose3d botToTargetPoseWithBuffer = botToTargetPose.transformBy(bufferTransform);
         double desiredShooterAngle = Math.atan2(
-                botToTargetPose.getZ(),
-                botToTargetPose.getTranslation().toTranslation2d().getNorm());
+                botToTargetPoseWithBuffer.getZ(),
+                botToTargetPoseWithBuffer.getTranslation().toTranslation2d().getNorm());
 
         return MathUtil.clamp(desiredShooterAngle, Shooter.MIN_ANGLE.getRadians(), Shooter.MAX_ANGLE.getRadians());
+    }
+
+    protected Transform3d CalculateBufferFromDistanceToTarget(double distanceToTarget)
+    {
+        return new Transform3d(
+            0, // x
+            0, // y
+            0, // z
+            new Rotation3d()
+        ); // TODO: can be tuned/calculated
     }
 
     @Override
