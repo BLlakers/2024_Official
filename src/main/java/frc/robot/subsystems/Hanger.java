@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import com.revrobotics.CANSparkMax;
@@ -87,21 +88,17 @@ public class Hanger extends SubsystemBase {
 
     /** Raises hang when Held. Will stop at top position */
     public Command RaiseHangAuto() {
-        return this.runEnd(this::RightHangUp, this::RightHangStop)
-        .until(() -> this.GetRightPosition() >= 140)
-        .alongWith(
-            this.runEnd(this::LeftHangUp, this::LeftHangStop)
-            .until(() -> this.GetLeftPosition() >= 140)
+        return Commands.parallel(
+            this.runEnd(this::RightHangUp, this::RightHangStop).until(() -> this.GetRightPosition() >= 140),
+            this.runEnd(this::LeftHangUp, this::LeftHangStop).until(() -> this.GetLeftPosition() >= 140)
         ).finallyDo(this::HangStop);
     }
 
     /** Lowers hang when Held. Will stop when it hits the limit switch */
     public Command LowerHangAuto() {
-        return this.runEnd(this::RightHangDown, this::RightHangStop)
-        .until(this::RightHangIsDown)
-        .alongWith(
-            this.runEnd(this::LeftHangDown, this::LeftHangStop)
-            .until(this::LeftHangIsDown)
+        return Commands.parallel(
+            this.runEnd(this::RightHangDown, this::RightHangStop).until(this::RightHangIsDown),
+            this.runEnd(this::LeftHangDown, this::LeftHangStop).until(this::LeftHangIsDown)
         ).finallyDo(this::HangStop);
         
     }

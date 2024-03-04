@@ -65,9 +65,9 @@ public class Shooter extends SubsystemBase {
     public Command CalibrateShooterAngle() {
         throw new UnsupportedOperationException("This is untested code. Wait for Dimitri");
         // return this.AngleUpShooter()
-        //         .finallyDo(() -> {
-        //             m_angleMtrEnc.setPosition(0);
-        //         });
+        // .finallyDo(() -> {
+        // m_angleMtrEnc.setPosition(0);
+        // });
     }
 
     public void Shoot() {
@@ -143,12 +143,6 @@ public class Shooter extends SubsystemBase {
         m_shooterAngleMtr.set(maxSpeedPercent);
     }
 
-    public void SetShooterAngleSpeed(double radiansPerSecond) {
-        // TODO: drive the velocity given amount of rotational velocity we want to
-        // achieve
-        throw new UnsupportedOperationException("Shooter.SetShooterAngleSpeed is not yet implemented.");
-    }
-
     /**
      * Check if top limit switch has been tripped
      * 
@@ -157,17 +151,19 @@ public class Shooter extends SubsystemBase {
     public boolean TopLimitSwitchTripped() {
         if (m_limitSwitchTop == null)
             return false;
+
         boolean tripped = m_limitSwitchTop.get();
 
         if (tripped)
             m_angleMtrEnc.setPosition(0); // calibrate the position
+
         return tripped;
     }
 
     /**
      * Check if top limit switch has been tripped
      * 
-     * @return true if the top limit switch is tripped. false otherwise
+     * @return true if the bottom limit switch is tripped. false otherwise
      */
     public boolean BottomLimitSwitchTripped() {
         if (m_limitSwitchBottom == null)

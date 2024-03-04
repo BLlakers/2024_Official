@@ -140,7 +140,6 @@ public class RobotContainer {
          * - Right Trigger: provide gas
          * - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
          */
-
         m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
                 () -> driverController.getLeftX(), () -> driverController.getRightX(),
                 () -> driverController.getRightTriggerAxis(), m_DriveTrain,
@@ -164,15 +163,7 @@ public class RobotContainer {
         manipController.a() // Shoot the note
                 .whileTrue(ShootNoteCommand.withTimeout(1.5));
         manipController.x() // eject the intake command
-                .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommand()
-                        .onlyWhile(() -> !m_Intake.NoteIsLoaded()));
-        // reset the intake encoder position
-        // manipController.b() // toggle the intake between it's different states
-        // .toggleOnTrue(AutoIntakeNoteCommand);
-        // manipController.y()
-        // .toggleOnTrue(AutoEjectNoteCommand);
-        // manipController.b().whileTrue(m_IntakeWheels.RunIntakeWheelsCommand()).whileFalse(m_IntakeWheels.StopIntakeWheelsCommand());
-        // manipController.y().whileTrue(m_IntakeWheels.ReverseIntakeWheelsCommand()).onFalse(m_IntakeWheels.StopIntakeWheelsCommand());
+                .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommand());
 
         manipController.povUp().onTrue(m_Intake.autoIntakeUp());
         manipController.povDown().onTrue(m_Intake.autoIntakeDown());
