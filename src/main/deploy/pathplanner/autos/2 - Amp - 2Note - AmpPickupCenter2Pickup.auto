@@ -60,10 +60,41 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue - Left - to2ndCenterNote"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue - 2ndCenterBackToLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
         }
       ]
     }
   },
-  "folder": "Amp Autos",
+  "folder": "Amp Autos (0-3)",
   "choreoAuto": false
 }

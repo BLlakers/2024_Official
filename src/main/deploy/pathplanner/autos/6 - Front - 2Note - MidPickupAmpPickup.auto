@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.11,
-      "y": 6.41
+      "x": 1.27,
+      "y": 5.55
     },
-    "rotation": 35.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Left - toLeftNote"
+                        "pathName": "Blue - Front - toMidNote"
                       }
                     }
                   ]
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - LeftBackToLeft"
+            "pathName": "Blue - MidBackToFront"
           }
         },
         {
@@ -66,15 +66,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Blue - Front - toLeftNote"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Blue - Left - to2ndCenterNote"
+                  "name": "Intake"
                 }
               }
             ]
@@ -83,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - 2ndCenterBackToLeft"
+            "pathName": "Blue - LeftBackToFront"
           }
         },
         {
@@ -95,6 +108,6 @@
       ]
     }
   },
-  "folder": "Amp Autos",
+  "folder": "Front Autos (4-8) ",
   "choreoAuto": false
 }

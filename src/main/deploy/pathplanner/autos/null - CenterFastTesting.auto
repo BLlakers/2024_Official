@@ -12,21 +12,27 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake"
+            "pathName": "Fast - toNote2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 0.25
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake"
+            "pathName": "Fast - Note2BacktoFront"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
           }
         }
       ]

@@ -4,16 +4,13 @@
   "holonomicMode": true,
   "pathFolders": [
     "Front Starting Position Blue",
-    "Front Starting Position Red",
     "Left Starting Position Blue",
-    "Left Starting Position Red",
-    "Right Starting Position Red",
     "Right Starting Position Blue"
   ],
   "autoFolders": [
-    "Amp Autos",
-    "Front Autos ",
-    "Opp Autos"
+    "Amp Autos (0-3)",
+    "Front Autos (4-8) ",
+    "Opp Autos (9-10)"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

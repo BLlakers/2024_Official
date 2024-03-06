@@ -25,7 +25,7 @@ public final class Constants {
         new HolonomicPathFollowerConfig(
             new PIDConstants(5, 0, 0), // Translation constants
             new PIDConstants(3, 0, 0), // Rotation constants
-            3.68, // what should be our robots fastest chassis speeds in m/s
+            DriveTrain.kMaxSpeed, // what should be our robots fastest chassis speeds in m/s
             0.3875, // The radius of the robot in meters
             new ReplanningConfig());
     public static final Transform3d CAMERA_TO_ROBOT =

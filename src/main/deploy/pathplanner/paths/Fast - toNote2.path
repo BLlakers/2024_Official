@@ -1,0 +1,84 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.27,
+        "y": 5.55
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.27,
+        "y": 5.55
+      },
+      "isLocked": false,
+      "linkedName": "Blue - FrontStartingPose"
+    },
+    {
+      "anchor": {
+        "x": 2.8237041089478336,
+        "y": 4.824935034488037
+      },
+      "prevControl": {
+        "x": 1.8561560524584393,
+        "y": 4.809243338537059
+      },
+      "nextControl": {
+        "x": 3.7912521654372275,
+        "y": 4.840626730439015
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.497645610676991,
+        "y": 6.4529805982714725
+      },
+      "prevControl": {
+        "x": 4.746948946801426,
+        "y": 6.383148350469095
+      },
+      "nextControl": {
+        "x": 6.346202692406539,
+        "y": 6.531916140757942
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.883798934502291,
+        "y": 5.726599070887158
+      },
+      "prevControl": {
+        "x": 6.612610148298374,
+        "y": 5.949766514920229
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue - 2ndCenterPickup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Front Starting Position Blue",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

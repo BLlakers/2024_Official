@@ -1,0 +1,84 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.883798934502291,
+        "y": 5.726599070887158
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.096090346031116,
+        "y": 5.949766514917625
+      },
+      "isLocked": false,
+      "linkedName": "Blue - 2ndCenterPickup"
+    },
+    {
+      "anchor": {
+        "x": 5.468044782243412,
+        "y": 6.324710341728376
+      },
+      "prevControl": {
+        "x": 6.790215118896046,
+        "y": 6.344444227349973
+      },
+      "nextControl": {
+        "x": 4.560172686466085,
+        "y": 6.3111600119407125
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.882905765811533,
+        "y": 4.834801977296262
+      },
+      "prevControl": {
+        "x": 3.4847892772751328,
+        "y": 4.864402805728668
+      },
+      "nextControl": {
+        "x": 2.2658688511997425,
+        "y": 4.804455899528706
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.27,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 2.182352826248384,
+        "y": 5.6932260018365985
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue - FrontStartingPose"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Front Starting Position Blue",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

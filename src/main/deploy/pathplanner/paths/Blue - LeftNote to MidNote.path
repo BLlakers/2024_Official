@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6841875081753006,
-        "y": 6.874261052373746
+        "x": 2.6460991383521244,
+        "y": 6.758855825403959
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3459898428783994,
-        "y": 6.480473742254135
+        "x": 2.307901473055223,
+        "y": 6.3650685152843485
       },
       "isLocked": false,
       "linkedName": "Blue - LeftNotePickup"
@@ -32,10 +32,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 180.0,
-    "maxAngularAcceleration": 90.0
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,

@@ -104,54 +104,10 @@
           "data": {
             "name": "Shoot"
           }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.25
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Blue - Front - toLeftNote"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Blue - LeftBackToFront"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
         }
       ]
     }
   },
-  "folder": "Front Autos ",
+  "folder": "Front Autos (4-8) ",
   "choreoAuto": false
 }
