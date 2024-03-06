@@ -15,16 +15,16 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class IntakePIDcommand extends PIDCommand{
+public class IntakePIDcommand extends ProfiledPIDCommand{
 Intake m_Intake; 
     public IntakePIDcommand(Intake intake, Rotation2d goal) {   
     super(
-         new PIDController(0, 0, 0),
+         new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(1, 1)),
                 () -> {
                     return intake.GetIntakeMotorAngle().getRadians();
                 },
                 goal.getRadians(),
-                output -> intake.MoveIntake(output),
+                (setpoint, output) -> intake.MoveIntake(setpoint),
                 intake
                 );
                 m_Intake = intake;
@@ -53,6 +53,6 @@ Intake m_Intake;
 
     @Override
     public boolean isFinished() {
-        return getController().atSetpoint();
+        return getController().atGoal();
     }
 } 
