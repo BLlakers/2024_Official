@@ -35,9 +35,9 @@ public class RobotContainer {
    * Creates buttons and controller for: - the driver controller (port 0) - the manipulator
    * controller (port 1) - the debug controller (port 2)
    */
-
   CommandXboxController driverController =
       new CommandXboxController(Constants.Controller.DriverControllerChannel);
+
   CommandXboxController manipController =
       new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController =
