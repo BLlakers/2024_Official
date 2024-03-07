@@ -60,7 +60,7 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     // Grab the current states: april tag in view and the current robot pose
     Pose2d robotPose   = m_drivetrain.getPose2d();
     AprilTag aprilTag  = m_aprilTagProvider.get();
-    if (aprilTag.ID <= -100) { // is valid if > 0: we update our current estimate of where the april tag is relative to the robot
+    if (aprilTag.ID <= 0) { // is valid if > 0: we update our current estimate of where the april tag is relative to the robot
       m_drivetrain.stopModules();
       return;
     }
