@@ -170,6 +170,8 @@ public class RobotContainer {
     driverController.start().onTrue(m_DriveTrain.resetPose2d()); // RESETING OUR POSE 2d/ odometry
     driverController.rightStick().onTrue(m_DriveTrain.WheelLockCommand()); // lock wheels
 
+    driverController.y().whileTrue(AprilAlignRadialCommand);
+
     // Manipulator Controller commands
     manipController
         .leftBumper() // Angle down the shooter

@@ -77,7 +77,7 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     // Find the tag we want to chase
     Pose2d Bot2Tag = aprilTag.pose.toPose2d();
     Translation2d Bot2Tag_Translation = Bot2Tag.getTranslation();
-    Rotation2d targetDirection = Bot2Tag_Translation.getAngle();
+    Rotation2d targetDirection = Bot2Tag_Translation.getAngle().plus(Rotation2d.fromDegrees(180));
 
     // Transform the tag's pose to set our goal
     Pose2d botToGoal =
