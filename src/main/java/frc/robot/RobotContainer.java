@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -214,12 +215,13 @@ public class RobotContainer {
         // loads New Auto auto file
         // return new PathPlannerAuto("New Auto");
 
-        // return new SequentialCommandGroup(
-        // new InstantCommand(() -> m_DriveTrain.resetPose(new Pose2d(1.00, 5.00, new
-        // Rotation2d(0)))),
-        // autoChooser.getSelected());
+        Command autoCommand = autoChooser.getSelected();
 
-        return autoChooser.getSelected();
+        return autoCommand.beforeStarting(
+                () -> m_DriveTrain.resetPose(new Pose2d(1.27, 5.55, new Rotation2d()))
+        );
+
+        // return autoChooser.getSelected();
 
     }
 }

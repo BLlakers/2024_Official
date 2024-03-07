@@ -17,7 +17,7 @@ public class IntakeWheels extends SubsystemBase {
     private final ColorSensorV3 m_colorSensorV3 = new ColorSensorV3(i2cPort);
 
     private static final double s_IntakeSpeed = 0.55;
-    private static final double s_EjectSpeed = 0.95;
+    private static final double s_EjectSpeed = -0.95;
 
     /**
      * A Rev Color Sensor V3 object is constructed with an I2C port as a
@@ -46,7 +46,7 @@ public class IntakeWheels extends SubsystemBase {
         if (NoteIsLoaded()) {
             intakeWheelMtrR.set(0);
         } else {
-            intakeWheelMtrR.set(-s_IntakeSpeed);
+            intakeWheelMtrR.set(s_IntakeSpeed);
         }
     }
 
