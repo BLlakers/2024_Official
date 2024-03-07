@@ -20,8 +20,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     m_robotContainer.m_DriveTrain.ZeroGyro().schedule();
-    CameraServer.startAutomaticCapture();
-
+    var cam = CameraServer.startAutomaticCapture();
+    cam.setResolution(320, 160);
+    cam.setFPS(30);
+    cam.setExposureManual(50);
     SmartDashboard.putString("Code Version", codeVersion);
   }
 
