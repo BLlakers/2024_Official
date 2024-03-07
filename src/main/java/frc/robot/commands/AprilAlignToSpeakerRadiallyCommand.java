@@ -7,9 +7,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -62,23 +60,24 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     // Grab the current states: april tag in view and the current robot pose
     Pose2d robotPose   = m_drivetrain.getPose2d();
     AprilTag aprilTag  = m_aprilTagProvider.get();
-    if (aprilTag.ID <= 0) { // is valid if > 0: we update our current estimate of where the april tag is relative to the robot
+    if (aprilTag.ID <= -100) { // is valid if > 0: we update our current estimate of where the april tag is relative to the robot
       m_drivetrain.stopModules();
       return;
     }
     // Find the tag we want to chase
-    Pose3d botToTarget                   = aprilTag.pose;
-    Translation2d botToTargetTranslation = botToTarget.getTranslation().toTranslation2d();
-    Rotation2d targetDirection           = botToTargetTranslation.getAngle();
+    Pose2d Bot2Tag                    = aprilTag.pose.toPose2d();
+    Translation2d Bot2Tag_Translation = Bot2Tag.getTranslation();
+    Rotation2d targetDirection        = Bot2Tag_Translation.getAngle();
     
     // Transform the tag's pose to set our goal
-    Transform2d botToGoalPose = new Transform2d(
-      botToTargetTranslation.times(
-        (OPTIMAL_RADIUS / botToTargetTranslation.getNorm()) - 1
+    Pose2d botToGoal = new Pose2d(
+      Bot2Tag_Translation.times(
+        1 - (OPTIMAL_RADIUS / Bot2Tag_Translation.getNorm())
       ),
       targetDirection
     );
-    goalPose = robotPose.transformBy(botToGoalPose);
+
+    goalPose = botToGoal.transformBy(robotPose.minus(new Pose2d()));
 
     if (null != goalPose) {
       // Drive
@@ -86,9 +85,9 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
       yController.setGoal(goalPose.getY());
       omegaController.setGoal(goalPose.getRotation().getRadians());
 
-      SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Goal/X", goalPose.getX());
-      SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Goal/Y", goalPose.getY());
-      SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Goal/Rot", goalPose.getRotation().getDegrees());
+      SmartDashboard.putNumber(m_drivetrain.getName() + "/AprilAlignCommand/Goal/X", goalPose.getX());
+      SmartDashboard.putNumber(m_drivetrain.getName() + "/AprilAlignCommand/Goal/Y", goalPose.getY());
+      SmartDashboard.putNumber(m_drivetrain.getName() + "/AprilAlignCommand/Goal/Rot", goalPose.getRotation().getDegrees());
     }
     
     double xSpeed = xController.calculate(robotPose.getX());
@@ -102,14 +101,13 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     }
 
     double omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians());
-    System.out.println(omegaSpeed);
     if (omegaController.atGoal()) {
       omegaSpeed = 0;
     }
 
-    SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Command/VelX", xSpeed);
-    SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Command/VelY", ySpeed);
-    SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Command/VelRot", omegaSpeed);
+    SmartDashboard.putNumber(m_drivetrain.getName() + "/AprilAlignCommand/Command/VelX", xSpeed);
+    SmartDashboard.putNumber(m_drivetrain.getName() + "/AprilAlignCommand/Command/VelY", ySpeed);
+    SmartDashboard.putNumber(m_drivetrain.getName() + "/AprilAlignCommand/Command/VelRot", omegaSpeed);
 
     m_drivetrain.driveChassisSpeeds(
        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation())

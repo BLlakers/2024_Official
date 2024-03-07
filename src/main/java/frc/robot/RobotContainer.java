@@ -60,6 +60,8 @@ public class RobotContainer {
     final Command AutoEjectNoteCommand = m_Intake.autoIntakeDown()
             .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5));
 
+    final Command AprilAlignRadialCommand = new AprilAlignToSpeakerRadiallyCommand(m_Limelight::getCurrentAprilTag, m_DriveTrain);
+
     // A chooser for autonomous commands
     private final SendableChooser<Command> autoChooser;
     // Creating 2d field in Sim/ShuffleBoard
@@ -208,6 +210,8 @@ public class RobotContainer {
         SmartDashboard.putData(m_Intake);
         SmartDashboard.putData(m_Intake.GetIntakeWheels());
         SmartDashboard.putData(m_Limelight);
+
+        SmartDashboard.putData("DriveTrain/AprilAlignCommand", AprilAlignRadialCommand);
 
     }
 

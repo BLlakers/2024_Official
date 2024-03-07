@@ -67,10 +67,18 @@ public final class Constants {
   }
 
   public static class AprilTagID {
-    public final static int BlueSpeakerCenter = -1;
-    public final static int RedSpeakerCenter = -1;
-    public final static int BlueStageCenter = -1;
-    public final static int RedStageCenter = -1;
+    public final static int PracticeSpeakerCenter = 1;
+    public final static int BlueSpeakerCenter = 7;
+    public final static int RedSpeakerCenter = 4;
+
+    public final static int BlueStageCenter = 14;
+    public final static int RedStageCenter = 13;
+
+    public final static int BlueStageLeft = 15;
+    public final static int RedStageRight = 12;
+    
+    public final static int RedStageLeft = 11;
+    public final static int BlueStageRight = 16;
 
     public final static Pose2d BlueSpeakerCenterPose = new Pose2d(); // TODO
     public final static Pose2d RedSpeakerCenterPose = new Pose2d(); // TODO

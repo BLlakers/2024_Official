@@ -26,10 +26,17 @@ import frc.robot.Constants;
 public class Limelight extends SubsystemBase {
     private DoubleArraySubscriber m_aprilTagPoseTopic;
     private IntegerPublisher m_priorityTagIdPub;
+
+    private String m_limelightName;
     private AprilTag m_currentAprilTag = new AprilTag(-1, new Pose3d());
 
     public Limelight() {
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        this("limelight");
+    }
+
+    public Limelight(String cameraName) {
+        m_limelightName = cameraName;
+        NetworkTable table = NetworkTableInstance.getDefault().getTable(m_limelightName);
         m_aprilTagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace")
                 .subscribe(new double[] { 0, 0, 0, 0, 0, 0 });
         m_priorityTagIdPub = table.getIntegerTopic("priorityid").publish();
@@ -55,9 +62,14 @@ public class Limelight extends SubsystemBase {
      *         ROTy, ROTz.
      */
     public AprilTag getCurrentAprilTag() {
-        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        NetworkTable table = NetworkTableInstance.getDefault().getTable(m_limelightName);
         NetworkTableEntry tid = table.getEntry("tid");
+        int aprilTagId = (int) tid.getInteger(-1);
         TimestampedDoubleArray poseArray = m_aprilTagPoseTopic.getAtomic(); // (x, y, z, rotx, roty, rotz)
+
+        if (poseArray.value.length < 6)
+            return new AprilTag(-1, new Pose3d());
+
         Translation3d poseTranslation = new Translation3d(
                 poseArray.value[0], // x
                 poseArray.value[1], // y
@@ -72,10 +84,7 @@ public class Limelight extends SubsystemBase {
 
         Pose3d aprilTagPose = new Pose3d(poseTranslation, poseOrientation); // creating pose3d based off of our
                                                                             // translation3d and rot3d and tid
-        int aprilTagId = (int) tid.getInteger(-1);
-        return new AprilTag(
-                aprilTagId,
-                aprilTagPose);
+        return new AprilTag(aprilTagId, aprilTagPose);
     }
 
     @Override
@@ -92,26 +101,26 @@ public class Limelight extends SubsystemBase {
         return this.run(() -> {
             m_currentAprilTag = this.getCurrentAprilTag();
         })
-                .onlyWhile(() -> m_currentAprilTag.ID < 0)
-                .andThen(() -> { // set the robot's pose relative to the field
-                    // grab the currently viewed april tag
-                    AprilTag tag = m_currentAprilTag;
+        .onlyWhile(() -> m_currentAprilTag.ID < 0)
+        .andThen(() -> { // set the robot's pose relative to the field
+            // grab the currently viewed april tag
+            AprilTag tag = m_currentAprilTag;
 
-                    // Perform the calculations to determine the bot's position rel. to tag
-                    Transform2d Tag2Bot = tag.pose.toPose2d().minus(new Pose2d()).inverse();
-                    
-                    // Depending on which team we are in, reset the pose of the robot relative to speaker tag
-                    Pose2d Origin2Tag = Constants.AprilTagID.BlueSpeakerCenterPose;
-                    Pose2d Origin2Bot = Origin2Tag.transformBy(Tag2Bot);
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent())
-                    {
-                        if (alliance.get() == Alliance.Red) // only need blue, flip if red
-                            Origin2Bot = GeometryUtil.flipFieldPose(Origin2Bot);
-                    }
-                    
-                    drivetrain.resetPose(Origin2Bot);
-                });
+            // Perform the calculations to determine the bot's position rel. to tag
+            Transform2d Tag2Bot = tag.pose.toPose2d().minus(new Pose2d()).inverse();
+            
+            // Depending on which team we are in, reset the pose of the robot relative to speaker tag
+            Pose2d Origin2Tag = Constants.AprilTagID.BlueSpeakerCenterPose;
+            Pose2d Origin2Bot = Origin2Tag.transformBy(Tag2Bot);
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent())
+            {
+                if (alliance.get() == Alliance.Red) // only need blue, flip if red
+                    Origin2Bot = GeometryUtil.flipFieldPose(Origin2Bot);
+            }
+            
+            drivetrain.resetPose(Origin2Bot);
+        });
 
     }
 }
