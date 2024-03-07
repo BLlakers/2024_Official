@@ -37,6 +37,7 @@ public class RobotContainer {
    */
   CommandXboxController driverController =
       new CommandXboxController(Constants.Controller.DriverControllerChannel);
+
   CommandXboxController manipController =
       new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController =
