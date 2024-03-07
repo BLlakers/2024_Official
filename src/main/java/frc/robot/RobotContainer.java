@@ -228,15 +228,18 @@ public class RobotContainer {
 
     // Add subsystems
     SmartDashboard.putData(m_DriveTrain);
-    SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
+    SmartDashboard.putData(m_DriveTrain.getName() + "/Reset Pose 2D", m_DriveTrain.resetPose2d());
+    SmartDashboard.putData(m_DriveTrain.getName() + "/AprilAlignCommand", AprilAlignRadialCommand);
 
     SmartDashboard.putData(m_Shooter);
     SmartDashboard.putData(m_Hanger);
+    SmartDashboard.putData(m_Limelight);
+    
     SmartDashboard.putData(m_Intake);
     SmartDashboard.putData(m_Intake.GetIntakeWheels());
-    SmartDashboard.putData(m_Limelight);
-
-    SmartDashboard.putData("DriveTrain/AprilAlignCommand", AprilAlignRadialCommand);
+    SmartDashboard.putData(m_Intake.getName() + "/AutoIntakePIDCommand Up", IntakePIDcommand.IntakeUp(m_Intake));
+    SmartDashboard.putData(m_Intake.getName() + "/AutoIntakePIDCommand Down", IntakePIDcommand.IntakeDown(m_Intake));
+    SmartDashboard.putData(m_Intake.getName() + "/AutoIntakePIDCommand Amp", IntakePIDcommand.IntakeAmp(m_Intake));
   }
 
   public Command getAutonomousCommand() {

@@ -50,8 +50,8 @@ public class Intake extends SubsystemBase {
   public static final Rotation2d PosDownAngle = Rotation2d.fromDegrees(140); // Down
   public static final Rotation2d PosUpAngle = Rotation2d.fromDegrees(5); // starting
   public static final Rotation2d PosAmpAngle = Rotation2d.fromDegrees(30); // This needs to be measured TODO
-  public static final Rotation2d PositionDown = Rotation2d.fromDegrees(60);
-  public static final Rotation2d PositionUp = Rotation2d.fromDegrees(20);
+  public static final Rotation2d DrivingPositionDown = Rotation2d.fromDegrees(70);
+  public static final Rotation2d DrivingPositionUp = Rotation2d.fromDegrees(20);
 
   private static final double s_IntakeAngleSpeedUp = -0.25;
   private static final double s_IntakeAngleSpeedDown = 0.25;

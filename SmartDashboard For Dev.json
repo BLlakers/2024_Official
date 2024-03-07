@@ -585,6 +585,45 @@
                 }
               ]
             }
+          },
+          "13,0": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Intake/Angle/AutoIntakePIDCommand Amp",
+              "_title": "Angle/AutoIntakePIDCommand Amp",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,1": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Intake/Angle/AutoIntakePIDCommand Down",
+              "_title": "Angle/AutoIntakePIDCommand Down",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,2": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Intake/Angle/AutoIntakePIDCommand Up",
+              "_title": "Angle/AutoIntakePIDCommand Up",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -723,8 +762,8 @@
   ],
   "windowGeometry": {
     "x": 0.0,
-    "y": 37.0,
+    "y": 36.79999923706055,
     "width": 1512.0,
-    "height": 945.0
+    "height": 945.5999755859375
   }
 }

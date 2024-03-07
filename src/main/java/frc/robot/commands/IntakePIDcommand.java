@@ -20,7 +20,7 @@ public class IntakePIDcommand extends ProfiledPIDCommand {
 
     public IntakePIDcommand(Intake intake, Rotation2d goal, DrivingStateEndCondition endCondition) {
         super(
-                new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(1, 1)),
+                new ProfiledPIDController(1.2, 0, 0, new TrapezoidProfile.Constraints(Units.radiansToDegrees(50), Units.degreesToRadians(40))),
                 () -> {
                     return intake.GetIntakeMotorAngle().getRadians();
                 },
@@ -31,6 +31,7 @@ public class IntakePIDcommand extends ProfiledPIDCommand {
         m_endCondition = endCondition;
         getController().enableContinuousInput(-Math.PI, Math.PI); // finds the closest point on a circle and tells it to
                                                                   // go that way.
+        getController().setTolerance(Units.degreesToRadians(5));
         addRequirements(m_Intake);
     }
 
@@ -56,7 +57,6 @@ public class IntakePIDcommand extends ProfiledPIDCommand {
     public void end(boolean interrupted) {
         super.end(interrupted);
         m_Intake.StopIntake();
-        ;
     }
 
     @Override
@@ -66,21 +66,25 @@ public class IntakePIDcommand extends ProfiledPIDCommand {
         {
             case PositionHold:
                 endConditionMet = false;
+                break;
 
             case PositionStopUp:
                 endConditionMet = this.IsIntakeUp();
+                break;
 
             case PositionStopDown:
                 endConditionMet = this.IsIntakeDown();
+                break;
         }
+
         return getController().atGoal() || endConditionMet;
     }
 
     private boolean IsIntakeUp(){
-        return m_Intake.GetIntakeMotorAngle().getDegrees() <= Intake.PositionUp.getDegrees();
+        return m_Intake.GetIntakeMotorAngle().getDegrees() <= Intake.DrivingPositionUp.getDegrees();
     }
 
     private boolean IsIntakeDown(){
-        return m_Intake.GetIntakeMotorAngle().getDegrees() >= Intake.PositionDown.getDegrees();
+        return m_Intake.GetIntakeMotorAngle().getDegrees() >= Intake.DrivingPositionDown.getDegrees();
     }
 }
