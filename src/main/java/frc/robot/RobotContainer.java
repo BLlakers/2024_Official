@@ -63,7 +63,8 @@ public class RobotContainer {
 
   final Command AutoIntakeNoteCommand =
       m_Intake
-          .autoIntakeDown().onlyIf(() -> !m_Intake.NoteIsLoaded())
+          .autoIntakeDown()
+          .onlyIf(() -> !m_Intake.NoteIsLoaded())
           .alongWith(m_Intake.GetIntakeWheels().IntakeNoteCommand())
           .finallyDo(m_Intake.autoIntakeUp()::schedule);
   final Command AutoEjectNoteCommand =

@@ -54,7 +54,7 @@ public class Intake extends SubsystemBase {
   public static final double PositionUp = 20;
 
   private static final double s_IntakeAngleSpeedUp = -0.25;
-  private static final double s_IntakeAngleSpeedDown = 0.25; 
+  private static final double s_IntakeAngleSpeedDown = 0.25;
 
   /**
    * A Rev Color Sensor V3 object is constructed with an I2C port as a parameter. The device will be
