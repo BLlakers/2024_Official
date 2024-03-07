@@ -17,21 +17,29 @@ import frc.robot.subsystems.DriveTrain;
 
 public final class Constants {
   public static class Drive {
-    public final static Translation2d SMFrontRightLocation = new Translation2d(0.285, -0.285);
-    public final static Translation2d SMFrontLeftLocation = new Translation2d(0.285, 0.285);
-    public final static Translation2d SMBackLeftLocation = new Translation2d(-0.285, 0.285);
-    public final static Translation2d SMBackRightLocation = new Translation2d(-0.285, -0.285);
-    public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-        new PIDConstants(5, 0, 0), // Translation constants
-        new PIDConstants(3, 0, 0), // Rotation constants
-        DriveTrain.kMaxSpeed, // what should be our robots fastest chassis speeds in m/s
-        0.3875, // The radius of the robot in meters
-        new ReplanningConfig(true,false));
-    public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
-        0, 0, 0, new Rotation3d(0, 0, 0)); // we do conversion in limelight. would normally tell robot where the camera
-                                           // is relative to the center of the bot.
-    public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(
-        DriveTrain.kMaxAngularSpeed, DriveTrain.kModuleMaxAngularAcceleration);
+    public static final Translation2d SMFrontRightLocation = new Translation2d(0.285, -0.285);
+    public static final Translation2d SMFrontLeftLocation = new Translation2d(0.285, 0.285);
+    public static final Translation2d SMBackLeftLocation = new Translation2d(-0.285, 0.285);
+    public static final Translation2d SMBackRightLocation = new Translation2d(-0.285, -0.285);
+    public static final HolonomicPathFollowerConfig pathFollowerConfig =
+        new HolonomicPathFollowerConfig(
+            new PIDConstants(5, 0, 0), // Translation constants
+            new PIDConstants(3, 0, 0), // Rotation constants
+            DriveTrain.kMaxSpeed, // what should be our robots fastest chassis speeds in m/s
+            0.3875, // The radius of the robot in meters
+            new ReplanningConfig(true, false));
+    public static final Transform3d CAMERA_TO_ROBOT =
+        new Transform3d(
+            0,
+            0,
+            0,
+            new Rotation3d(
+                0, 0,
+                0)); // we do conversion in limelight. would normally tell robot where the camera
+    // is relative to the center of the bot.
+    public static final TrapezoidProfile.Constraints kthetaController =
+        new TrapezoidProfile.Constraints(
+            DriveTrain.kMaxAngularSpeed, DriveTrain.kModuleMaxAngularAcceleration);
   }
 
   public static class Conversion {
