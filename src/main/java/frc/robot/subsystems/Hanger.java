@@ -97,7 +97,13 @@ public class Hanger extends SubsystemBase {
 
         return cmd;
     }
-
+    public boolean HangersDown(){
+        if (RightHangIsDown() && LeftHangIsDown()){
+            return true;
+        } else {
+            return false;
+        }
+    }
     /** Lowers hang when Held. Will stop when it hits the limit switch */
     public Command LowerHangAuto() {
         Command cmd = Commands.parallel(

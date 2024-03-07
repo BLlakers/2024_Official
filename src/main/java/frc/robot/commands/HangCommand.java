@@ -76,13 +76,18 @@ public class HangCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+  
+        return m_hanger.HangersDown();
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_hanger.LeftHangStop();
-        m_hanger.RightHangStop();
+        if (interrupted == true){
+            m_hanger.LeftHangStop();
+            m_hanger.RightHangStop();
+        } else {
+            return;
+        }
     }
 
 }

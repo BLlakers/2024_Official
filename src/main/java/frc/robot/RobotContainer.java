@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -12,6 +13,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -41,6 +43,7 @@ public class RobotContainer {
     CommandXboxController manipController = new CommandXboxController(Constants.Controller.ManipControllerChannel);
     CommandXboxController debugController = new CommandXboxController(Constants.Controller.DebugControllerChannel);
 
+
     // commands
     final Command ShootNoteCommand = m_Shooter.RunShooter()
             .alongWith(
@@ -56,7 +59,7 @@ public class RobotContainer {
             .withName("Shoot Command");
 
     final Command AutoIntakeNoteCommand = new AutoIntake(m_Intake, m_Intake.GetIntakeWheels());
-
+    final Command AutoIntakeNoteCommandJared = m_Intake.autoIntakeDown().alongWith(m_Intake.GetIntakeWheels().IntakeNoteCommand()).andThen(m_Intake::autoIntakeUp).finallyDo(m_Intake::StopIntakeCommand);
     final Command AutoEjectNoteCommand = m_Intake.autoIntakeDown()
             .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5));
 
@@ -165,6 +168,7 @@ public class RobotContainer {
 
         manipController.a() // Shoot the note
                 .whileTrue(ShootNoteCommand.withTimeout(1.5));
+        manipController.b().whileTrue(AutoIntakeNoteCommandJared);
         manipController.x() // eject the intake command
                 .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommand());
 

@@ -60,7 +60,7 @@ public class AprilAlignToTransformCommand extends Command {
   public AprilAlignToTransformCommand(
       Supplier<AprilTag> aprilTagSupplier,
       DriveTrain drivetrainSubsystem,
-      Transform2d goalTransformRelativeToAprilTag) {
+      Transform2d goalTransformRelativeToAprilTag) { // GoalTransformTo tag is where we want to stop. Should be a negative number. 
     this.m_drivetrain = drivetrainSubsystem;
     this.m_aprilTagProvider = aprilTagSupplier;
     this.m_tagToGoal = goalTransformRelativeToAprilTag;
