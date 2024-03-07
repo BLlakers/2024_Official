@@ -1,4 +1,4 @@
-   package frc.robot;
+package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
@@ -17,111 +17,119 @@ import frc.robot.subsystems.DriveTrain;
 
 public final class Constants {
   public static class Drive {
-    public final static Translation2d SMFrontRightLocation = new Translation2d(0.285, -0.285);
-    public final static Translation2d SMFrontLeftLocation = new Translation2d(0.285, 0.285);
-    public final static Translation2d SMBackLeftLocation = new Translation2d(-0.285, 0.285);
-    public final static Translation2d SMBackRightLocation = new Translation2d(-0.285, -0.285);
-    public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-        new PIDConstants(5, 0, 0), // Translation constants
-        new PIDConstants(3, 0, 0), // Rotation constants
-        3.68, // what should be our robots fastest chassis speeds in m/s
-        0.3875, // The radius of the robot in meters
-        new ReplanningConfig());
-    public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
-        0, 0, 0, new Rotation3d(0, 0, 0)); // we do conversion in limelight. would normally tell robot where the camera
-                                           // is relative to the center of the bot.
-    public static final TrapezoidProfile.Constraints kthetaController = new TrapezoidProfile.Constraints(
-        DriveTrain.kMaxAngularSpeed, DriveTrain.kModuleMaxAngularAcceleration);
+    public static final Translation2d SMFrontRightLocation = new Translation2d(0.285, -0.285);
+    public static final Translation2d SMFrontLeftLocation = new Translation2d(0.285, 0.285);
+    public static final Translation2d SMBackLeftLocation = new Translation2d(-0.285, 0.285);
+    public static final Translation2d SMBackRightLocation = new Translation2d(-0.285, -0.285);
+    public static final HolonomicPathFollowerConfig pathFollowerConfig =
+        new HolonomicPathFollowerConfig(
+            new PIDConstants(5, 0, 0), // Translation constants
+            new PIDConstants(3, 0, 0), // Rotation constants
+            3.68, // what should be our robots fastest chassis speeds in m/s
+            0.3875, // The radius of the robot in meters
+            new ReplanningConfig());
+    public static final Transform3d CAMERA_TO_ROBOT =
+        new Transform3d(
+            0,
+            0,
+            0,
+            new Rotation3d(
+                0, 0,
+                0)); // we do conversion in limelight. would normally tell robot where the camera
+    // is relative to the center of the bot.
+    public static final TrapezoidProfile.Constraints kthetaController =
+        new TrapezoidProfile.Constraints(
+            DriveTrain.kMaxAngularSpeed, DriveTrain.kModuleMaxAngularAcceleration);
   }
 
   public static class Conversion {
-    public final static double driveEncoderCtsperRev = 6.8;
-    public final static double kWheelDiameterM = Inches.of(4).in(Meters);
-    public final static double kWheelCircumference = Math.PI * kWheelDiameterM;
-    public final static double NeoEncoderCountsPerRev = 42;
-    public final static double NeoRevPerEncoderCounts = 1 / NeoEncoderCountsPerRev;
-    public final static double NeoMaxSpeedRPM = 5820;
-    public final static double MagEncoderCountsPerRev = 4096;
-    public final static double MagRevPerEncoderCounts = 1 / MagEncoderCountsPerRev;
-    public final static double DriveGearRatio = 8.14;
-    public final static double TurnGearRatio = 12.8;
-    public final static double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
+    public static final double driveEncoderCtsperRev = 6.8;
+    public static final double kWheelDiameterM = Inches.of(4).in(Meters);
+    public static final double kWheelCircumference = Math.PI * kWheelDiameterM;
+    public static final double NeoEncoderCountsPerRev = 42;
+    public static final double NeoRevPerEncoderCounts = 1 / NeoEncoderCountsPerRev;
+    public static final double NeoMaxSpeedRPM = 5820;
+    public static final double MagEncoderCountsPerRev = 4096;
+    public static final double MagRevPerEncoderCounts = 1 / MagEncoderCountsPerRev;
+    public static final double DriveGearRatio = 8.14;
+    public static final double TurnGearRatio = 12.8;
+    public static final double driveEncoderConversion = DriveGearRatio * kWheelCircumference;
   }
 
   public static class Controller {
-    public final static int DriverControllerChannel = 0;
-    public final static int ManipControllerChannel = 1;
-    public final static int DebugControllerChannel = 2;
-    public final static int buttonA = 1;
-    public final static int buttonB = 2;
-    public final static int buttonX = 3;
-    public final static int buttonY = 4;
-    public final static int buttonLeft = 5;
-    public final static int buttonRight = 6;
-    public final static int buttonOptions = 7;
-    public final static int buttonStart = 8;
-    public final static int buttonLS = 9;
-    public final static int buttonRS = 10;
-    public final static double deadzone = 0.17;
-    public final static double RTdeadzone = .01;
+    public static final int DriverControllerChannel = 0;
+    public static final int ManipControllerChannel = 1;
+    public static final int DebugControllerChannel = 2;
+    public static final int buttonA = 1;
+    public static final int buttonB = 2;
+    public static final int buttonX = 3;
+    public static final int buttonY = 4;
+    public static final int buttonLeft = 5;
+    public static final int buttonRight = 6;
+    public static final int buttonOptions = 7;
+    public static final int buttonStart = 8;
+    public static final int buttonLS = 9;
+    public static final int buttonRS = 10;
+    public static final double deadzone = 0.17;
+    public static final double RTdeadzone = .01;
   }
 
   public static class AprilTagID {
-    public final static int PracticeSpeakerCenter = 1;
-    public final static int BlueSpeakerCenter = 7;
-    public final static int RedSpeakerCenter = 4;
+    public static final int PracticeSpeakerCenter = 1;
+    public static final int BlueSpeakerCenter = 7;
+    public static final int RedSpeakerCenter = 4;
 
-    public final static int BlueStageCenter = 14;
-    public final static int RedStageCenter = 13;
+    public static final int BlueStageCenter = 14;
+    public static final int RedStageCenter = 13;
 
-    public final static int BlueStageLeft = 15;
-    public final static int RedStageRight = 12;
-    
-    public final static int RedStageLeft = 11;
-    public final static int BlueStageRight = 16;
+    public static final int BlueStageLeft = 15;
+    public static final int RedStageRight = 12;
 
-    public final static Pose2d BlueSpeakerCenterPose = new Pose2d(); // TODO
-    public final static Pose2d RedSpeakerCenterPose = new Pose2d(); // TODO
+    public static final int RedStageLeft = 11;
+    public static final int BlueStageRight = 16;
+
+    public static final Pose2d BlueSpeakerCenterPose = new Pose2d(); // TODO
+    public static final Pose2d RedSpeakerCenterPose = new Pose2d(); // TODO
   }
 
   public static class Port {
-    public final static int blSteerMtrC = 1;
-    public final static int blDriveMtrC = 2;
-    public final static int flDriveMtrC = 3;
-    public final static int flSteerMtrC = 4;
-    public final static int frSteerMtrC = 5;
-    public final static int frDriveMtrC = 6;
-    public final static int brDriveMtrC = 7;
-    public final static int brSteerMtrC = 8;
-    public final static int blTurnEncoderDIOC = 0;
-    public final static int flTurnEncoderDIOC = 1;
-    public final static int frTurnEncoderDIOC = 2;
-    public final static int brTurnEncoderDIOC = 3;
-    public final static int hangerLeftMagSwitchDIOC = 7;
-    public final static int hangerRightMagSwitchDIOC = 8;
-    public final static int PHChannel = 30; // REV Pneumatic Hub
-    public final static int PDHChannel = 20; // REV Power Distribution Hub
+    public static final int blSteerMtrC = 1;
+    public static final int blDriveMtrC = 2;
+    public static final int flDriveMtrC = 3;
+    public static final int flSteerMtrC = 4;
+    public static final int frSteerMtrC = 5;
+    public static final int frDriveMtrC = 6;
+    public static final int brDriveMtrC = 7;
+    public static final int brSteerMtrC = 8;
+    public static final int blTurnEncoderDIOC = 0;
+    public static final int flTurnEncoderDIOC = 1;
+    public static final int frTurnEncoderDIOC = 2;
+    public static final int brTurnEncoderDIOC = 3;
+    public static final int hangerLeftMagSwitchDIOC = 7;
+    public static final int hangerRightMagSwitchDIOC = 8;
+    public static final int PHChannel = 30; // REV Pneumatic Hub
+    public static final int PDHChannel = 20; // REV Power Distribution Hub
   }
 
   public static class Intake {
-    public final static int AngleMtrC = 15;
-    public final static int WheelMtrC = 14;
-   
+    public static final int AngleMtrC = 15;
+    public static final int WheelMtrC = 14;
   }
 
   // SHOOTER
   public static class Shooter {
-    public final static int LeftMtrC = 11;
-    public final static int RightMtrC = 12;
-    public final static int AngleMtrC = 13;
-    public final static int LimitSwitchTopDIO = 4;
-    public final static int LimitSwitchBottomDIO = -1; // TODO: add the digital input channel for this limit
+    public static final int LeftMtrC = 11;
+    public static final int RightMtrC = 12;
+    public static final int AngleMtrC = 13;
+    public static final int LimitSwitchTopDIO = 4;
+    public static final int LimitSwitchBottomDIO =
+        -1; // TODO: add the digital input channel for this limit
   }
 
   // HANGER
   public static class Hanger {
-    public final static int LeftMtrC = 9;
-    public final static int RightMtrC = 10;
+    public static final int LeftMtrC = 9;
+    public static final int RightMtrC = 10;
   }
 
   public abstract class RobotVersionConstants {
@@ -146,5 +154,4 @@ public final class Constants {
   }
 
   public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
-
 }

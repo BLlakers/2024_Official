@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -13,7 +12,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,212 +22,234 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 public class RobotContainer {
-    // Creates our objects from our methods for our classes
-    DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
-    Limelight m_Limelight = new Limelight();
-    Intake m_Intake = new Intake();
-    Shooter m_Shooter = new Shooter();
-    Hanger m_Hanger = new Hanger();
-    // Shooter
+  // Creates our objects from our methods for our classes
+  DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
+  Limelight m_Limelight = new Limelight();
+  Intake m_Intake = new Intake();
+  Shooter m_Shooter = new Shooter();
+  Hanger m_Hanger = new Hanger();
 
+  // Shooter
+
+  /**
+   * Creates buttons and controller for: - the driver controller (port 0) - the manipulator
+   * controller (port 1) - the debug controller (port 2)
+   */
+  CommandXboxController driverController =
+      new CommandXboxController(Constants.Controller.DriverControllerChannel);
+
+  CommandXboxController manipController =
+      new CommandXboxController(Constants.Controller.ManipControllerChannel);
+  CommandXboxController debugController =
+      new CommandXboxController(Constants.Controller.DebugControllerChannel);
+
+  // commands
+  final Command ShootNoteCommand =
+      m_Shooter
+          .RunShooter()
+          .alongWith(
+              Commands.waitSeconds(0.5) // shooter speed up
+                  .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
+          .withName("Shoot Command");
+
+  final Command AutoShootNote =
+      m_Shooter
+          .RunShooter()
+          .alongWith(
+              Commands.waitSeconds(0.5) // shooter speed up
+                  .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
+          .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
+          .withName("Shoot Command");
+
+  final Command AutoIntakeNoteCommand = new AutoIntake(m_Intake, m_Intake.GetIntakeWheels());
+  final Command AutoIntakeNoteCommandJared =
+      m_Intake
+          .autoIntakeDown()
+          .alongWith(m_Intake.GetIntakeWheels().IntakeNoteCommand())
+          .andThen(m_Intake::autoIntakeUp)
+          .finallyDo(m_Intake::StopIntakeCommand);
+  final Command AutoEjectNoteCommand =
+      m_Intake
+          .autoIntakeDown()
+          .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5));
+
+  final Command AprilAlignRadialCommand =
+      new AprilAlignToSpeakerRadiallyCommand(m_Limelight::getCurrentAprilTag, m_DriveTrain);
+
+  // A chooser for autonomous commands
+  private final SendableChooser<Command> autoChooser;
+  // Creating 2d field in Sim/ShuffleBoard
+  private final Field2d field;
+  // Trying to get feedback from auto
+  List<Pose2d> currentPath = new ArrayList<Pose2d>();
+
+  public RobotContainer() {
+    m_DriveTrain.setName("DriveTrain");
+
+    configureShuffleboard();
+    configureBindings();
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    NamedCommands.registerCommand("Shoot", AutoShootNote);
+    NamedCommands.registerCommand(
+        "AutoLowerIntake",
+        new AutoIntake(
+            m_Intake, m_Intake.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeDown));
+    NamedCommands.registerCommand(
+        "AutoRaiseIntake",
+        new AutoIntake(
+            m_Intake, m_Intake.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeUp));
+    NamedCommands.registerCommand("Intake", new AutoIntake(m_Intake, m_Intake.GetIntakeWheels()));
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    // Another option that allows you to specify the default auto by its name:
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // Creates a field to be put to the shuffleboard
+    field = new Field2d();
+
+    SmartDashboard.putData("Field", field);
+
+    // Logging callback for current robot pose
+    PathPlannerLogging.setLogCurrentPoseCallback(
+        (pose) -> {
+          // Do whatever you want with the pose here
+          field.setRobotPose(pose);
+        });
+
+    // Logging callback for target robot pose
+    PathPlannerLogging.setLogTargetPoseCallback(
+        (pose) -> {
+          // Do whatever you want with the pose here
+          field.getObject("target pose").setPose(pose);
+        });
+
+    // Logging callback for the active path, this is sent as a list of poses
+    PathPlannerLogging.setLogActivePathCallback(
+        (poses) -> {
+          // Do whatever you want with the poses here
+          field.getObject("path").setPoses(poses);
+        });
+  }
+
+  public void periodic() {
+    // us trying to set pose for field2d
+    field.setRobotPose(m_DriveTrain.getPose2d());
+  }
+
+  /**
+   * Creates Command Bindings. Read description down below:
+   *
+   * <p>Use this method to define your trigger->comand mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
+  private void configureBindings() {
     /**
-     * Creates buttons and controller for:
-     * - the driver controller (port 0)
-     * - the manipulator controller (port 1)
-     * - the debug controller (port 2)
+     * Swerve Drive Controller Command
+     *
+     * <p>Controls: - Left Stick: Steering - Right Stick: Rotate the robot - Right Trigger: provide
+     * gas - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
      */
+    m_DriveTrain.setDefaultCommand(
+        new SwerveDriveCommand(
+            () -> driverController.getLeftY(),
+            () -> driverController.getLeftX(),
+            () -> driverController.getRightX(),
+            () -> driverController.getRightTriggerAxis(),
+            m_DriveTrain,
+            () -> driverController.getLeftTriggerAxis() >= 0.5));
 
-    CommandXboxController driverController = new CommandXboxController(Constants.Controller.DriverControllerChannel);
-    CommandXboxController manipController = new CommandXboxController(Constants.Controller.ManipControllerChannel);
-    CommandXboxController debugController = new CommandXboxController(Constants.Controller.DebugControllerChannel);
+    // Driver Controller commands
+    // - DriveTrain commands (outside of actual driving)
+    driverController.a().onTrue(m_DriveTrain.toggleFieldRelativeEnable());
+    driverController.b().onTrue(m_DriveTrain.ZeroGyro());
+    driverController.start().onTrue(m_DriveTrain.resetPose2d()); // RESETING OUR POSE 2d/ odometry
+    driverController.rightStick().onTrue(m_DriveTrain.WheelLockCommand()); // lock wheels
 
+    // Manipulator Controller commands
+    manipController
+        .leftBumper() // Angle down the shooter
+        .whileTrue(m_Hanger.LowerHangAuto());
+    manipController
+        .rightBumper() // Angle up the shooter
+        .whileTrue(m_Hanger.RaiseHangAuto());
 
-    // commands
-    final Command ShootNoteCommand = m_Shooter.RunShooter()
-            .alongWith(
-                    Commands.waitSeconds(0.5) // shooter speed up
-                            .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
-            .withName("Shoot Command");
+    manipController.start().onTrue(m_Intake.resetIntakePos());
 
-    final Command AutoShootNote = m_Shooter.RunShooter()
-            .alongWith(
-                    Commands.waitSeconds(0.5) // shooter speed up
-                            .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
-            .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
-            .withName("Shoot Command");
+    manipController
+        .a() // Shoot the note
+        .whileTrue(ShootNoteCommand.withTimeout(1.5));
+    manipController.b().whileTrue(AutoIntakeNoteCommandJared);
+    manipController
+        .x() // eject the intake command
+        .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommand());
 
-    final Command AutoIntakeNoteCommand = new AutoIntake(m_Intake, m_Intake.GetIntakeWheels());
-    final Command AutoIntakeNoteCommandJared = m_Intake.autoIntakeDown().alongWith(m_Intake.GetIntakeWheels().IntakeNoteCommand()).andThen(m_Intake::autoIntakeUp).finallyDo(m_Intake::StopIntakeCommand);
-    final Command AutoEjectNoteCommand = m_Intake.autoIntakeDown()
-            .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5));
+    manipController.povUp().onTrue(m_Intake.autoIntakeUp());
+    manipController.povDown().onTrue(m_Intake.autoIntakeDown());
+    manipController
+        .povLeft()
+        .whileTrue(m_Intake.ManualLowerIntakeCommand()); // lower the intake arm
+    manipController
+        .povRight()
+        .whileTrue(m_Intake.ManualRaiseIntakeCommand()); // raise the intake arm
 
-    final Command AprilAlignRadialCommand = new AprilAlignToSpeakerRadiallyCommand(m_Limelight::getCurrentAprilTag, m_DriveTrain);
+    manipController
+        .y() // eject the intake command
+        .whileTrue(m_Intake.GetIntakeWheels().EjectNoteCommand());
+    manipController.rightTrigger(0.5).whileTrue(m_Shooter.RunShooter());
 
-    // A chooser for autonomous commands
-    private final SendableChooser<Command> autoChooser;
-    // Creating 2d field in Sim/ShuffleBoard
-    private final Field2d field;
-    // Trying to get feedback from auto
-    List<Pose2d> currentPath = new ArrayList<Pose2d>();
+    // Debug controller
+    // - Manual hanger commands
+    debugController
+        .leftBumper() // Left Hanger arm down
+        .whileTrue(m_Hanger.runEnd(m_Hanger::LeftHangDown, m_Hanger::LeftHangStop));
+    debugController
+        .a() // Left Hanger arm up
+        .whileTrue(m_Hanger.runEnd(m_Hanger::LeftHangUp, m_Hanger::LeftHangStop));
 
-    public RobotContainer() {
-        m_DriveTrain.setName("DriveTrain");
+    debugController
+        .rightBumper() // Right Hanger arm down
+        .whileTrue(m_Hanger.runEnd(m_Hanger::RightHangDown, m_Hanger::RightHangStop));
+    debugController
+        .b() // Right Hanger arm up
+        .whileTrue(m_Hanger.runEnd(m_Hanger::RightHangUp, m_Hanger::RightHangStop));
 
-        configureShuffleboard();
-        configureBindings();
-        // Build an auto chooser. This will use Commands.none() as the default option.
-        NamedCommands.registerCommand("Shoot", AutoShootNote);
-        NamedCommands.registerCommand("AutoLowerIntake",
-                new AutoIntake(m_Intake, m_Intake.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeDown));
-        NamedCommands.registerCommand("AutoRaiseIntake",
-                new AutoIntake(m_Intake, m_Intake.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeUp));
-        NamedCommands.registerCommand("Intake",
-                new AutoIntake(m_Intake, m_Intake.GetIntakeWheels()));
-        autoChooser = AutoBuilder.buildAutoChooser();
+    debugController.povUp().whileTrue(m_Shooter.ManualAngleUp());
 
-        // Another option that allows you to specify the default auto by its name:
-        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+    debugController.povDown().whileTrue(m_Shooter.ManualAngleDown());
+  }
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-        // Creates a field to be put to the shuffleboard
-        field = new Field2d();
+  private void configureShuffleboard() {
+    SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
 
-        SmartDashboard.putData("Field", field);
+    // Add subsystems
+    SmartDashboard.putData(m_DriveTrain);
+    SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
 
-        // Logging callback for current robot pose
-        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.setRobotPose(pose);
-        });
+    SmartDashboard.putData(m_Shooter);
+    SmartDashboard.putData(m_Hanger);
+    SmartDashboard.putData(m_Intake);
+    SmartDashboard.putData(m_Intake.GetIntakeWheels());
+    SmartDashboard.putData(m_Limelight);
 
-        // Logging callback for target robot pose
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.getObject("target pose").setPose(pose);
-        });
+    SmartDashboard.putData("DriveTrain/AprilAlignCommand", AprilAlignRadialCommand);
+  }
 
-        // Logging callback for the active path, this is sent as a list of poses
-        PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            // Do whatever you want with the poses here
-            field.getObject("path").setPoses(poses);
-        });
-    }
+  public Command getAutonomousCommand() {
+    // loads New Auto auto file
+    // return new PathPlannerAuto("New Auto");
 
-    public void periodic() {
-        // us trying to set pose for field2d
-        field.setRobotPose(m_DriveTrain.getPose2d());
-    }
+    Command autoCommand = autoChooser.getSelected();
 
-    /**
-     * Creates Command Bindings. Read description down below:
-     * <p>
-     * Use this method to define your trigger->comand mappings. Triggers can be
-     * created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-     * an arbitrary
-     * predicate, or via the named factories in {@link
-     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-     * {@link
-     * CommandXboxController
-     * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-     * PS4} controllers or
-     * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-     * joysticks}.
-     */
-    private void configureBindings() {
-        /**
-         * Swerve Drive Controller Command
-         * 
-         * Controls:
-         * - Left Stick: Steering
-         * - Right Stick: Rotate the robot
-         * - Right Trigger: provide gas
-         * - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
-         */
-        m_DriveTrain.setDefaultCommand(new SwerveDriveCommand(() -> driverController.getLeftY(),
-                () -> driverController.getLeftX(), () -> driverController.getRightX(),
-                () -> driverController.getRightTriggerAxis(), m_DriveTrain,
-                () -> driverController.getLeftTriggerAxis() >= 0.5));
+    return autoCommand.beforeStarting(
+        () -> m_DriveTrain.resetPose(new Pose2d(1.27, 5.55, new Rotation2d())));
 
-        // Driver Controller commands
-        // - DriveTrain commands (outside of actual driving)
-        driverController.a().onTrue(m_DriveTrain.toggleFieldRelativeEnable());
-        driverController.b().onTrue(m_DriveTrain.ZeroGyro());
-        driverController.start().onTrue(m_DriveTrain.resetPose2d());// RESETING OUR POSE 2d/ odometry
-        driverController.rightStick().onTrue(m_DriveTrain.WheelLockCommand()); // lock wheels
+    // return autoChooser.getSelected();
 
-        // Manipulator Controller commands
-        manipController.leftBumper() // Angle down the shooter
-                .whileTrue(m_Hanger.LowerHangAuto());
-        manipController.rightBumper() // Angle up the shooter
-                .whileTrue(m_Hanger.RaiseHangAuto());
-
-        manipController.start().onTrue(m_Intake.resetIntakePos());
-
-        manipController.a() // Shoot the note
-                .whileTrue(ShootNoteCommand.withTimeout(1.5));
-        manipController.b().whileTrue(AutoIntakeNoteCommandJared);
-        manipController.x() // eject the intake command
-                .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommand());
-
-        manipController.povUp().onTrue(m_Intake.autoIntakeUp());
-        manipController.povDown().onTrue(m_Intake.autoIntakeDown());
-        manipController.povLeft().whileTrue(m_Intake.ManualLowerIntakeCommand()); // lower the intake arm
-        manipController.povRight().whileTrue(m_Intake.ManualRaiseIntakeCommand()); // raise the intake arm
-
-        manipController.y() // eject the intake command
-                .whileTrue(m_Intake.GetIntakeWheels().EjectNoteCommand());
-        manipController.rightTrigger(0.5)
-                .whileTrue(m_Shooter.RunShooter());
-
-        // Debug controller
-        // - Manual hanger commands
-        debugController.leftBumper() // Left Hanger arm down
-                .whileTrue(m_Hanger.runEnd(m_Hanger::LeftHangDown, m_Hanger::LeftHangStop));
-        debugController.a() // Left Hanger arm up
-                .whileTrue(m_Hanger.runEnd(m_Hanger::LeftHangUp, m_Hanger::LeftHangStop));
-
-        debugController.rightBumper() // Right Hanger arm down
-                .whileTrue(m_Hanger.runEnd(m_Hanger::RightHangDown, m_Hanger::RightHangStop));
-        debugController.b() // Right Hanger arm up
-                .whileTrue(m_Hanger.runEnd(m_Hanger::RightHangUp, m_Hanger::RightHangStop));
-
-        debugController.povUp()
-                .whileTrue(m_Shooter.ManualAngleUp());
-
-        debugController.povDown()
-                .whileTrue(m_Shooter.ManualAngleDown());
-
-    }
-
-    private void configureShuffleboard() {
-        SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
-
-        // Add subsystems
-        SmartDashboard.putData(m_DriveTrain);
-        SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
-
-        SmartDashboard.putData(m_Shooter);
-        SmartDashboard.putData(m_Hanger);
-        SmartDashboard.putData(m_Intake);
-        SmartDashboard.putData(m_Intake.GetIntakeWheels());
-        SmartDashboard.putData(m_Limelight);
-
-        SmartDashboard.putData("DriveTrain/AprilAlignCommand", AprilAlignRadialCommand);
-
-    }
-
-    public Command getAutonomousCommand() {
-        // loads New Auto auto file
-        // return new PathPlannerAuto("New Auto");
-
-        Command autoCommand = autoChooser.getSelected();
-
-        return autoCommand.beforeStarting(
-                () -> m_DriveTrain.resetPose(new Pose2d(1.27, 5.55, new Rotation2d()))
-        );
-
-        // return autoChooser.getSelected();
-
-    }
+  }
 }

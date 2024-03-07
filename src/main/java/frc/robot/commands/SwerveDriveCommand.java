@@ -23,7 +23,10 @@ public class SwerveDriveCommand extends Command {
   private static final double kDriveMaxSpeed = 0.8 * DriveTrain.kMaxSpeed;
   private static final double kTurnMaxSpeed = 0.8 * DriveTrain.kMaxTurnAngularSpeed;
 
-  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX,
+  public SwerveDriveCommand(
+      DoubleSupplier _leftY,
+      DoubleSupplier _leftX,
+      DoubleSupplier _rightX,
       DoubleSupplier _AccelerateRT,
       DriveTrain _dTrain) {
     m_leftY = _leftY;
@@ -35,9 +38,13 @@ public class SwerveDriveCommand extends Command {
     addRequirements(m_DriveTrain);
   }
 
-  public SwerveDriveCommand(DoubleSupplier _leftY, DoubleSupplier _leftX, DoubleSupplier _rightX,
+  public SwerveDriveCommand(
+      DoubleSupplier _leftY,
+      DoubleSupplier _leftX,
+      DoubleSupplier _rightX,
       DoubleSupplier _AccelerateRT,
-      DriveTrain _dTrain, BooleanSupplier _halfSpeedCondition) {
+      DriveTrain _dTrain,
+      BooleanSupplier _halfSpeedCondition) {
     m_leftY = _leftY;
     m_leftX = _leftX;
     m_rightX = _rightX;
@@ -49,9 +56,7 @@ public class SwerveDriveCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -99,8 +104,7 @@ public class SwerveDriveCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
