@@ -7,6 +7,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -70,6 +71,9 @@ public final class Constants {
     public final static int RedSpeakerCenter = -1;
     public final static int BlueStageCenter = -1;
     public final static int RedStageCenter = -1;
+
+    public final static Pose2d BlueSpeakerCenterPose = new Pose2d(); // TODO
+    public final static Pose2d RedSpeakerCenterPose = new Pose2d(); // TODO
   }
 
   public static class Port {
