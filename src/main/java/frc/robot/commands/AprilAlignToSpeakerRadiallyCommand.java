@@ -70,7 +70,7 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     AprilTag aprilTag = m_aprilTagProvider.get();
     if (aprilTag.ID
         <= 0) { // is valid if > 0: we update our current estimate of where the april tag is
-                // relative to the robot
+      // relative to the robot
       m_drivetrain.stopModules();
       return;
     }
