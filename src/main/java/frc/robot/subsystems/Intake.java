@@ -49,7 +49,8 @@ public class Intake extends SubsystemBase {
 
   public static final Rotation2d PosDownAngle = Rotation2d.fromDegrees(140); // Down
   public static final Rotation2d PosUpAngle = Rotation2d.fromDegrees(5); // starting
-  public static final Rotation2d PosAmpAngle = Rotation2d.fromDegrees(30); // This needs to be measured TODO
+  public static final Rotation2d PosAmpAngle =
+      Rotation2d.fromDegrees(30); // This needs to be measured TODO
   public static final Rotation2d DrivingPositionDown = Rotation2d.fromDegrees(70);
   public static final Rotation2d DrivingPositionUp = Rotation2d.fromDegrees(20);
 
@@ -105,8 +106,7 @@ public class Intake extends SubsystemBase {
     return m_IntakeWheels.NoteIsLoaded();
   }
 
-  public void MoveIntake(double speed)
-  {
+  public void MoveIntake(double speed) {
     intakeAngleMtr.set(speed);
   }
 
