@@ -7,18 +7,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-//some imports no longer needed but leaving them here untill final version
+// some imports no longer needed but leaving them here untill final version
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   String codeVersion = "0.0";
   private PowerDistribution PDH = new PowerDistribution(20, PowerDistribution.ModuleType.kRev);
+
   // commit
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    m_robotContainer.m_DriveTrain.ZeroGyro().schedule();    
+    m_robotContainer.m_DriveTrain.ZeroGyro().schedule();
     CameraServer.startAutomaticCapture();
 
     SmartDashboard.putString("Code Version", codeVersion);
@@ -31,9 +32,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {
-
-  }
+  public void disabledInit() {}
 
   @Override
   public void disabledPeriodic() {
@@ -52,9 +51,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {
-
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -64,12 +61,10 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.AutoIntakeNoteCommand.cancel();
-    
   }
 
   @Override
-  public void teleopPeriodic() {
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
@@ -77,17 +72,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-
-  }
+  public void testPeriodic() {}
 
   @Override
-  public void simulationInit() {
-
-  }
+  public void simulationInit() {}
 
   @Override
-  public void simulationPeriodic() {
-
-  }
+  public void simulationPeriodic() {}
 }

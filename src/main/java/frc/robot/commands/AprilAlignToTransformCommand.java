@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-//import static frc.robot.Constants.VisionConstants.CAMERA_TO_ROBOT;
+// import static frc.robot.Constants.VisionConstants.CAMERA_TO_ROBOT;
 
 import java.util.function.Supplier;
 
@@ -18,36 +18,41 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 
 public class AprilAlignToTransformCommand extends Command {
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
-  private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(
-      Units.degreesToRadians(60), 8);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS =
+      new TrapezoidProfile.Constraints(1, 2);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS =
+      new TrapezoidProfile.Constraints(1, 2);
+  private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS =
+      new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8);
 
-  private final ProfiledPIDController m_xController = new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS);
-  private final ProfiledPIDController m_yController = new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS);
-  private final ProfiledPIDController m_rotController = new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS);
+  private final ProfiledPIDController m_xController =
+      new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS);
+  private final ProfiledPIDController m_yController =
+      new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS);
+  private final ProfiledPIDController m_rotController =
+      new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS);
 
-  public static final Transform2d TRANSFORM_HANGER_LEFT = new Transform2d(
-    Units.inchesToMeters(12 + 4 + 5/8),
-    Units.inchesToMeters(85.9/2) - Math.abs(Constants.Drive.SMFrontRightLocation.getX() - 6), 
-    new Rotation2d()
-  );
-  public static final Transform2d TRANSFORM_HANGER_RIGHT = new Transform2d(
-      TRANSFORM_HANGER_LEFT.getX(),
-      -TRANSFORM_HANGER_LEFT.getY(), // Inverts the y-direction alignment to get right hanger position
-      TRANSFORM_HANGER_LEFT.getRotation());
+  public static final Transform2d TRANSFORM_HANGER_LEFT =
+      new Transform2d(
+          Units.inchesToMeters(12 + 4 + 5 / 8),
+          Units.inchesToMeters(85.9 / 2)
+              - Math.abs(Constants.Drive.SMFrontRightLocation.getX() - 6),
+          new Rotation2d());
+  public static final Transform2d TRANSFORM_HANGER_RIGHT =
+      new Transform2d(
+          TRANSFORM_HANGER_LEFT.getX(),
+          -TRANSFORM_HANGER_LEFT
+              .getY(), // Inverts the y-direction alignment to get right hanger position
+          TRANSFORM_HANGER_LEFT.getRotation());
 
-  public static final Transform2d TRANSFORM_SPEAKER_FRONT = new Transform2d(
-    Units.inchesToMeters(3*12 + 1/2),
-    0, 
-    new Rotation2d()
-  );
-  public static final Transform2d TRANSFORM_SPEAKER_LEFT = TRANSFORM_SPEAKER_FRONT.plus(
-    new Transform2d(0, 0, Rotation2d.fromDegrees(60))
-  ); // rotate by 60 degrees
-  public static final Transform2d TRANSFORM_SPEAKER_RIGHT = TRANSFORM_SPEAKER_FRONT.plus(
-    new Transform2d(0, 0, Rotation2d.fromDegrees(-60))
-  ); // rotate by 60 degrees
+  public static final Transform2d TRANSFORM_SPEAKER_FRONT =
+      new Transform2d(Units.inchesToMeters(3 * 12 + 1 / 2), 0, new Rotation2d());
+  public static final Transform2d TRANSFORM_SPEAKER_LEFT =
+      TRANSFORM_SPEAKER_FRONT.plus(
+          new Transform2d(0, 0, Rotation2d.fromDegrees(60))); // rotate by 60 degrees
+  public static final Transform2d TRANSFORM_SPEAKER_RIGHT =
+      TRANSFORM_SPEAKER_FRONT.plus(
+          new Transform2d(0, 0, Rotation2d.fromDegrees(-60))); // rotate by 60 degrees
 
   // subsystems
   private DriveTrain m_drivetrain;
@@ -60,7 +65,9 @@ public class AprilAlignToTransformCommand extends Command {
   public AprilAlignToTransformCommand(
       Supplier<AprilTag> aprilTagSupplier,
       DriveTrain drivetrainSubsystem,
-      Transform2d goalTransformRelativeToAprilTag) { // GoalTransformTo tag is where we want to stop. Should be a negative number. 
+      Transform2d
+          goalTransformRelativeToAprilTag) { // GoalTransformTo tag is where we want to stop. Should
+                                             // be a negative number.
     this.m_drivetrain = drivetrainSubsystem;
     this.m_aprilTagProvider = aprilTagSupplier;
     this.m_tagToGoal = goalTransformRelativeToAprilTag;
@@ -87,8 +94,9 @@ public class AprilAlignToTransformCommand extends Command {
     // Grab the current states: april tag in view and the current robot pose
     Pose2d robotPose = m_drivetrain.getPose2d();
     AprilTag aprilTag = m_aprilTagProvider.get();
-    if (aprilTag.ID <= 0) { // is valid if > 0: we update our current estimate of where the april tag is
-                            // relative to the robot
+    if (aprilTag.ID
+        <= 0) { // is valid if > 0: we update our current estimate of where the april tag is
+      // relative to the robot
       m_drivetrain.stopModules();
       return;
     }
@@ -125,7 +133,6 @@ public class AprilAlignToTransformCommand extends Command {
 
     m_drivetrain.driveChassisSpeeds(
         ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, robotPose.getRotation()));
-
   }
 
   @Override
@@ -137,5 +144,4 @@ public class AprilAlignToTransformCommand extends Command {
   public boolean isFinished() {
     return m_rotController.atGoal() && m_xController.atGoal() && m_yController.atGoal();
   }
-
 }
