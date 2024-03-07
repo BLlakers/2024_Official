@@ -47,11 +47,11 @@ public class Intake extends SubsystemBase {
   // public int IntakePos = 1;
   public static final double GEAR_RATIO = 30.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
 
-  public static final double PosDownAngle = 140; // Down
-  public static final double PosUpAngle = 5; // starting
-  public static final double PosAmpAngle = 30; // This needs to be measured TODO
-  public static final double PositionDown = 60;
-  public static final double PositionUp = 20;
+  public static final Rotation2d PosDownAngle = Rotation2d.fromDegrees(140); // Down
+  public static final Rotation2d PosUpAngle = Rotation2d.fromDegrees(5); // starting
+  public static final Rotation2d PosAmpAngle = Rotation2d.fromDegrees(30); // This needs to be measured TODO
+  public static final Rotation2d PositionDown = Rotation2d.fromDegrees(60);
+  public static final Rotation2d PositionUp = Rotation2d.fromDegrees(20);
 
   private static final double s_IntakeAngleSpeedUp = -0.25;
   private static final double s_IntakeAngleSpeedDown = 0.25;
@@ -76,11 +76,11 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     super.periodic();
 
-    if (GetIntakeMotorAngle().getDegrees() <= Intake.PosUpAngle) {
+    if (GetIntakeMotorAngle().getDegrees() <= Intake.PosUpAngle.getDegrees()) {
       m_CurrentState = State.PositionUp;
-    } else if (GetIntakeMotorAngle().getDegrees() >= Intake.PosDownAngle) {
+    } else if (GetIntakeMotorAngle().getDegrees() >= Intake.PosDownAngle.getDegrees()) {
       m_CurrentState = State.PositionDown;
-    } else if (Math.abs(GetIntakeMotorAngle().getDegrees() - Intake.PosAmpAngle) <= 1)
+    } else if (Math.abs(GetIntakeMotorAngle().getDegrees() - Intake.PosAmpAngle.getDegrees()) <= 1)
       m_CurrentState = State.PositionAmp;
     else m_CurrentState = State.PositionOther;
   }
@@ -103,6 +103,11 @@ public class Intake extends SubsystemBase {
 
   public boolean NoteIsLoaded() {
     return m_IntakeWheels.NoteIsLoaded();
+  }
+
+  public void MoveIntake(double speed)
+  {
+    intakeAngleMtr.set(speed);
   }
 
   public Command autoIntakeUp() {

@@ -83,7 +83,7 @@ public class AutoIntake extends Command {
      */
     if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeDown) {
       // if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle) {
-      if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle - 40) {
+      if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle.getDegrees() - 40) {
         m_Intake.LowerIntake();
       } else {
         m_Intake.StopIntake();
@@ -95,7 +95,7 @@ public class AutoIntake extends Command {
         m_CurrentIntakeDrivingState = DrivingState.DriveIntakeUp;
       }
     } else if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeUp) {
-      if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle + 40) {
+      if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosUpAngle.getDegrees() + 40) {
         System.out.println(6);
         m_Intake.RaiseIntake();
 
