@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain;
 
@@ -22,9 +23,9 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
     private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
 
-    private static final double MIN_RADIUS = 1.25;    // meters
-    private static final double OPTIMAL_RADIUS = 1.5; // meters
-    private static final double MAX_RADIUS = 1.75;    // meters
+    private static final double MIN_RADIUS = 2.1;    // meters
+    private static final double OPTIMAL_RADIUS = 2.25; // meters
+    private static final double MAX_RADIUS = 2.5;    // meters
 
     private final DriveTrain m_drivetrain;
     private final Supplier<AprilTag> m_aprilTagProvider;
@@ -73,7 +74,7 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     // Transform the tag's pose to set our goal
     Transform2d botToGoalPose = new Transform2d(
       botToTargetTranslation.times(
-        1 - (OPTIMAL_RADIUS / botToTargetTranslation.getNorm())
+        (OPTIMAL_RADIUS / botToTargetTranslation.getNorm()) - 1
       ),
       targetDirection
     );
@@ -84,6 +85,10 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
       xController.setGoal(goalPose.getX());
       yController.setGoal(goalPose.getY());
       omegaController.setGoal(goalPose.getRotation().getRadians());
+
+      SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Goal/X", goalPose.getX());
+      SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Goal/Y", goalPose.getY());
+      SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Goal/Rot", goalPose.getRotation().getDegrees());
     }
     
     double xSpeed = xController.calculate(robotPose.getX());
@@ -101,6 +106,10 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     if (omegaController.atGoal()) {
       omegaSpeed = 0;
     }
+
+    SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Command/VelX", xSpeed);
+    SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Command/VelY", ySpeed);
+    SmartDashboard.putNumber("DriveTrain/AprilAlignCommand/Command/VelRot", omegaSpeed);
 
     m_drivetrain.driveChassisSpeeds(
        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation())
