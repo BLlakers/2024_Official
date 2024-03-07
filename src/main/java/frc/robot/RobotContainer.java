@@ -35,9 +35,9 @@ public class RobotContainer {
    * Creates buttons and controller for: - the driver controller (port 0) - the manipulator
    * controller (port 1) - the debug controller (port 2)
    */
+
   CommandXboxController driverController =
       new CommandXboxController(Constants.Controller.DriverControllerChannel);
-
   CommandXboxController manipController =
       new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController =
@@ -59,15 +59,14 @@ public class RobotContainer {
               Commands.waitSeconds(0.5) // shooter speed up
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
-          .withName("Shoot Command");
+          .withName("Auto Shoot Command");
 
-  final Command AutoIntakeNoteCommand = new AutoIntake(m_Intake, m_Intake.GetIntakeWheels());
-  final Command AutoIntakeNoteCommandJared =
+  final Command AutoIntakeNoteCommand =
       m_Intake
           .autoIntakeDown()
           .alongWith(m_Intake.GetIntakeWheels().IntakeNoteCommand())
-          .andThen(m_Intake::autoIntakeUp)
-          .finallyDo(m_Intake::StopIntakeCommand);
+          .andThen(m_Intake.autoIntakeUp())
+          .finallyDo(m_Intake.StopIntakeCommand()::schedule);
   final Command AutoEjectNoteCommand =
       m_Intake
           .autoIntakeDown()
@@ -184,7 +183,7 @@ public class RobotContainer {
     manipController
         .a() // Shoot the note
         .whileTrue(ShootNoteCommand.withTimeout(1.5));
-    manipController.b().whileTrue(AutoIntakeNoteCommandJared);
+    manipController.b().whileTrue(AutoIntakeNoteCommand);
     manipController
         .x() // eject the intake command
         .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommand());
