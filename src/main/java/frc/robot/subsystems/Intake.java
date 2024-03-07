@@ -53,6 +53,9 @@ public class Intake extends SubsystemBase {
   public static final double PositionDown = 60;
   public static final double PositionUp = 20;
 
+  private static final double s_IntakeAngleSpeedUp = -0.25;
+  private static final double s_IntakeAngleSpeedDown = 0.25; 
+
   /**
    * A Rev Color Sensor V3 object is constructed with an I2C port as a parameter. The device will be
    * automatically initialized with default parameters.
@@ -95,7 +98,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void RaiseIntake() {
-    intakeAngleMtr.set(-.35);
+    intakeAngleMtr.set(s_IntakeAngleSpeedUp);
   }
 
   public boolean NoteIsLoaded() {
@@ -103,10 +106,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Command autoIntakeUp() {
-    return this.run(
-            () -> {
-              intakeAngleMtr.set(-0.25);
-            })
+    return this.run(this::RaiseIntake)
         .onlyWhile(() -> GetIntakeMotorAngle().getDegrees() > Intake.s_AngleUpStopDegrees)
         .finallyDo(this::StopIntake);
   }
@@ -130,10 +130,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Command autoIntakeDown() {
-    return this.run(
-            () -> {
-              intakeAngleMtr.set(0.25);
-            })
+    return this.run(this::LowerIntake)
         .onlyWhile(() -> GetIntakeMotorAngle().getDegrees() < Intake.s_AngleDownStopDegrees)
         .finallyDo(this::StopIntake);
   }
@@ -143,7 +140,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void LowerIntake() {
-    intakeAngleMtr.set(0.35);
+    intakeAngleMtr.set(s_IntakeAngleSpeedDown);
   }
 
   public Command StopIntakeCommand() {
