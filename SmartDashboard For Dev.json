@@ -53,19 +53,6 @@
               "imageHeight": 0
             }
           },
-          "5,0": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Network Table Tree",
-              "_source0": "network_table:///SmartDashboard/AprilTag",
-              "_title": "AprilTag",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "5,2": {
             "size": [
               2,
@@ -90,6 +77,19 @@
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/Auto Chooser",
               "_title": "SmartDashboard/Auto Chooser",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Limelight/AprilTag",
+              "_title": "SmartDashboard/Limelight/AprilTag",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -585,6 +585,45 @@
                 }
               ]
             }
+          },
+          "13,0": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Intake/Angle/AutoIntakePIDCommand Amp",
+              "_title": "/SmartDashboard/Intake/Angle/AutoIntakePIDCommand Amp",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,1": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Intake/Angle/AutoIntakePIDCommand Down",
+              "_title": "/SmartDashboard/Intake/Angle/AutoIntakePIDCommand Down",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,2": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Intake/Angle/AutoIntakePIDCommand Up",
+              "_title": "/SmartDashboard/Intake/Angle/AutoIntakePIDCommand Up",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -719,12 +758,104 @@
           }
         }
       }
+    },
+    {
+      "title": "Tab 7",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "6,0": {
+            "size": [
+              5,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/AprilAlignCommand",
+              "_title": "SmartDashboard/DriveTrain/AprilAlignCommand",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,0": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/AprilAlignCommand/Command",
+              "_title": "/SmartDashboard/DriveTrain/AprilAlignCommand/Command",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,2": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/AprilAlignCommand/Goal",
+              "_title": "/SmartDashboard/DriveTrain/AprilAlignCommand/Goal",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,3": {
+            "size": [
+              5,
+              3
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/Odometry/Pose",
+              "_title": "SmartDashboard/DriveTrain/Odometry/Pose",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,2": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/AprilTag/pose",
+              "_title": "SmartDashboard/AprilTag/pose",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,5": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/Limelight/Reset Pose by TagID",
+              "_title": "SmartDashboard/DriveTrain/Limelight/Reset Pose by TagID",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {
     "x": 0.0,
-    "y": 37.0,
-    "width": 1512.0,
-    "height": 945.0
+    "y": 0.0,
+    "width": 1546.4000244140625,
+    "height": 804.7999877929688
   }
 }

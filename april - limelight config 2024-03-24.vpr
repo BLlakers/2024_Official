@@ -65,9 +65,9 @@ red_balance:1520
 roi_x:0
 roi_y:0.000000
 rsf:0
-rspitch:0
+rspitch:-5.3
 rsroll:90
-rss:0.61
+rss:0.76
 rsu:0
 rsyaw:-90
 sat_max:216

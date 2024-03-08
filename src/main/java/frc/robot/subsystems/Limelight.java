@@ -9,9 +9,12 @@ import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
@@ -80,9 +83,9 @@ public class Limelight extends SubsystemBase {
 
     Rotation3d poseOrientation =
         new Rotation3d(
-            poseArray.value[3], // roll = rotx
-            poseArray.value[4], // pitch = roty
-            poseArray.value[5] // yaw = rotz
+            Units.degreesToRadians(poseArray.value[3]), // roll = rotx
+            Units.degreesToRadians(poseArray.value[4]), // pitch = roty
+            Units.degreesToRadians(poseArray.value[5]) // yaw = rotz
             );
 
     Pose3d aprilTagPose =
@@ -96,9 +99,12 @@ public class Limelight extends SubsystemBase {
     super.initSendable(builder);
 
     builder.addDoubleProperty("AprilTag/tagID", () -> m_currentAprilTag.ID, null);
-    builder.addDoubleProperty("AprilTag/pose/X", m_currentAprilTag.pose::getX, null);
-    builder.addDoubleProperty("AprilTag/pose/Y", m_currentAprilTag.pose::getY, null);
-    builder.addDoubleProperty("AprilTag/pose/Z", m_currentAprilTag.pose::getZ, null);
+    builder.addDoubleProperty("AprilTag/pose/X", () -> m_currentAprilTag.pose.getX(), null);
+    builder.addDoubleProperty("AprilTag/pose/Y", () -> m_currentAprilTag.pose.getY(), null);
+    builder.addDoubleProperty("AprilTag/pose/Z", () -> m_currentAprilTag.pose.getZ(), null);
+    builder.addDoubleProperty("AprilTag/pose/RotX", () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getX()), null);
+    builder.addDoubleProperty("AprilTag/pose/RotY", () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getY()), null);
+    builder.addDoubleProperty("AprilTag/pose/RotZ", () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getZ()), null);
   }
 
   public Command resetBotPoseRelativeToField(DriveTrain drivetrain) {
@@ -113,7 +119,13 @@ public class Limelight extends SubsystemBase {
               AprilTag tag = m_currentAprilTag;
 
               // Perform the calculations to determine the bot's position rel. to tag
-              Transform2d Tag2Bot = tag.pose.toPose2d().minus(new Pose2d()).inverse();
+              Pose3d Bot2Tag = tag.pose;
+              Translation2d Bot2Tag_Translation = Bot2Tag.toPose2d().getTranslation();
+              Transform2d Tag2Bot = new Transform2d(
+                Bot2Tag_Translation.rotateBy(Rotation2d.fromDegrees(180)),
+                Rotation2d.fromRadians(Bot2Tag.getRotation().getY()).times(-1)
+              );
+              
 
               // Depending on which team we are in, reset the pose of the robot relative to speaker
               // tag
@@ -126,6 +138,6 @@ public class Limelight extends SubsystemBase {
               }
 
               drivetrain.resetPose(Origin2Bot);
-            });
+            }).ignoringDisable(true);
   }
 }

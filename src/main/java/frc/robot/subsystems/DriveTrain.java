@@ -144,6 +144,8 @@ public class DriveTrain extends SubsystemBase {
         new SwerveDriveOdometry(
             this.m_kinematics, navx.getRotation2d(), getSwerveModulePositions());
 
+    navx.reset();
+
     addChild(m_frontLeft.getName(), m_frontLeft);
     addChild(m_frontRight.getName(), m_frontRight);
     addChild(m_backLeft.getName(), m_backLeft);

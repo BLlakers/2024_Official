@@ -11,7 +11,6 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -239,6 +238,7 @@ public class RobotContainer {
     SmartDashboard.putData(m_Limelight);
 
     SmartDashboard.putData("DriveTrain/AprilAlignCommand", AprilAlignRadialCommand);
+    SmartDashboard.putData(m_DriveTrain.getName() + "/Limelight/Reset Pose by TagID", m_Limelight.resetBotPoseRelativeToField(m_DriveTrain));
   }
 
   public Command getAutonomousCommand() {
@@ -248,7 +248,7 @@ public class RobotContainer {
     Command autoCommand = autoChooser.getSelected();
 
     return autoCommand.beforeStarting(
-        () -> m_DriveTrain.resetPose(new Pose2d(1.27, 5.55, new Rotation2d())));
+        m_Limelight.resetBotPoseRelativeToField(m_DriveTrain));
 
     // return autoChooser.getSelected();
 

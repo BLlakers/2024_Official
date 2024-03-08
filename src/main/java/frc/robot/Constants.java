@@ -8,10 +8,12 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Other.RobotVersion;
 import frc.robot.subsystems.DriveTrain;
 
@@ -80,7 +82,11 @@ public final class Constants {
     public static final int RedStageLeft = 11;
     public static final int BlueStageRight = 16;
 
-    public static final Pose2d BlueSpeakerCenterPose = new Pose2d(); // TODO
+    public static final Pose2d BlueSpeakerCenterPose = new Pose2d(
+      0, 
+      5.46,
+      Rotation2d.fromDegrees(0)
+    ); // TODO
     public static final Pose2d RedSpeakerCenterPose = new Pose2d(); // TODO
   }
 

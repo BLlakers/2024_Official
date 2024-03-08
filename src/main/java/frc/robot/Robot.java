@@ -19,7 +19,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    m_robotContainer.m_DriveTrain.ZeroGyro().schedule();
     var cam = CameraServer.startAutomaticCapture();
     cam.setResolution(320, 160);
     cam.setFPS(30);
