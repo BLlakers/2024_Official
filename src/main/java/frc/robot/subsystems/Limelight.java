@@ -102,9 +102,18 @@ public class Limelight extends SubsystemBase {
     builder.addDoubleProperty("AprilTag/pose/X", () -> m_currentAprilTag.pose.getX(), null);
     builder.addDoubleProperty("AprilTag/pose/Y", () -> m_currentAprilTag.pose.getY(), null);
     builder.addDoubleProperty("AprilTag/pose/Z", () -> m_currentAprilTag.pose.getZ(), null);
-    builder.addDoubleProperty("AprilTag/pose/RotX", () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getX()), null);
-    builder.addDoubleProperty("AprilTag/pose/RotY", () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getY()), null);
-    builder.addDoubleProperty("AprilTag/pose/RotZ", () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getZ()), null);
+    builder.addDoubleProperty(
+        "AprilTag/pose/RotX",
+        () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getX()),
+        null);
+    builder.addDoubleProperty(
+        "AprilTag/pose/RotY",
+        () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getY()),
+        null);
+    builder.addDoubleProperty(
+        "AprilTag/pose/RotZ",
+        () -> Units.radiansToDegrees(m_currentAprilTag.pose.getRotation().getZ()),
+        null);
   }
 
   public Command resetBotPoseRelativeToField(DriveTrain drivetrain) {
@@ -121,11 +130,10 @@ public class Limelight extends SubsystemBase {
               // Perform the calculations to determine the bot's position rel. to tag
               Pose3d Bot2Tag = tag.pose;
               Translation2d Bot2Tag_Translation = Bot2Tag.toPose2d().getTranslation();
-              Transform2d Tag2Bot = new Transform2d(
-                Bot2Tag_Translation.rotateBy(Rotation2d.fromDegrees(180)),
-                Rotation2d.fromRadians(Bot2Tag.getRotation().getY()).times(-1)
-              );
-              
+              Transform2d Tag2Bot =
+                  new Transform2d(
+                      Bot2Tag_Translation.rotateBy(Rotation2d.fromDegrees(180)),
+                      Rotation2d.fromRadians(Bot2Tag.getRotation().getY()).times(-1));
 
               // Depending on which team we are in, reset the pose of the robot relative to speaker
               // tag
@@ -138,6 +146,7 @@ public class Limelight extends SubsystemBase {
               }
 
               drivetrain.resetPose(Origin2Bot);
-            }).ignoringDisable(true);
+            })
+        .ignoringDisable(true);
   }
 }

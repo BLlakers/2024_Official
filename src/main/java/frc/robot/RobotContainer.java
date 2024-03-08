@@ -238,7 +238,9 @@ public class RobotContainer {
     SmartDashboard.putData(m_Limelight);
 
     SmartDashboard.putData("DriveTrain/AprilAlignCommand", AprilAlignRadialCommand);
-    SmartDashboard.putData(m_DriveTrain.getName() + "/Limelight/Reset Pose by TagID", m_Limelight.resetBotPoseRelativeToField(m_DriveTrain));
+    SmartDashboard.putData(
+        m_DriveTrain.getName() + "/Limelight/Reset Pose by TagID",
+        m_Limelight.resetBotPoseRelativeToField(m_DriveTrain));
   }
 
   public Command getAutonomousCommand() {
@@ -247,8 +249,7 @@ public class RobotContainer {
 
     Command autoCommand = autoChooser.getSelected();
 
-    return autoCommand.beforeStarting(
-        m_Limelight.resetBotPoseRelativeToField(m_DriveTrain));
+    return autoCommand.beforeStarting(m_Limelight.resetBotPoseRelativeToField(m_DriveTrain));
 
     // return autoChooser.getSelected();
 
