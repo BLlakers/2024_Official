@@ -79,20 +79,21 @@ public class Shooter extends SubsystemBase {
     // });
   }
 
-    public void Shoot() {
-        SetShootingSpeed(s_LeftMotorShooterSpeed, s_RightMotorShooterSpeed);
-    }
-    public void Amp(){
-        SetShootingSpeed(ShootingSpeed,-ShootingSpeed);
-    }
+  public void Shoot() {
+    SetShootingSpeed(s_LeftMotorShooterSpeed, s_RightMotorShooterSpeed);
+  }
 
-    public Command RunShooter() {
-        return this.runEnd(this::Shoot, this::StopShooter);
-    }
-    
-    public Command RunAmp(){
-        return this.runEnd(this::Amp, this::StopShooter);
-    }
+  public void Amp() {
+    SetShootingSpeed(ShootingSpeed, -ShootingSpeed);
+  }
+
+  public Command RunShooter() {
+    return this.runEnd(this::Shoot, this::StopShooter);
+  }
+
+  public Command RunAmp() {
+    return this.runEnd(this::Amp, this::StopShooter);
+  }
 
   public Command StopShooterCommand() {
     return this.runOnce(this::StopShooter);
