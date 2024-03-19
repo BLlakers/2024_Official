@@ -42,8 +42,10 @@ public class RobotContainer {
       new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController =
       new CommandXboxController(Constants.Controller.DebugControllerChannel);
-
-  // commands
+    final Command DriveForward = new SwerveDriveCommand(() -> 1,() -> 0, () -> 0, () -> .3, m_DriveTrain);
+    final Command DriveSide = new SwerveDriveCommand(() -> 0,() -> 1, () -> 0, () -> .3, m_DriveTrain);
+    final Command Rotate = new SwerveDriveCommand(() -> 0,() -> 0, () -> .3, () -> 0, m_DriveTrain);
+    // commands
   final Command ShootNoteCommandNoWait =
       m_Shooter
           .RunShooter()
@@ -54,18 +56,14 @@ public class RobotContainer {
 
   final Command ShootNoteCommand =
       m_Shooter
-          .RunShooter()
-          .alongWith(
-              Commands.waitSeconds(0.5) // shooter speed up. Will be done in RPM by District Champs
-                  .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
+          .RunShooter().
+          andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
           .withName("Shoot Command");
 
   final Command AutoShootNote =
       m_Shooter
           .RunShooter()
-          .alongWith(
-              Commands.waitSeconds(0.5) // shooter speed up
-                  .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
+        .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoOnlyShootNote =
@@ -77,8 +75,7 @@ public class RobotContainer {
 
       // shooter speed up
       m_Intake
-          .GetIntakeWheels()
-          .EjectNoteCommand()
+          .GetIntakeWheels().EjectNoteCommand()
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoIntakeNoteCommand =
@@ -244,7 +241,7 @@ public class RobotContainer {
         .whileTrue(m_Hanger.runEnd(m_Hanger::RightHangUp, m_Hanger::RightHangStop));
 
     debugController.povUp().whileTrue(m_Shooter.ManualAngleUp());
-
+    debugController.x().whileTrue(DriveForward);
     debugController.povDown().whileTrue(m_Shooter.ManualAngleDown());
   }
 
@@ -254,7 +251,7 @@ public class RobotContainer {
     // Add subsystems
     SmartDashboard.putData(m_DriveTrain);
     SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
-
+    
     SmartDashboard.putData(m_Shooter);
     SmartDashboard.putData(m_Hanger);
     SmartDashboard.putData(m_Intake);
