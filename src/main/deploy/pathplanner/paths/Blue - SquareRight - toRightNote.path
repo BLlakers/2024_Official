@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1149354110405783,
-        "y": 4.6960454548583845
+        "x": 0.7615130614871499,
+        "y": 4.46972509329181
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.536498368342772,
-        "y": 4.344687771030855
+        "x": 2.399401768259221,
+        "y": 4.124269235018612
       },
       "isLocked": false,
-      "linkedName": "Blue - RightStartingPose"
+      "linkedName": "Blue - RightSquareStartingPose"
     },
     {
       "anchor": {
@@ -20,22 +20,22 @@
         "y": 4.286166175756032
       },
       "prevControl": {
-        "x": 1.8307130348640128,
-        "y": 4.685898322980669
+        "x": 2.391697012659691,
+        "y": 4.294169840896403
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue - RightNotePickup"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 180.0,
-    "maxAngularAcceleration": 90.0
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
@@ -45,8 +45,8 @@
   "reversed": false,
   "folder": "Right Starting Position Blue",
   "previewStartingState": {
-    "rotation": -35.0,
+    "rotation": -60.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

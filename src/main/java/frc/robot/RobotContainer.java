@@ -44,11 +44,18 @@ public class RobotContainer {
       new CommandXboxController(Constants.Controller.DebugControllerChannel);
 
   // commands
+  final Command ShootNoteCommandNoWait =
+      m_Shooter
+          .RunShooter()
+               // shooter speed up. Will be done in RPM by District Champs
+                  .alongWith(m_Intake.GetIntakeWheels().EjectNoteCommand()).withTimeout(0.5)
+          .withName("Shoot Command No Wait");
+
   final Command ShootNoteCommand =
       m_Shooter
           .RunShooter()
           .alongWith(
-              Commands.waitSeconds(0.5) // shooter speed up
+              Commands.waitSeconds(0.5) // shooter speed up. Will be done in RPM by District Champs
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withName("Shoot Command");
 
@@ -60,7 +67,17 @@ public class RobotContainer {
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
+final Command AutoOnlyShootNote =
+      m_Shooter
+          .RunShooter()
+          .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
+          .withName("Auto Shoot Command");
+final Command AutoIntakeOut =
 
+         // shooter speed up
+                  m_Intake.GetIntakeWheels().EjectNoteCommand()
+          .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
+          .withName("Auto Shoot Command");
   final Command AutoIntakeNoteCommand =
       m_Intake
           .autoIntakeDown()
@@ -89,6 +106,9 @@ public class RobotContainer {
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
     NamedCommands.registerCommand("Shoot", AutoShootNote);
+    NamedCommands.registerCommand("ShootOnly", AutoOnlyShootNote);
+    NamedCommands.registerCommand("IntakeOut", AutoIntakeOut);
+    NamedCommands.registerCommand("ShootNoDelay", ShootNoteCommandNoWait);
     NamedCommands.registerCommand(
         "AutoLowerIntake",
         new AutoIntake(
@@ -99,6 +119,10 @@ public class RobotContainer {
             m_Intake, m_Intake.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeUp));
     NamedCommands.registerCommand("Intake", new AutoIntake(m_Intake, m_Intake.GetIntakeWheels()));
     autoChooser = AutoBuilder.buildAutoChooser();
+
+
+
+
 
     // Another option that allows you to specify the default auto by its name:
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");

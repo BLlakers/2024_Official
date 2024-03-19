@@ -100,7 +100,7 @@ public class Limelight extends SubsystemBase {
     builder.addDoubleProperty("AprilTag/pose/Y", m_currentAprilTag.pose::getY, null);
     builder.addDoubleProperty("AprilTag/pose/Z", m_currentAprilTag.pose::getZ, null);
   }
-
+/*
   public Command resetBotPoseRelativeToField(DriveTrain drivetrain) {
     return this.run(
             () -> {
@@ -128,4 +128,5 @@ public class Limelight extends SubsystemBase {
               drivetrain.resetPose(Origin2Bot);
             });
   }
+  */
 }

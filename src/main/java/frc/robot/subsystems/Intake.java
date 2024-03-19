@@ -39,8 +39,8 @@ public class Intake extends SubsystemBase {
 
   private IntakeWheels m_IntakeWheels = new IntakeWheels();
 
-  private static final double s_AngleDownStopDegrees = 90;
-  private static final double s_AngleUpStopDegrees = 30;
+  private static final double s_AngleDownStopDegrees = 95;
+  private static final double s_AngleUpStopDegrees = 45;
 
   // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
   public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();

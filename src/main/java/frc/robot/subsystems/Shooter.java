@@ -44,7 +44,7 @@ public class Shooter extends SubsystemBase {
   // Constants
   public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(55);
   public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(30);
-  public static final double s_angleMotorSpeedPercentage = 0.1;
+  public static final double s_angleMotorSpeedPercentage = 0.3;
   public static final double s_positionConversionFactor =
       LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO; // meters
   public static final double s_velocityConversionFactor =
@@ -54,7 +54,8 @@ public class Shooter extends SubsystemBase {
 
   private static double s_LeftMotorShooterSpeed = 0.85;
   private static double s_RightMotorShooterSpeed = -0.85;
-
+private static double s_LeftMotorShooterVoltage = 12;
+  private static double s_RightMotorShooterVoltage = -12;
   public Shooter() {
     setName("Shooter");
 
@@ -81,10 +82,12 @@ public class Shooter extends SubsystemBase {
   public void Shoot() {
     SetShootingSpeed(s_LeftMotorShooterSpeed, s_RightMotorShooterSpeed);
   }
-
+ public void ShootV() {
+    SetShootingSpeedVoltage(s_LeftMotorShooterVoltage, s_RightMotorShooterVoltage);
+  }
   public Command RunShooter() {
 
-    return this.runEnd(this::Shoot, this::StopShooter);
+    return this.runEnd(this::ShootV, this::StopShooter);
   }
 
   public Command StopShooterCommand() {
@@ -132,6 +135,10 @@ public class Shooter extends SubsystemBase {
   public void SetShootingSpeed(double maxSpeedPercentLeft, double maxSpeedPercentRight) {
     m_shooterMtrLeft.set(maxSpeedPercentLeft);
     m_shooterMtrRight.set(maxSpeedPercentRight);
+  }
+  public void SetShootingSpeedVoltage(double maxSpeedVoltageLeft, double maxSpeedVoltageRight) {
+    m_shooterMtrLeft.setVoltage(maxSpeedVoltageLeft);
+    m_shooterMtrRight.setVoltage(maxSpeedVoltageRight);
   }
 
   /**
@@ -256,6 +263,15 @@ public class Shooter extends SubsystemBase {
         "Motor Right/Speed Percentage",
         () -> m_shooterMtrLeftEnc.getVelocity() / Constants.Conversion.NeoMaxSpeedRPM,
         null);
+          builder.addDoubleProperty(
+        "Motor Right/Voltage",
+        () -> m_shooterMtrRight.getVoltageCompensationNominalVoltage(),
+        null);
+
+          builder.addDoubleProperty(
+        "Motor Left/Voltage",
+        () -> m_shooterMtrLeft.getVoltageCompensationNominalVoltage(),
+        null);
     builder.addDoubleProperty("Angle Motor/Encoder/Position", m_angleMtrEnc::getPosition, null);
     builder.addDoubleProperty("Aiming Angle", () -> this.GetShooterAngle().getDegrees(), null);
 
@@ -267,7 +283,9 @@ public class Shooter extends SubsystemBase {
         "Motor Right/Speed Setpoint",
         () -> s_RightMotorShooterSpeed,
         (double s) -> s_RightMotorShooterSpeed = s);
-
+    builder.addDoubleProperty("MotorLeft/Voltage SetPoint", () -> s_LeftMotorShooterVoltage, (double s) -> s_LeftMotorShooterVoltage = s);
+    builder.addDoubleProperty("MotorRight/Voltage SetPoint", () -> s_RightMotorShooterVoltage, (double s) -> s_RightMotorShooterVoltage = s);
+    
     builder.addBooleanProperty("Top Limit Switch/Tripped", this::TopLimitSwitchTripped, null);
     builder.addBooleanProperty("Bottom Limit Switch/Tripped", this::BottomLimitSwitchTripped, null);
   }
