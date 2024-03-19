@@ -8,9 +8,11 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.Other.RobotVersion;
 import frc.robot.subsystems.DriveTrain;
@@ -75,6 +77,11 @@ public final class Constants {
   }
 
   public static class AprilTagID {
+    public static final Transform3d BotToLimeLightTransform = new Transform3d(
+        new Translation3d(-0.62, 0, 0),
+        new Rotation3d(new Quaternion(0.5, 0.5, 0.5, -0.5))
+    );
+    
     public static final int PracticeSpeakerCenter = 1;
     public static final int BlueSpeakerCenter = 7;
     public static final int RedSpeakerCenter = 4;

@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
   private DoubleArraySubscriber m_aprilTagPoseTopic;
@@ -61,7 +62,7 @@ public class Limelight extends SubsystemBase {
     TimestampedDoubleArray poseArray =
         m_aprilTagPoseTopic.getAtomic(); // (x, y, z, rotx, roty, rotz)
 
-    if (poseArray.value.length < 6) return new AprilTag(-1, new Pose3d());
+    if (poseArray.value.length < 6 || aprilTagId < 0) return new AprilTag(-1, new Pose3d());
 
     Translation3d poseTranslation =
         new Translation3d(
@@ -77,10 +78,12 @@ public class Limelight extends SubsystemBase {
             poseArray.value[5] // yaw = rotz
             );
 
-    Pose3d aprilTagPose =
-        new Pose3d(poseTranslation, poseOrientation); // creating pose3d based off of our
-    // translation3d and rot3d and tid
-    return new AprilTag(aprilTagId, aprilTagPose);
+    Pose3d aprilTagPose = new Pose3d(poseTranslation, poseOrientation); 
+        // creating pose3d based off of our translation3d and rot3d and tid
+
+    Pose3d aprilTagPoseInBotFrame = aprilTagPose.transformBy(Constants.AprilTagID.BotToLimeLightTransform);
+
+    return new AprilTag(aprilTagId, aprilTagPoseInBotFrame);
   }
 
   @Override
