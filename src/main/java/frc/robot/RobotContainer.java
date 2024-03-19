@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +41,12 @@ public class RobotContainer {
       new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController =
       new CommandXboxController(Constants.Controller.DebugControllerChannel);
-    final Command DriveForward = new SwerveDriveCommand(() -> 1,() -> 0, () -> 0, () -> .3, m_DriveTrain);
-    final Command DriveSide = new SwerveDriveCommand(() -> 0,() -> 1, () -> 0, () -> .3, m_DriveTrain);
-    final Command Rotate = new SwerveDriveCommand(() -> 0,() -> 0, () -> .3, () -> 0, m_DriveTrain);
-    // commands
+  final Command DriveForward =
+      new SwerveDriveCommand(() -> 1, () -> 0, () -> 0, () -> .3, m_DriveTrain);
+  final Command DriveSide =
+      new SwerveDriveCommand(() -> 0, () -> 1, () -> 0, () -> .3, m_DriveTrain);
+  final Command Rotate = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
+  // commands
   final Command ShootNoteCommandNoWait =
       m_Shooter
           .RunShooter()
@@ -56,14 +57,16 @@ public class RobotContainer {
 
   final Command ShootNoteCommand =
       m_Shooter
-          .RunShooter().
-          andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
+          .RunShooter()
+          .andThen(
+              m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
           .withName("Shoot Command");
 
   final Command AutoShootNote =
       m_Shooter
           .RunShooter()
-        .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
+          .andThen(
+              m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoOnlyShootNote =
@@ -75,7 +78,8 @@ public class RobotContainer {
 
       // shooter speed up
       m_Intake
-          .GetIntakeWheels().EjectNoteCommand()
+          .GetIntakeWheels()
+          .EjectNoteCommand()
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoIntakeNoteCommand =
@@ -251,7 +255,7 @@ public class RobotContainer {
     // Add subsystems
     SmartDashboard.putData(m_DriveTrain);
     SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
-    
+
     SmartDashboard.putData(m_Shooter);
     SmartDashboard.putData(m_Hanger);
     SmartDashboard.putData(m_Intake);
