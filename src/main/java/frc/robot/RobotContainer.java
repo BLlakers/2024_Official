@@ -47,8 +47,9 @@ public class RobotContainer {
   final Command ShootNoteCommandNoWait =
       m_Shooter
           .RunShooter()
-               // shooter speed up. Will be done in RPM by District Champs
-                  .alongWith(m_Intake.GetIntakeWheels().EjectNoteCommand()).withTimeout(0.5)
+          // shooter speed up. Will be done in RPM by District Champs
+          .alongWith(m_Intake.GetIntakeWheels().EjectNoteCommand())
+          .withTimeout(0.5)
           .withName("Shoot Command No Wait");
 
   final Command ShootNoteCommand =
@@ -67,15 +68,17 @@ public class RobotContainer {
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
-final Command AutoOnlyShootNote =
+  final Command AutoOnlyShootNote =
       m_Shooter
           .RunShooter()
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
-final Command AutoIntakeOut =
+  final Command AutoIntakeOut =
 
-         // shooter speed up
-                  m_Intake.GetIntakeWheels().EjectNoteCommand()
+      // shooter speed up
+      m_Intake
+          .GetIntakeWheels()
+          .EjectNoteCommand()
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoIntakeNoteCommand =
@@ -119,10 +122,6 @@ final Command AutoIntakeOut =
             m_Intake, m_Intake.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeUp));
     NamedCommands.registerCommand("Intake", new AutoIntake(m_Intake, m_Intake.GetIntakeWheels()));
     autoChooser = AutoBuilder.buildAutoChooser();
-
-
-
-
 
     // Another option that allows you to specify the default auto by its name:
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
