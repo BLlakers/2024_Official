@@ -59,17 +59,16 @@ public class RobotContainer {
   final Command ShootNoteCommand =
       m_Shooter
           .RunShooter()
-          .alongWith( 
-            Commands.waitUntil(m_Shooter::ShouldWeShoot)
-            .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand())
-           )
+          .alongWith(
+              Commands.waitUntil(m_Shooter::ShouldWeShoot)
+                  .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withName("Shoot Command");
 
   final Command AutoShootNote =
       m_Shooter
           .RunShooter()
           .alongWith(
-            m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
+              m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoOnlyShootNote =

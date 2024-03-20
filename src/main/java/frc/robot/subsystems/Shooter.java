@@ -98,9 +98,11 @@ public class Shooter extends SubsystemBase {
   public Command StopShooterCommand() {
     return this.runOnce(this::StopShooter);
   }
-  public boolean ShouldWeShoot(){
-   if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrRpm && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrRpm) {
-    return true; 
+
+  public boolean ShouldWeShoot() {
+    if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrRpm
+        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrRpm) {
+      return true;
     } else {
       return false;
     }
