@@ -78,10 +78,11 @@ public class Limelight extends SubsystemBase {
             poseArray.value[5] // yaw = rotz
             );
 
-    Pose3d aprilTagPose = new Pose3d(poseTranslation, poseOrientation); 
-        // creating pose3d based off of our translation3d and rot3d and tid
+    Pose3d aprilTagPose = new Pose3d(poseTranslation, poseOrientation);
+    // creating pose3d based off of our translation3d and rot3d and tid
 
-    Pose3d aprilTagPoseInBotFrame = aprilTagPose.transformBy(Constants.AprilTagID.BotToLimeLightTransform);
+    Pose3d aprilTagPoseInBotFrame =
+        aprilTagPose.transformBy(Constants.AprilTagID.BotToLimeLightTransform);
 
     return new AprilTag(aprilTagId, aprilTagPoseInBotFrame);
   }

@@ -79,10 +79,11 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     Translation2d Bot2Tag_Translation = Bot2Tag.getTranslation();
 
     // Measure the target measurement we want to read from Limelight
-    goalPose = new Pose2d(
+    goalPose =
+        new Pose2d(
             Bot2Tag_Translation.times((OPTIMAL_RADIUS / Bot2Tag_Translation.getNorm())),
             Rotation2d.fromDegrees(180));
-    
+
     if (null != goalPose) {
       // Drive
       xController.setGoal(goalPose.getX());

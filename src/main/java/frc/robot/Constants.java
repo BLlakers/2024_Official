@@ -77,11 +77,10 @@ public final class Constants {
   }
 
   public static class AprilTagID {
-    public static final Transform3d BotToLimeLightTransform = new Transform3d(
-        new Translation3d(-0.62, 0, 0),
-        new Rotation3d(new Quaternion(0.5, 0.5, 0.5, -0.5))
-    );
-    
+    public static final Transform3d BotToLimeLightTransform =
+        new Transform3d(
+            new Translation3d(-0.62, 0, 0), new Rotation3d(new Quaternion(0.5, 0.5, 0.5, -0.5)));
+
     public static final int PracticeSpeakerCenter = 1;
     public static final int BlueSpeakerCenter = 7;
     public static final int RedSpeakerCenter = 4;
