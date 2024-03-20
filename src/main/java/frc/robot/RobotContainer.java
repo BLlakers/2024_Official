@@ -51,7 +51,6 @@ public class RobotContainer {
   final Command ShootNoteCommandNoWait =
       m_Shooter
           .RunShooter()
-          // shooter speed up. Will be done in RPM by District Champs
           .alongWith(m_Intake.GetIntakeWheels().EjectNoteCommand())
           .withTimeout(0.5)
           .withName("Shoot Command No Wait");

@@ -56,8 +56,8 @@ public class Shooter extends SubsystemBase {
 
   private static double s_LeftMotorShooterSpeed = 0.85;
   private static double s_RightMotorShooterSpeed = -0.85;
-  private static double s_LeftMotorShooterVoltage = 12;
-  private static double s_RightMotorShooterVoltage = -12;
+  private static double s_LeftMotorShooterVoltage = 9;
+  private static double s_RightMotorShooterVoltage = -9;
 
   public Shooter() {
     setName("Shooter");
