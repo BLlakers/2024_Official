@@ -31,8 +31,8 @@ public class Shooter extends SubsystemBase {
   private DigitalInput m_limitSwitchBottom = null;
 
   // Constants to calculate the angle of the shooter
-  public static final double s_RightMtrRpm = 3500;
-  public static final double s_LeftMtrRpm = 3500;
+  public static final double s_RightMtrRpm = -4000;
+  public static final double s_LeftMtrRpm = 4000;
   private static final double LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET = Units.inchesToMeters(5.4375);
   private static final double LENGTH_OF_SHOOTER_LINK = Units.inchesToMeters(3.9453125);
   private static final double LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK =
@@ -98,10 +98,9 @@ public class Shooter extends SubsystemBase {
   public Command StopShooterCommand() {
     return this.runOnce(this::StopShooter);
   }
-
-  public boolean ShouldWeShoot() {
-    if (s_LeftMotorShooterSpeed >= s_LeftMtrRpm && s_RightMotorShooterSpeed >= s_RightMtrRpm) {
-      return true;
+  public boolean ShouldWeShoot(){
+   if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrRpm && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrRpm) {
+    return true; 
     } else {
       return false;
     }
@@ -266,7 +265,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-
+    builder.addBooleanProperty("Should We Shoot?", () -> ShouldWeShoot(), null);
     builder.addDoubleProperty("Motor Left/Speed", m_shooterMtrLeftEnc::getVelocity, null);
     builder.addDoubleProperty(
         "Motor Left/Speed Percentage",

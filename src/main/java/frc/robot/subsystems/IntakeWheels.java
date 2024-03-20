@@ -17,7 +17,7 @@ public class IntakeWheels extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensorV3 = new ColorSensorV3(i2cPort);
 
-  private static final double s_IntakeSpeed = 0.55;
+  private static final double s_IntakeSpeed = 0.75;
   private static final double s_EjectSpeed = -0.95;
 
   /**

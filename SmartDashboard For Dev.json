@@ -742,6 +742,21 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "8,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Shooter/Should We Shoot?",
+              "_title": "/SmartDashboard/Shooter/Should We Shoot?",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
