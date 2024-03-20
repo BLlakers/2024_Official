@@ -77,16 +77,12 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     // Find the tag we want to chase
     Pose2d Bot2Tag = aprilTag.pose.toPose2d();
     Translation2d Bot2Tag_Translation = Bot2Tag.getTranslation();
-    Rotation2d targetDirection = Bot2Tag_Translation.getAngle().plus(Rotation2d.fromDegrees(180));
 
-    // Transform the tag's pose to set our goal
-    Pose2d botToGoal =
-        new Pose2d(
-            Bot2Tag_Translation.times(1 - (OPTIMAL_RADIUS / Bot2Tag_Translation.getNorm())),
-            targetDirection);
-
-    goalPose = botToGoal.transformBy(robotPose.minus(new Pose2d()));
-
+    // Measure the target measurement we want to read from Limelight
+    goalPose = new Pose2d(
+            Bot2Tag_Translation.times((OPTIMAL_RADIUS / Bot2Tag_Translation.getNorm())),
+            Rotation2d.fromDegrees(180));
+    
     if (null != goalPose) {
       // Drive
       xController.setGoal(goalPose.getX());
@@ -102,17 +98,17 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
           goalPose.getRotation().getDegrees());
     }
 
-    double xSpeed = xController.calculate(robotPose.getX());
+    double xSpeed = xController.calculate(Bot2Tag.getX());
     if (xController.atGoal()) {
       xSpeed = 0;
     }
 
-    double ySpeed = yController.calculate(robotPose.getY());
+    double ySpeed = yController.calculate(Bot2Tag.getY());
     if (yController.atGoal()) {
       ySpeed = 0;
     }
 
-    double omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians());
+    double omegaSpeed = omegaController.calculate(Bot2Tag.getRotation().getRadians());
     if (omegaController.atGoal()) {
       omegaSpeed = 0;
     }
