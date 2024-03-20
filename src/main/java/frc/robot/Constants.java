@@ -6,9 +6,8 @@ import static edu.wpi.first.units.Units.Meters;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Quaternion;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -77,9 +76,9 @@ public final class Constants {
   }
 
   public static class AprilTagID {
-    public static final Transform3d BotToLimeLightTransform =
-        new Transform3d(
-            new Translation3d(-0.62, 0, 0), new Rotation3d(new Quaternion(0.5, 0.5, 0.5, -0.5)));
+    public static final Pose3d LimelightToBotPose =
+        new Pose3d(
+            new Translation3d(0, 0, -0.62), new Rotation3d(Math.PI/2, 0, -Math.PI/2).unaryMinus());
 
     public static final int PracticeSpeakerCenter = 1;
     public static final int BlueSpeakerCenter = 7;

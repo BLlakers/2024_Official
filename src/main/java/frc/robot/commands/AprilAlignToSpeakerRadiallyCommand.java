@@ -99,12 +99,12 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
           goalPose.getRotation().getDegrees());
     }
 
-    double xSpeed = xController.calculate(Bot2Tag.getX());
+    double xSpeed = -xController.calculate(Bot2Tag.getX());
     if (xController.atGoal()) {
       xSpeed = 0;
     }
 
-    double ySpeed = yController.calculate(Bot2Tag.getY());
+    double ySpeed = -yController.calculate(Bot2Tag.getY());
     if (yController.atGoal()) {
       ySpeed = 0;
     }

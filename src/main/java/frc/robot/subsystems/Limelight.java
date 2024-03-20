@@ -6,11 +6,13 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +23,6 @@ public class Limelight extends SubsystemBase {
   private IntegerPublisher m_priorityTagIdPub;
 
   private String m_limelightName;
-  private AprilTag m_currentAprilTag = new AprilTag(-1, new Pose3d());
 
   public Limelight() {
     this("limelight");
@@ -35,6 +36,17 @@ public class Limelight extends SubsystemBase {
             .getDoubleArrayTopic("targetpose_robotspace")
             .subscribe(new double[] {0, 0, 0, 0, 0, 0});
     m_priorityTagIdPub = table.getIntegerTopic("priorityid").publish();
+
+
+    NetworkTableInstance.getDefault().getTable(m_limelightName).putValue(
+      "targetpose_robotspace", 
+      NetworkTableValue.makeDoubleArray(new double[] {1., 2., 3., 0., 0., 0.})
+    ); 
+
+    NetworkTableInstance.getDefault().getTable(m_limelightName).putValue(
+      "tid", 
+      NetworkTableValue.makeInteger(1)
+    ); 
   }
 
   public void SetTagIDToTrack(int tagID) {
@@ -43,11 +55,11 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_currentAprilTag = getCurrentAprilTag();
-    SmartDashboard.putNumber("AprilTag/tagID", m_currentAprilTag.ID);
-    SmartDashboard.putNumber("AprilTag/pose/X", m_currentAprilTag.pose.getX());
-    SmartDashboard.putNumber("AprilTag/pose/Y", m_currentAprilTag.pose.getY());
-    SmartDashboard.putNumber("AprilTag/pose/Z", m_currentAprilTag.pose.getZ());
+    AprilTag currentTag = getCurrentAprilTag();
+    SmartDashboard.putNumber("AprilTag/tagID", currentTag.ID);
+    SmartDashboard.putNumber("AprilTag/pose/X", currentTag.pose.getX());
+    SmartDashboard.putNumber("AprilTag/pose/Y", currentTag.pose.getY());
+    SmartDashboard.putNumber("AprilTag/pose/Z", currentTag.pose.getZ());
   }
 
   /**
@@ -73,27 +85,40 @@ public class Limelight extends SubsystemBase {
 
     Rotation3d poseOrientation =
         new Rotation3d(
-            poseArray.value[3], // roll = rotx
-            poseArray.value[4], // pitch = roty
-            poseArray.value[5] // yaw = rotz
+            Units.degreesToRadians(poseArray.value[3]), // roll = rotx
+            Units.degreesToRadians(poseArray.value[4]), // pitch = roty
+            Units.degreesToRadians(poseArray.value[5]) // yaw = rotz
             );
 
     Pose3d aprilTagPose = new Pose3d(poseTranslation, poseOrientation);
     // creating pose3d based off of our translation3d and rot3d and tid
 
     Pose3d aprilTagPoseInBotFrame =
-        aprilTagPose.transformBy(Constants.AprilTagID.BotToLimeLightTransform);
+        aprilTagPose.relativeTo(Constants.AprilTagID.LimelightToBotPose);
 
-    return new AprilTag(aprilTagId, aprilTagPoseInBotFrame);
+    System.err.println("Before: " + aprilTagPose);
+    System.err.println("After: " + aprilTagPoseInBotFrame);
+
+    AprilTag tag = new AprilTag(aprilTagId, aprilTagPoseInBotFrame);
+    System.out.println(tag);
+
+    return tag;
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("AprilTag/tagID", () -> m_currentAprilTag.ID, null);
-    builder.addDoubleProperty("AprilTag/pose/X", m_currentAprilTag.pose::getX, null);
-    builder.addDoubleProperty("AprilTag/pose/Y", m_currentAprilTag.pose::getY, null);
-    builder.addDoubleProperty("AprilTag/pose/Z", m_currentAprilTag.pose::getZ, null);
+    builder.addDoubleProperty("BotToLimeLight/Transform3d/Translation/X", Constants.AprilTagID.LimelightToBotPose::getX, null);
+    builder.addDoubleProperty("BotToLimeLight/Transform3d/Translation/Y", Constants.AprilTagID.LimelightToBotPose::getY, null);
+    builder.addDoubleProperty("BotToLimeLight/Transform3d/Translation/Z", Constants.AprilTagID.LimelightToBotPose::getZ, null);
+    builder.addDoubleProperty("BotToLimeLight/Transform3d/Rotation/X", () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getX(), null);
+    builder.addDoubleProperty("BotToLimeLight/Transform3d/Rotation/Y", () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getY(), null);
+    builder.addDoubleProperty("BotToLimeLight/Transform3d/Rotation/Z", () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getZ(), null);
+
+    builder.addDoubleProperty("AprilTag/tagID", () -> getCurrentAprilTag().ID, null);
+    builder.addDoubleProperty("AprilTag/pose/X", () -> getCurrentAprilTag().pose.getX(), null);
+    builder.addDoubleProperty("AprilTag/pose/Y", () -> getCurrentAprilTag().pose.getY(), null);
+    builder.addDoubleProperty("AprilTag/pose/Z", () -> getCurrentAprilTag().pose.getZ(), null);
   }
 }
