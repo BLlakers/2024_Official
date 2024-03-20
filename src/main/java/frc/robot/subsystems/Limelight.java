@@ -37,16 +37,15 @@ public class Limelight extends SubsystemBase {
             .subscribe(new double[] {0, 0, 0, 0, 0, 0});
     m_priorityTagIdPub = table.getIntegerTopic("priorityid").publish();
 
+    NetworkTableInstance.getDefault()
+        .getTable(m_limelightName)
+        .putValue(
+            "targetpose_robotspace",
+            NetworkTableValue.makeDoubleArray(new double[] {1., 2., 3., 0., 0., 0.}));
 
-    NetworkTableInstance.getDefault().getTable(m_limelightName).putValue(
-      "targetpose_robotspace", 
-      NetworkTableValue.makeDoubleArray(new double[] {1., 2., 3., 0., 0., 0.})
-    ); 
-
-    NetworkTableInstance.getDefault().getTable(m_limelightName).putValue(
-      "tid", 
-      NetworkTableValue.makeInteger(1)
-    ); 
+    NetworkTableInstance.getDefault()
+        .getTable(m_limelightName)
+        .putValue("tid", NetworkTableValue.makeInteger(1));
   }
 
   public void SetTagIDToTrack(int tagID) {
@@ -109,12 +108,30 @@ public class Limelight extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("BotToLimeLight/Transform3d/Translation/X", Constants.AprilTagID.LimelightToBotPose::getX, null);
-    builder.addDoubleProperty("BotToLimeLight/Transform3d/Translation/Y", Constants.AprilTagID.LimelightToBotPose::getY, null);
-    builder.addDoubleProperty("BotToLimeLight/Transform3d/Translation/Z", Constants.AprilTagID.LimelightToBotPose::getZ, null);
-    builder.addDoubleProperty("BotToLimeLight/Transform3d/Rotation/X", () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getX(), null);
-    builder.addDoubleProperty("BotToLimeLight/Transform3d/Rotation/Y", () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getY(), null);
-    builder.addDoubleProperty("BotToLimeLight/Transform3d/Rotation/Z", () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getZ(), null);
+    builder.addDoubleProperty(
+        "BotToLimeLight/Transform3d/Translation/X",
+        Constants.AprilTagID.LimelightToBotPose::getX,
+        null);
+    builder.addDoubleProperty(
+        "BotToLimeLight/Transform3d/Translation/Y",
+        Constants.AprilTagID.LimelightToBotPose::getY,
+        null);
+    builder.addDoubleProperty(
+        "BotToLimeLight/Transform3d/Translation/Z",
+        Constants.AprilTagID.LimelightToBotPose::getZ,
+        null);
+    builder.addDoubleProperty(
+        "BotToLimeLight/Transform3d/Rotation/X",
+        () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getX(),
+        null);
+    builder.addDoubleProperty(
+        "BotToLimeLight/Transform3d/Rotation/Y",
+        () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getY(),
+        null);
+    builder.addDoubleProperty(
+        "BotToLimeLight/Transform3d/Rotation/Z",
+        () -> Constants.AprilTagID.LimelightToBotPose.getRotation().getZ(),
+        null);
 
     builder.addDoubleProperty("AprilTag/tagID", () -> getCurrentAprilTag().ID, null);
     builder.addDoubleProperty("AprilTag/pose/X", () -> getCurrentAprilTag().pose.getX(), null);
