@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Left - toLeftNote"
+                        "pathName": "Blue - Amp - AmpNote"
                       }
                     }
                   ]
@@ -52,38 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - Left - BackToLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Blue - Left - to2ndCenterNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Blue - 2ndCenterBackToLeft"
+            "pathName": "Blue - AmpNote - Amp"
           }
         },
         {

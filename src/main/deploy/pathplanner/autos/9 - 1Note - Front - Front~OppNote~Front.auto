@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Front - toLeftNote"
+                        "pathName": "Blue - Front - OppNote"
                       }
                     }
                   ]
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - LeftBackToFront"
+            "pathName": "Blue - OppNote - Front"
           }
         },
         {

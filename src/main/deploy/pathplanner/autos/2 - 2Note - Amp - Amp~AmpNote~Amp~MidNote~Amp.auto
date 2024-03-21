@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 1.11,
-      "y": 4.7
+      "y": 6.41
     },
-    "rotation": -35.0
+    "rotation": 35.0
   },
   "command": {
     "type": "sequential",
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Right - toRightNote"
+                        "pathName": "Blue - Amp - AmpNote"
                       }
                     }
                   ]
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - RightBackToRight"
+            "pathName": "Blue - AmpNote - Amp"
           }
         },
         {
@@ -72,9 +72,22 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Blue - Right - toLastCenterNote"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Blue - Amp - MidNote "
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -83,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - LastCenterBackToRight"
+            "pathName": "Blue - MidNote - Amp"
           }
         },
         {
@@ -95,6 +108,6 @@
       ]
     }
   },
-  "folder": "Opp Autos",
+  "folder": "Amp Autos",
   "choreoAuto": false
 }

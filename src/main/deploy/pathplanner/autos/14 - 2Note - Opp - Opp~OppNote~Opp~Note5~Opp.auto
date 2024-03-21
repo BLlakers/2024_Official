@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.27,
-      "y": 5.55
+      "x": 1.11,
+      "y": 4.7
     },
-    "rotation": 0.0
+    "rotation": -35.0
   },
   "command": {
     "type": "sequential",
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Front - toMidNote"
+                        "pathName": "Blue - Opp - OppNote"
                       }
                     }
                   ]
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - MidBackToFront"
+            "pathName": "Blue - OppNote - Opp"
           }
         },
         {
@@ -66,28 +66,15 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.25
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Blue - Front - toLeftNote"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Blue - Opp - Note5"
                 }
               }
             ]
@@ -96,7 +83,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - LeftBackToFront"
+            "pathName": "Blue - Note5 - Opp"
           }
         },
         {
@@ -108,6 +95,6 @@
       ]
     }
   },
-  "folder": "Front Autos ",
+  "folder": "Opp Autos",
   "choreoAuto": false
 }
