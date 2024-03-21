@@ -20,8 +20,8 @@ public class SwerveDriveCommand extends Command {
 
   private BooleanSupplier m_RunHalfSpeed;
 
-  private static final double kDriveMaxSpeed = 0.6 * DriveTrain.kMaxSpeed;
-  private static final double kTurnMaxSpeed = 0.6 * DriveTrain.kMaxTurnAngularSpeed;
+  private static final double kDriveMaxSpeed = 0.85 * DriveTrain.kMaxSpeed;
+  private static final double kTurnMaxSpeed = 0.5 * DriveTrain.kMaxTurnAngularSpeed;
 
   public SwerveDriveCommand(
       DoubleSupplier _leftY,

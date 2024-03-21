@@ -63,17 +63,25 @@ public class RobotContainer {
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withName("Shoot Command");
 
+            final Command AmpCommand =
+      m_Shooter
+          .ShootAmp()
+          .alongWith(
+              Commands.waitUntil(m_Shooter::ShouldWeShoot)
+                  .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
+          .withName("Shoot Command");
+
   final Command AutoShootNote =
       m_Shooter
           .RunShooter()
           .alongWith(
-              m_Intake.GetIntakeWheels().EjectNoteCommand().onlyIf(() -> m_Shooter.ShouldWeShoot()))
-          .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
+              Commands.waitUntil(m_Shooter::ShouldWeShoot)
+                  .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
+          .withTimeout(1.5) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoOnlyShootNote =
       m_Shooter
           .RunShooter()
-          .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoIntakeOut =
 
@@ -248,6 +256,8 @@ public class RobotContainer {
     debugController.povUp().whileTrue(m_Shooter.ManualAngleUp());
     debugController.x().whileTrue(DriveForward);
     debugController.povDown().whileTrue(m_Shooter.ManualAngleDown());
+    debugController.rightTrigger(.5).whileTrue(m_Intake.GetIntakeWheels().ReIntakeNoteCommand());
+    debugController.leftStick().whileTrue(m_Shooter.MoveServo());
   }
 
   private void configureShuffleboard() {
