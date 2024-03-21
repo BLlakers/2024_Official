@@ -45,19 +45,21 @@ public class IntakeWheels extends SubsystemBase {
 
   public Command IntakeNoteOverrunCommand() {
     return this.run(this::IntakeNote)
-      .until(this::NoteIsLoaded)
-      .andThen(Commands.waitSeconds(s_IntakeOverrunSeconds))
-      .finallyDo(this::Stop);
+        .until(this::NoteIsLoaded)
+        .andThen(Commands.waitSeconds(s_IntakeOverrunSeconds))
+        .finallyDo(this::Stop);
   }
 
-  public Command ReIntakeNoteCommand()
-  {
+  public Command ReIntakeNoteCommand() {
     return Commands.repeatingSequence(
-      this.run(() -> {intakeWheelMtrR.set(s_ReIntakeNoteEjectSpeed);}) // partial eject
-        .until(() -> m_colorSensorV3.getIR() < 250),
-      this.run(this::IntakeNote) // re-intake
-        .until(this::NoteIsLoaded)
-    ).finallyDo(this::Stop);
+            this.run(
+                    () -> {
+                      intakeWheelMtrR.set(s_ReIntakeNoteEjectSpeed);
+                    }) // partial eject
+                .until(() -> m_colorSensorV3.getIR() < 250),
+            this.run(this::IntakeNote) // re-intake
+                .until(this::NoteIsLoaded))
+        .finallyDo(this::Stop);
   }
 
   public void IntakeNote() {

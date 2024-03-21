@@ -8,7 +8,6 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Servo;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -27,7 +26,6 @@ public class Shooter extends SubsystemBase {
   private RelativeEncoder m_shooterMtrRightEnc = m_shooterMtrRight.getEncoder();
   private RelativeEncoder m_angleMtrEnc = m_shooterAngleMtr.getEncoder();
 
-  
   private DigitalInput m_limitSwitchTop = null;
   private DigitalInput m_limitSwitchBottom = null;
 
@@ -36,7 +34,7 @@ public class Shooter extends SubsystemBase {
   public static final double s_LeftMtrShooterRpm = 3500;
   public static final double s_RightMtrAmpRpm = -3300;
   public static final double s_LeftMtrAmpRpm = 3300;
-  
+
   private static final double LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET = Units.inchesToMeters(5.4375);
   private static final double LENGTH_OF_SHOOTER_LINK = Units.inchesToMeters(3.9453125);
   private static final double LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK =
@@ -60,7 +58,7 @@ public class Shooter extends SubsystemBase {
 
   private static double s_LeftMotorShooterSpeed = 0.85;
   private static double s_RightMotorShooterSpeed = -0.85;
-  private static double s_LeftMotorShooterVoltage =   11;
+  private static double s_LeftMotorShooterVoltage = 11;
   private static double s_RightMotorShooterVoltage = -11;
   private static double s_LeftMotorAmpVoltage = 2.2;
   private static double s_RightMotorAmpVoltage = -2.2;
@@ -95,14 +93,15 @@ public class Shooter extends SubsystemBase {
   public void ShootV() {
     SetShootingSpeedVoltage(s_LeftMotorShooterVoltage, s_RightMotorShooterVoltage);
   }
-    public void ShootA() {
+
+  public void ShootA() {
     SetShootingSpeedVoltage(s_LeftMotorAmpVoltage, s_RightMotorAmpVoltage);
   }
- public Command ShootAmp() {
+
+  public Command ShootAmp() {
 
     return this.runEnd(this::ShootA, this::StopShooter);
   }
-
 
   public Command RunShooter() {
 

@@ -63,7 +63,7 @@ public class RobotContainer {
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withName("Shoot Command");
 
-            final Command AmpCommand =
+  final Command AmpCommand =
       m_Shooter
           .ShootAmp()
           .alongWith(
@@ -79,10 +79,7 @@ public class RobotContainer {
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withTimeout(1.5) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
-  final Command AutoOnlyShootNote =
-      m_Shooter
-          .RunShooter()
-          .withName("Auto Shoot Command");
+  final Command AutoOnlyShootNote = m_Shooter.RunShooter().withName("Auto Shoot Command");
   final Command AutoIntakeOut =
 
       // shooter speed up
