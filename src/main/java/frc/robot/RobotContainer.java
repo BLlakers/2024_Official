@@ -233,7 +233,9 @@ public class RobotContainer {
         .y() // eject the intake command
         .whileTrue(m_Intake.GetIntakeWheels().EjectNoteCommand());
     manipController.rightTrigger(0.5).whileTrue(m_Shooter.RunShooter());
-    manipController.leftTrigger(0.5).whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommandrunRegardless());
+    manipController
+        .leftTrigger(0.5)
+        .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommandrunRegardless());
 
     // Debug controller
     // - Manual hanger commands

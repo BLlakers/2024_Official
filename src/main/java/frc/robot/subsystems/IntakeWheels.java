@@ -42,6 +42,7 @@ public class IntakeWheels extends SubsystemBase {
   public Command IntakeNoteCommand() {
     return this.runEnd(this::IntakeNote, this::Stop).until(this::NoteIsLoaded);
   }
+
   public Command IntakeNoteCommandrunRegardless() {
     return this.runEnd(this::IntakeNote, this::Stop);
   }
@@ -72,7 +73,6 @@ public class IntakeWheels extends SubsystemBase {
       intakeWheelMtrR.set(s_IntakeSpeed);
     }
   }
-
 
   public Command StopCommand() {
     return this.runOnce(this::Stop);
