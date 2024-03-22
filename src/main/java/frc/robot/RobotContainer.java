@@ -233,6 +233,7 @@ public class RobotContainer {
         .y() // eject the intake command
         .whileTrue(m_Intake.GetIntakeWheels().EjectNoteCommand());
     manipController.rightTrigger(0.5).whileTrue(m_Shooter.RunShooter());
+    manipController.leftTrigger(0.5).whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommandrunRegardless());
 
     // Debug controller
     // - Manual hanger commands
@@ -254,7 +255,6 @@ public class RobotContainer {
     debugController.x().whileTrue(DriveForward);
     debugController.povDown().whileTrue(m_Shooter.ManualAngleDown());
     debugController.rightTrigger(.5).whileTrue(m_Intake.GetIntakeWheels().ReIntakeNoteCommand());
-    debugController.leftStick().whileTrue(m_Shooter.MoveServo());
   }
 
   private void configureShuffleboard() {

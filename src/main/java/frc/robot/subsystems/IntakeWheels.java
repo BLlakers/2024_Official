@@ -32,7 +32,7 @@ public class IntakeWheels extends SubsystemBase {
   }
 
   public boolean NoteIsLoaded() {
-    return m_colorSensorV3.getIR() >= 150;
+    return m_colorSensorV3.getIR() >= 200;
   }
 
   public Command PowerOnIntakeWheelsCommand() {
@@ -41,6 +41,9 @@ public class IntakeWheels extends SubsystemBase {
 
   public Command IntakeNoteCommand() {
     return this.runEnd(this::IntakeNote, this::Stop).until(this::NoteIsLoaded);
+  }
+  public Command IntakeNoteCommandrunRegardless() {
+    return this.runEnd(this::IntakeNote, this::Stop);
   }
 
   public Command IntakeNoteOverrunCommand() {
@@ -69,6 +72,7 @@ public class IntakeWheels extends SubsystemBase {
       intakeWheelMtrR.set(s_IntakeSpeed);
     }
   }
+
 
   public Command StopCommand() {
     return this.runOnce(this::Stop);

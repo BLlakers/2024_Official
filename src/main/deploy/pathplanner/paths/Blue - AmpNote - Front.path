@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6841875081753006,
-        "y": 6.874261052373746
+        "x": 2.5553683061717036,
+        "y": 6.921104398556871
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.210137911990952,
-        "y": 6.25502241896616
+        "x": 2.081318709987355,
+        "y": 6.301865765149285
       },
       "isLocked": false,
       "linkedName": "Blue - LeftNotePickup"
@@ -30,12 +30,30 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootOnly"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 180.0,
-    "maxAngularAcceleration": 90.0
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
@@ -48,5 +66,5 @@
     "rotation": 45.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

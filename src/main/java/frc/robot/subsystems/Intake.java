@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
 
   private IntakeWheels m_IntakeWheels = new IntakeWheels();
 
-  private static final double s_AngleDownStopDegrees = 105;
+  private static final double s_AngleDownStopDegrees = 95;
   private static final double s_AngleUpStopDegrees = 45;
 
   // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
@@ -54,7 +54,7 @@ public class Intake extends SubsystemBase {
   public static final double PositionUp = 20;
 
   private static final double s_IntakeAngleSpeedUp = -0.25;
-  private static final double s_IntakeAngleSpeedDown = 0.25;
+  private static final double s_IntakeAngleSpeedDown = 0.35;
 
   /**
    * A Rev Color Sensor V3 object is constructed with an I2C port as a parameter. The device will be
