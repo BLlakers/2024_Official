@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5079619390008028,
-        "y": 5.525487974052871
+        "x": 1.1149354110405783,
+        "y": 6.405827590542485
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.178622470578276,
-        "y": 6.00967166635188
+        "x": 1.8410172395512872,
+        "y": 6.546306145521977
       },
       "isLocked": false,
-      "linkedName": "Blue - MidNotePickup"
+      "linkedName": "Blue - LeftStartingPose"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 6.921104398556871
       },
       "prevControl": {
-        "x": 2.176400608907305,
-        "y": 6.542136701292472
+        "x": 1.596496303952629,
+        "y": 6.457052069161117
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Left Starting Position Blue",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 35.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

@@ -42,25 +42,50 @@ public class RobotContainer {
       new CommandXboxController(Constants.Controller.ManipControllerChannel);
   CommandXboxController debugController =
       new CommandXboxController(Constants.Controller.DebugControllerChannel);
-
+  final Command DriveForward =
+      new SwerveDriveCommand(() -> 1, () -> 0, () -> 0, () -> .3, m_DriveTrain);
+  final Command DriveSide =
+      new SwerveDriveCommand(() -> 0, () -> 1, () -> 0, () -> .3, m_DriveTrain);
+  final Command Rotate = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
   // commands
+  final Command ShootNoteCommandNoWait =
+      m_Shooter
+          .ShootSpeakerCommand()
+          .alongWith(m_Intake.GetIntakeWheels().EjectNoteCommand())
+          .withTimeout(0.5)
+          .withName("Shoot Speaker No Wait");
+
   final Command ShootNoteCommand =
       m_Shooter
-          .RunShooter()
+          .ShootSpeakerCommand()
           .alongWith(
-              Commands.waitSeconds(0.5) // shooter speed up
+              Commands.waitUntil(m_Shooter::IsShooterAtSpeakerSpeed)
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
-          .withName("Shoot Command");
+          .withName("Shoot Speaker When At Target Speed");
+
+  final Command AmpCommand =
+      m_Shooter
+          .ShootAmpCommand()
+          .alongWith(
+              Commands.waitUntil(m_Shooter::IsShooterAtAmpSpeed)
+                  .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
+          .withName("Shoot Amp When at Target Speed");
 
   final Command AutoShootNote =
       m_Shooter
-          .RunShooter()
+          .ShootSpeakerCommand()
           .alongWith(
-              Commands.waitSeconds(0.5) // shooter speed up
+              Commands.waitUntil(m_Shooter::IsShooterAtSpeakerSpeed)
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
+          .withTimeout(1.5) // 0.5 (shooter) + 0.5 command
+          .withName("Auto Shoot Command");
+  final Command AutoOnlyShootNote = m_Shooter.ShootSpeakerCommand().withName("Auto Shoot Command");
+  final Command AutoIntakeOut =
+      m_Intake
+          .GetIntakeWheels() // shooter speed up
+          .EjectNoteCommand()
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
-
   final Command AutoIntakeNoteCommand =
       m_Intake
           .autoIntakeDown()
@@ -71,9 +96,6 @@ public class RobotContainer {
       m_Intake
           .autoIntakeDown()
           .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5));
-
-  final Command AprilAlignRadialCommand =
-      new AprilAlignToSpeakerRadiallyCommand(m_Limelight::getCurrentAprilTag, m_DriveTrain);
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -89,6 +111,9 @@ public class RobotContainer {
     configureBindings();
     // Build an auto chooser. This will use Commands.none() as the default option.
     NamedCommands.registerCommand("Shoot", AutoShootNote);
+    NamedCommands.registerCommand("ShootOnly", AutoOnlyShootNote);
+    NamedCommands.registerCommand("IntakeOut", AutoIntakeOut);
+    NamedCommands.registerCommand("ShootNoDelay", ShootNoteCommandNoWait);
     NamedCommands.registerCommand(
         "AutoLowerIntake",
         new AutoIntake(
@@ -170,8 +195,6 @@ public class RobotContainer {
     driverController.start().onTrue(m_DriveTrain.resetPose2d()); // RESETING OUR POSE 2d/ odometry
     driverController.rightStick().onTrue(m_DriveTrain.WheelLockCommand()); // lock wheels
 
-    driverController.y().whileTrue(AprilAlignRadialCommand);
-
     // Manipulator Controller commands
     manipController
         .leftBumper() // Angle down the shooter
@@ -202,7 +225,10 @@ public class RobotContainer {
     manipController
         .y() // eject the intake command
         .whileTrue(m_Intake.GetIntakeWheels().EjectNoteCommand());
-    manipController.rightTrigger(0.5).whileTrue(m_Shooter.RunShooter());
+    manipController.rightTrigger(0.5).whileTrue(m_Shooter.ShootSpeakerCommand());
+    manipController
+        .leftTrigger(0.5)
+        .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommandrunRegardless());
 
     // Debug controller
     // - Manual hanger commands
@@ -221,8 +247,9 @@ public class RobotContainer {
         .whileTrue(m_Hanger.runEnd(m_Hanger::RightHangUp, m_Hanger::RightHangStop));
 
     debugController.povUp().whileTrue(m_Shooter.ManualAngleUp());
-
+    debugController.x().whileTrue(DriveForward);
     debugController.povDown().whileTrue(m_Shooter.ManualAngleDown());
+    debugController.rightTrigger(.5).whileTrue(m_Intake.GetIntakeWheels().ReIntakeNoteCommand());
   }
 
   private void configureShuffleboard() {
@@ -230,27 +257,21 @@ public class RobotContainer {
 
     // Add subsystems
     SmartDashboard.putData(m_DriveTrain);
-    SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
+    SmartDashboard.putData(m_DriveTrain.getName() + "/Reset Pose 2D", m_DriveTrain.resetPose2d());
 
     SmartDashboard.putData(m_Shooter);
     SmartDashboard.putData(m_Hanger);
     SmartDashboard.putData(m_Intake);
     SmartDashboard.putData(m_Intake.GetIntakeWheels());
     SmartDashboard.putData(m_Limelight);
-
-    SmartDashboard.putData("DriveTrain/AprilAlignCommand", AprilAlignRadialCommand);
   }
 
   public Command getAutonomousCommand() {
     // loads New Auto auto file
-    // return new PathPlannerAuto("New Auto");
 
     Command autoCommand = autoChooser.getSelected();
 
     return autoCommand.beforeStarting(
         () -> m_DriveTrain.resetPose(new Pose2d(1.27, 5.55, new Rotation2d())));
-
-    // return autoChooser.getSelected();
-
   }
 }

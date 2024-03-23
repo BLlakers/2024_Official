@@ -59,23 +59,6 @@ public class SwerveModule extends SubsystemBase {
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
    *
    * @param driveMotorChannel CAN ID for the drive motor.
-   * @param turningMotorChannel CAN ID for the turning motor.
-   * @param driveEncoder DIO input for the drive encoder channel A
-   * @param turnEncoderPWMChannel DIO input for the drive encoder channel B
-   * @param turnOffset offset from 0 to 1 for the home position of the encoder
-   */
-  /*
-   * private void intizialze(){
-   * m_turningPIDController.reset(new
-   * TrapezoidProfile.Constraints(kModuleMaxAngularVelocity,
-   * kModuleMaxAngularAcceleration));
-   * }
-   */
-
-  /**
-   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
-   *
-   * @param driveMotorChannel CAN ID for the drive motor.
    * @param turningMotorChannel CAN ID for the turning motor
    * @param turnEncoderPWMChannel DIO input for the drive encoder channel B
    * @param turnOffset offset from 0 to 1 for the home position of the encoder
@@ -153,15 +136,11 @@ public class SwerveModule extends SubsystemBase {
     SwerveModuleState optimizedState =
         SwerveModuleState.optimize(desiredState, getModulePosition().angle);
 
-    // Calculate the drive output from the drive PID controller.
-    // final double driveOutput = m_drivePIDController.calculate(
-    // m_driveEncoder.getVelocity(), state.speedMetersPerSecond );
-
     final double signedAngleDifference =
         closestAngleCalculator(
             getModulePosition().angle.getRadians(), optimizedState.angle.getRadians());
     double rotateMotorPercentPower =
-        signedAngleDifference / (2 * Math.PI); // proportion error control //2
+        signedAngleDifference / (2 * Math.PI); // proportion error control
 
     double driveMotorPercentPower = optimizedState.speedMetersPerSecond / kDriveMaxSpeed;
     double turnMotorPercentPower = 1.6 * rotateMotorPercentPower;
@@ -238,6 +217,9 @@ public class SwerveModule extends SubsystemBase {
         "TurnMotor/Angle", () -> Units.radiansToDegrees(m_turningEncoder.getDistance()), null);
     builder.addDoubleProperty("DriveMotor/Pos", m_driveEncoder::getPosition, null);
     builder.addDoubleProperty("DriveMotor/Vel", m_driveEncoder::getVelocity, null);
+
+    builder.addDoubleProperty(
+        "TurnMotor/Encoder/AbsolutePosition", this.m_turningEncoder::getAbsolutePosition, null);
 
     builder.setSafeState(this::stop);
   }

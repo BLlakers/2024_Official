@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Left - toLeftNote"
+                        "pathName": "Blue - Amp - AmpNote"
                       }
                     }
                   ]
@@ -52,7 +52,51 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - LeftBackToLeft"
+            "pathName": "Blue - AmpNote - Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.25
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Blue - Amp - MidNote "
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue - MidNote - Amp"
           }
         },
         {

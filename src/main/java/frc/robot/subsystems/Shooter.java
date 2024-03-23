@@ -8,7 +8,6 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -31,6 +30,11 @@ public class Shooter extends SubsystemBase {
   private DigitalInput m_limitSwitchBottom = null;
 
   // Constants to calculate the angle of the shooter
+  public static final double s_RightMtrSpeakerTargetRPM = -3300;
+  public static final double s_LeftMtrSpeakerTargetRPM = 3400;
+  public static final double s_RightMtrAmpTargetRPM = -3300;
+  public static final double s_LeftMtrAmpTargetRPM = 3300;
+
   private static final double LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET = Units.inchesToMeters(5.4375);
   private static final double LENGTH_OF_SHOOTER_LINK = Units.inchesToMeters(3.9453125);
   private static final double LENGTH_BETWEEN_SHOOTER_BASE_AND_LINK =
@@ -44,7 +48,7 @@ public class Shooter extends SubsystemBase {
   // Constants
   public static final Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(55);
   public static final Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(30);
-  public static final double s_angleMotorSpeedPercentage = 0.1;
+  public static final double s_angleMotorSpeedPercentage = 0.3;
   public static final double s_positionConversionFactor =
       LEAD_SCREW_PITCH / MOTOR_ANGLE_GEAR_RATIO; // meters
   public static final double s_velocityConversionFactor =
@@ -54,6 +58,10 @@ public class Shooter extends SubsystemBase {
 
   private static double s_LeftMotorShooterSpeed = 0.85;
   private static double s_RightMotorShooterSpeed = -0.85;
+  private static double s_LeftMotorShooterVoltage = 11;
+  private static double s_RightMotorShooterVoltage = -11;
+  private static double s_LeftMotorAmpVoltage = 2.2;
+  private static double s_RightMotorAmpVoltage = -2.2;
 
   public Shooter() {
     setName("Shooter");
@@ -78,21 +86,47 @@ public class Shooter extends SubsystemBase {
     // });
   }
 
-  public void Shoot() {
+  public void ShootSpeakerSpeed() {
     SetShootingSpeed(s_LeftMotorShooterSpeed, s_RightMotorShooterSpeed);
   }
 
-  public Command RunShooter() {
+  public void ShootSpeakerVoltage() {
+    SetShootingSpeedVoltage(s_LeftMotorShooterVoltage, s_RightMotorShooterVoltage);
+  }
 
-    return this.runEnd(this::Shoot, this::StopShooter);
+  public void ShootAmpVoltage() {
+    SetShootingSpeedVoltage(s_LeftMotorAmpVoltage, s_RightMotorAmpVoltage);
+  }
+
+  public Command ShootAmpCommand() {
+
+    return this.runEnd(this::ShootAmpVoltage, this::StopShooter);
+  }
+
+  public Command ShootSpeakerCommand() {
+
+    return this.runEnd(this::ShootSpeakerVoltage, this::StopShooter);
   }
 
   public Command StopShooterCommand() {
     return this.runOnce(this::StopShooter);
   }
 
-  public void StopShooter() {
+  public boolean IsShooterAtSpeakerSpeed() {
+    if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrSpeakerTargetRPM
+        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrSpeakerTargetRPM) return true;
 
+    return false;
+  }
+
+  public boolean IsShooterAtAmpSpeed() {
+    if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrAmpTargetRPM
+        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrAmpTargetRPM) return true;
+
+    return false;
+  }
+
+  public void StopShooter() {
     m_shooterMtrLeft.stopMotor();
     m_shooterMtrRight.stopMotor();
   }
@@ -132,6 +166,11 @@ public class Shooter extends SubsystemBase {
   public void SetShootingSpeed(double maxSpeedPercentLeft, double maxSpeedPercentRight) {
     m_shooterMtrLeft.set(maxSpeedPercentLeft);
     m_shooterMtrRight.set(maxSpeedPercentRight);
+  }
+
+  public void SetShootingSpeedVoltage(double maxSpeedVoltageLeft, double maxSpeedVoltageRight) {
+    m_shooterMtrLeft.setVoltage(maxSpeedVoltageLeft);
+    m_shooterMtrRight.setVoltage(maxSpeedVoltageRight);
   }
 
   /**
@@ -245,7 +284,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-
+    builder.addBooleanProperty("Should We Shoot?", this::IsShooterAtSpeakerSpeed, null);
     builder.addDoubleProperty("Motor Left/Speed", m_shooterMtrLeftEnc::getVelocity, null);
     builder.addDoubleProperty(
         "Motor Left/Speed Percentage",
@@ -256,17 +295,41 @@ public class Shooter extends SubsystemBase {
         "Motor Right/Speed Percentage",
         () -> m_shooterMtrLeftEnc.getVelocity() / Constants.Conversion.NeoMaxSpeedRPM,
         null);
+    builder.addDoubleProperty(
+        "Motor Right/Voltage",
+        () -> m_shooterMtrRight.getVoltageCompensationNominalVoltage(),
+        null);
+
+    builder.addDoubleProperty(
+        "Motor Left/Voltage", () -> m_shooterMtrLeft.getVoltageCompensationNominalVoltage(), null);
     builder.addDoubleProperty("Angle Motor/Encoder/Position", m_angleMtrEnc::getPosition, null);
     builder.addDoubleProperty("Aiming Angle", () -> this.GetShooterAngle().getDegrees(), null);
 
     builder.addDoubleProperty(
-        "Motor Left/Speed Setpoint",
+        "Motor Left/Shooter/Speed Setpoint",
         () -> s_LeftMotorShooterSpeed,
         (double s) -> s_LeftMotorShooterSpeed = s);
     builder.addDoubleProperty(
-        "Motor Right/Speed Setpoint",
+        "Motor Right/Shooter/Speed Setpoint",
         () -> s_RightMotorShooterSpeed,
         (double s) -> s_RightMotorShooterSpeed = s);
+    builder.addDoubleProperty(
+        "MotorLeft/Shooter/Voltage SetPoint",
+        () -> s_LeftMotorShooterVoltage,
+        (double s) -> s_LeftMotorShooterVoltage = s);
+    builder.addDoubleProperty(
+        "MotorRight/Shooter/Voltage SetPoint",
+        () -> s_RightMotorShooterVoltage,
+        (double s) -> s_RightMotorShooterVoltage = s);
+
+    builder.addDoubleProperty(
+        "MotorLeft/Amp/Voltage SetPoint",
+        () -> s_LeftMotorAmpVoltage,
+        (double s) -> s_LeftMotorAmpVoltage = s);
+    builder.addDoubleProperty(
+        "MotorRight/Amp/Voltage SetPoint",
+        () -> s_RightMotorAmpVoltage,
+        (double s) -> s_RightMotorAmpVoltage = s);
 
     builder.addBooleanProperty("Top Limit Switch/Tripped", this::TopLimitSwitchTripped, null);
     builder.addBooleanProperty("Bottom Limit Switch/Tripped", this::BottomLimitSwitchTripped, null);

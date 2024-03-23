@@ -33,11 +33,11 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
   private final Supplier<AprilTag> m_aprilTagProvider;
 
   private final ProfiledPIDController xController =
-      new ProfiledPIDController(1, 0, 0.0, X_CONSTRAINTS);
+      new ProfiledPIDController(1.0, 0, 0.0, X_CONSTRAINTS);
   private final ProfiledPIDController yController =
-      new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS);
+      new ProfiledPIDController(1.0, 0, 0.0, Y_CONSTRAINTS);
   private final ProfiledPIDController omegaController =
-      new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS);
+      new ProfiledPIDController(0.8, 0, 0.0, OMEGA_CONSTRAINTS);
 
   private Pose2d goalPose;
 

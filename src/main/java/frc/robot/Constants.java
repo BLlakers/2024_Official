@@ -147,10 +147,10 @@ public final class Constants {
   }
 
   public class RobotVersion2024 extends RobotVersionConstants {
-    public static final double flTurnEncoderOffset = 0.6168;
-    public static final double frTurnEncoderOffset = 0.777;
-    public static final double blTurnEncoderOffset = 0.519;
-    public static final double brTurnEncoderOffset = 0.625;
+    public static final double flTurnEncoderOffset = 0.600;
+    public static final double frTurnEncoderOffset = 0.772;
+    public static final double blTurnEncoderOffset = 0.530;
+    public static final double brTurnEncoderOffset = 0.620;
   }
 
   public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;

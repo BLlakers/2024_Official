@@ -716,15 +716,56 @@
               "Visuals/Show tick mark ring": true,
               "Visuals/Counter clockwise": false
             }
+          },
+          "3,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Shooter/MotorLeft/Voltage SetPoint",
+              "_title": "SmartDashboard/Shooter/MotorLeft/Voltage SetPoint",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Shooter/MotorRight/Voltage SetPoint",
+              "_title": "/SmartDashboard/Shooter/MotorRight/Voltage SetPoint",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Shooter/Should We Shoot?",
+              "_title": "/SmartDashboard/Shooter/Should We Shoot?",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 37.0,
-    "width": 1512.0,
-    "height": 945.0
+    "x": 0.800000011920929,
+    "y": 0.800000011920929,
+    "width": 1534.4000244140625,
+    "height": 814.4000244140625
   }
 }

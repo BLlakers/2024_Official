@@ -105,11 +105,9 @@ public class Hanger extends SubsystemBase {
   }
 
   public boolean HangersDown() {
-    if (RightHangIsDown() && LeftHangIsDown()) {
-      return true;
-    } else {
-      return false;
-    }
+    if (RightHangIsDown() && LeftHangIsDown()) return true;
+
+    return false;
   }
 
   /** Lowers hang when Held. Will stop when it hits the limit switch */

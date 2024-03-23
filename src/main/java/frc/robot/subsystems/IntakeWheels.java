@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 
@@ -19,6 +20,8 @@ public class IntakeWheels extends SubsystemBase {
 
   private static final double s_IntakeSpeed = 0.55;
   private static final double s_EjectSpeed = -0.95;
+  private static final double s_ReIntakeNoteEjectSpeed = -0.4;
+  private static final double s_IntakeOverrunSeconds = 0.1;
 
   /**
    * A Rev Color Sensor V3 object is constructed with an I2C port as a parameter. The device will be
@@ -29,7 +32,7 @@ public class IntakeWheels extends SubsystemBase {
   }
 
   public boolean NoteIsLoaded() {
-    return m_colorSensorV3.getIR() >= 50;
+    return m_colorSensorV3.getIR() >= 200;
   }
 
   public Command PowerOnIntakeWheelsCommand() {
@@ -38,6 +41,29 @@ public class IntakeWheels extends SubsystemBase {
 
   public Command IntakeNoteCommand() {
     return this.runEnd(this::IntakeNote, this::Stop).until(this::NoteIsLoaded);
+  }
+
+  public Command IntakeNoteCommandrunRegardless() {
+    return this.runEnd(this::IntakeNote, this::Stop);
+  }
+
+  public Command IntakeNoteOverrunCommand() {
+    return this.run(this::IntakeNote)
+        .until(this::NoteIsLoaded)
+        .andThen(Commands.waitSeconds(s_IntakeOverrunSeconds))
+        .finallyDo(this::Stop);
+  }
+
+  public Command ReIntakeNoteCommand() {
+    return Commands.repeatingSequence(
+            this.run(
+                    () -> {
+                      intakeWheelMtrR.set(s_ReIntakeNoteEjectSpeed);
+                    }) // partial eject
+                .until(() -> m_colorSensorV3.getIR() < 250),
+            this.run(this::IntakeNote) // re-intake
+                .until(this::NoteIsLoaded))
+        .finallyDo(this::Stop);
   }
 
   public void IntakeNote() {

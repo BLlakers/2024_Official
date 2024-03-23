@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.27,
-      "y": 5.55
+      "x": 0.76,
+      "y": 4.47
     },
-    "rotation": 0.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -22,28 +22,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "sequential",
+                "type": "parallel",
                 "data": {
                   "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Blue - SquareOpp - OppNote"
+                      }
+                    },
                     {
                       "type": "wait",
                       "data": {
                         "waitTime": 0.25
                       }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Blue - Front - toMidNote"
-                      }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
                 }
               }
             ]
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - MidBackToFront"
+            "pathName": "Blue - OppNote - OppSquare"
           }
         },
         {
@@ -66,7 +66,7 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "parallel",
                 "data": {
                   "commands": [
                     {
@@ -78,7 +78,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Front - toRightNote"
+                        "pathName": "Blue - Opp - MidNote"
                       }
                     }
                   ]
@@ -96,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - RightBackToFront"
+            "pathName": null
           }
         },
         {
@@ -110,7 +110,7 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "parallel",
                 "data": {
                   "commands": [
                     {
@@ -122,7 +122,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Front - toLeftNote"
+                        "pathName": " Blue - Opp - AmpNote"
                       }
                     }
                   ]
@@ -140,7 +140,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - LeftBackToFront"
+            "pathName": " Blue - AmpNote - Opp"
           }
         },
         {
@@ -152,6 +152,6 @@
       ]
     }
   },
-  "folder": "Front Autos ",
+  "folder": "Opp Autos",
   "choreoAuto": false
 }
