@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.5079619390008028,
+        "y": 5.525487974052871
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7936009097081307,
+        "y": 5.607463829873343
+      },
+      "isLocked": false,
+      "linkedName": "Blue - MidNotePickup"
+    },
+    {
+      "anchor": {
+        "x": 1.27,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 2.004958988519973,
+        "y": 5.515804013063089
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue - FrontStartingPose"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootOnly"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Front Starting Position Blue",
+  "previewStartingState": {
+    "rotation": 0.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

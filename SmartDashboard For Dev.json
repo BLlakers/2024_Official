@@ -1,0 +1,771 @@
+{
+  "tabPane": [
+    {
+      "title": "COMP",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "SmartDashboard/",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "7,0": {
+            "size": [
+              3,
+              6
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://USB Camera 0",
+              "_title": "USB Camera 0",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": 0,
+              "imageHeight": 0
+            }
+          },
+          "0,0": {
+            "size": [
+              5,
+              6
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://limelight",
+              "_title": "limelight",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": 0,
+              "imageHeight": 0
+            }
+          },
+          "5,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/AprilTag",
+              "_title": "AprilTag",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Intake Wheels/Note is Loaded",
+              "_title": "SmartDashboard/Intake Wheels/Note is Loaded",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Auto Chooser",
+              "_title": "SmartDashboard/Auto Chooser",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Testing",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "LiveWindow/",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "8,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Shooter",
+              "_title": "Shooter",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Hanger",
+              "_title": "Hanger",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
+            "size": [
+              3,
+              4
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Robot",
+              "_title": "Robot",
+              "_glyph": 148,
+              "_showGlyph": true
+            }
+          },
+          "3,0": {
+            "size": [
+              3,
+              4
+            ],
+            "content": {
+              "_type": "PDP",
+              "_source0": "network_table:///SmartDashboard/PowerDistribution[20]",
+              "_title": "PDH",
+              "_glyph": 348,
+              "_showGlyph": true,
+              "Visuals/Show voltage and current values": true
+            }
+          },
+          "6,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/DriveTrainPID Reset Pose",
+              "_title": "ResetPose",
+              "_glyph": 4,
+              "_showGlyph": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "DriveTrain",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "network_table:///SmartDashboard/DriveTrain/",
+      "widgetPane": {
+        "gridSize": 70.0,
+        "showGrid": true,
+        "hgap": 9.0,
+        "vgap": 9.0,
+        "titleType": 0,
+        "tiles": {
+          "4,5": {
+            "size": [
+              5,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/FieldRelativeEnabled",
+              "_title": "FieldRelativeEnabled",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "4,8": {
+            "size": [
+              5,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/Reset Pose 2D",
+              "_title": "Reset Pose 2D",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,2": {
+            "size": [
+              4,
+              7
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Swerve Module Subsystems",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Basic Subsystem",
+                  "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Front Right",
+                  "_title": "Swerve Module/Front Right",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Basic Subsystem",
+                  "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Back Left",
+                  "_title": "Swerve Module/Back Left",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Basic Subsystem",
+                  "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Back Right",
+                  "_title": "Swerve Module/Back Right",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Basic Subsystem",
+                  "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Front Left",
+                  "_title": "Swerve Module/Front Left",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "4,0": {
+            "size": [
+              5,
+              5
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/Odometry",
+              "_title": "SmartDashboard/DriveTrain/Odometry",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Basic Subsystem",
+              "_source0": "network_table:///SmartDashboard/DriveTrain",
+              "_title": "SmartDashboard/DriveTrain",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,0": {
+            "size": [
+              10,
+              9
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Swerve Modules",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Number of columns": 2,
+              "Layout/Number of rows": 2,
+              "Layout/Label position": "TOP",
+              "_children": {
+                "0,0": {
+                  "_type": "List Layout",
+                  "_title": "Front Left",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "TOP",
+                  "_children": [
+                    {
+                      "_type": "Network Table Tree",
+                      "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Front Left/DriveMotor",
+                      "_title": "SmartDashboard/DriveTrain/Swerve Module/Front Left/DriveMotor",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Network Table Tree",
+                      "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Front Left/TurnMotor",
+                      "_title": "SmartDashboard/DriveTrain/Swerve Module/Front Left/TurnMotor",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                },
+                "1,0": {
+                  "_type": "List Layout",
+                  "_title": "Front Right",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "TOP",
+                  "_children": [
+                    {
+                      "_type": "Network Table Tree",
+                      "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Front Right/DriveMotor",
+                      "_title": "SmartDashboard/DriveTrain/Swerve Module/Front Right/DriveMotor",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Network Table Tree",
+                      "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Front Right/TurnMotor",
+                      "_title": "SmartDashboard/DriveTrain/Swerve Module/Front Right/TurnMotor",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                },
+                "1,1": {
+                  "_type": "List Layout",
+                  "_title": "Back Right",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "TOP",
+                  "_children": [
+                    {
+                      "_type": "Network Table Tree",
+                      "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Back Right/DriveMotor",
+                      "_title": "SmartDashboard/DriveTrain/Swerve Module/Back Right/DriveMotor",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Network Table Tree",
+                      "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Back Right/TurnMotor",
+                      "_title": "SmartDashboard/DriveTrain/Swerve Module/Back Right/TurnMotor",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                },
+                "0,1": {
+                  "_type": "List Layout",
+                  "_title": "Back Left",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "TOP",
+                  "_children": [
+                    {
+                      "_type": "Network Table Tree",
+                      "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Back Left/DriveMotor",
+                      "_title": "SmartDashboard/DriveTrain/Swerve Module/Back Left/DriveMotor",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Network Table Tree",
+                      "_source0": "network_table:///SmartDashboard/DriveTrain/Swerve Module/Back Left/TurnMotor",
+                      "_title": "SmartDashboard/DriveTrain/Swerve Module/Back Left/TurnMotor",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Hanger",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "network_table:///SmartDashboard/Hanger/",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              4,
+              5
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Left Hanger",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Network Table Tree",
+                  "_source0": "network_table:///SmartDashboard/Hanger/Left",
+                  "_title": "Hanger/Left",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/Hanger/Left/MagSwitch Engaged",
+                  "_title": "Hanger/Left/MagSwitch Engaged",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                }
+              ]
+            }
+          },
+          "4,0": {
+            "size": [
+              4,
+              5
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Right Hanger",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Network Table Tree",
+                  "_source0": "network_table:///SmartDashboard/Hanger/Right",
+                  "_title": "Hanger/Right",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/Hanger/Right/MagSwitch Engaged",
+                  "_title": "Hanger/Right/MagSwitch Engaged",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Intake",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "network_table:///SmartDashboard/Intake/",
+      "widgetPane": {
+        "gridSize": 72.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              3,
+              4
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Intake Subsystems",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Basic Subsystem",
+                  "_source0": "network_table:///SmartDashboard/Intake/Wheels",
+                  "_title": "Wheels",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Basic Subsystem",
+                  "_source0": "network_table:///SmartDashboard/Intake/Angle",
+                  "_title": "Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "8,0": {
+            "size": [
+              5,
+              5
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Intake/Angle",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Network Table Tree",
+                  "_source0": "network_table:///SmartDashboard/Intake/Angle/Motor",
+                  "_title": "Motor",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Intake/Angle/Angle",
+                  "_title": "Angle",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Intake/Angle/State",
+                  "_title": "Current State",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "0,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Intake/Angle/Note/Is Loaded",
+              "_title": "Note Is Loaded",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,0": {
+            "size": [
+              5,
+              5
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Intake/Wheels",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Network Table Tree",
+                  "_source0": "network_table:///SmartDashboard/Intake/Wheels/Color Sensor",
+                  "_title": "Color Sensor",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Shooter",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "network_table:///SmartDashboard/Shooter/",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Shooter/Top Limit Switch/Tripped",
+              "_title": "Top Limit Switch/Tripped",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Shooter/Bottom Limit Switch/Tripped",
+              "_title": "Bottom Limit Switch/Tripped",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Basic Subsystem",
+              "_source0": "network_table:///SmartDashboard/Shooter",
+              "_title": "Shooter Subsystem",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Shooter/Motor Left",
+              "_title": "Motor Shooter Left",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,2": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Shooter Motor Speed Setpoints",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Number of columns": 2,
+              "Layout/Number of rows": 1,
+              "Layout/Label position": "LEFT",
+              "_children": {
+                "0,0": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Shooter/Motor Left/Speed Setpoint",
+                  "_title": "Motor Left/Speed Setpoint",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                "1,0": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Shooter/Motor Right/Speed Setpoint",
+                  "_title": "Motor Right/Speed Setpoint",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              }
+            }
+          },
+          "4,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Shooter/Motor Right",
+              "_title": "Motor Shooter Right",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Gyro",
+              "_source0": "network_table:///SmartDashboard/Shooter/Aiming Angle",
+              "_title": "Aiming Angle",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Visuals/Major tick spacing": 45.0,
+              "Visuals/Starting angle": 180.0,
+              "Visuals/Show tick mark ring": true,
+              "Visuals/Counter clockwise": false
+            }
+          },
+          "3,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Shooter/MotorLeft/Voltage SetPoint",
+              "_title": "SmartDashboard/Shooter/MotorLeft/Voltage SetPoint",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Shooter/MotorRight/Voltage SetPoint",
+              "_title": "/SmartDashboard/Shooter/MotorRight/Voltage SetPoint",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Shooter/Should We Shoot?",
+              "_title": "/SmartDashboard/Shooter/Should We Shoot?",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": 0.800000011920929,
+    "y": 0.800000011920929,
+    "width": 1534.4000244140625,
+    "height": 814.4000244140625
+  }
+}

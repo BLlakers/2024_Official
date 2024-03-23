@@ -12,163 +12,166 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class Intake extends SubsystemBase {
-    // tells which state the intake is in currently
-    public enum State {
-        PositionUp,
-        PositionDown,
-        PositionAmp,
-        PositionOther;
-
-        @Override
-        public String toString()
-        {
-            Map<State, String> stateMap = new HashMap<State, String>();
-            stateMap.put(State.PositionUp, "Position Up");
-            stateMap.put(State.PositionDown, "Position Down");
-            stateMap.put(State.PositionOther, "Position Other");
-            stateMap.put(State.PositionAmp, "Position Amplifier");
-
-            return stateMap.get(this);
-        }
-    }
-
-    private CANSparkMax intakeAngleMtr = new CANSparkMax(Constants.Intake.AngleMtrC,
-            com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
-
-    private State m_CurrentState = State.PositionUp;
-
-    // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
-    public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
-    // public int IntakePos = 1;
-    public static final double GEAR_RATIO = 30.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
-
-    public static final double PosDownAngle = 140; // Down
-    public static final double PosUpAngle = 5; // starting
-    public static final double PosAmpAngle = 30; // This needs to be measured TODO
-    public static final double PositionDown = 60;
-    public static final double PositionUp = 20;
-
-    /**
-     * A Rev Color Sensor V3 object is constructed with an I2C port as a
-     * parameter. The device will be automatically initialized with default
-     * parameters.
-     */
-    public Intake() {
-        // intakeWheelMtr1.follow(intakeWheelMtr2);
-        double intakeAngleMotorPositionConversion = 2 * Math.PI / Intake.GEAR_RATIO; // revolutions -> radians
-        double intakeAngleMotorVelocityConversion = intakeAngleMotorPositionConversion / 60; // rpm -> radians/second
-        intakeAngleMtrEnc.setPositionConversionFactor(intakeAngleMotorPositionConversion);
-        intakeAngleMtrEnc.setVelocityConversionFactor(intakeAngleMotorVelocityConversion);
-        resetIntakeAngle();
-        setName("Intake Angle");
-    }
+  // tells which state the intake is in currently
+  public enum State {
+    PositionUp,
+    PositionDown,
+    PositionAmp,
+    PositionOther;
 
     @Override
-    public void periodic() {
-        super.periodic();
+    public String toString() {
+      Map<State, String> stateMap = new HashMap<State, String>();
+      stateMap.put(State.PositionUp, "Position Up");
+      stateMap.put(State.PositionDown, "Position Down");
+      stateMap.put(State.PositionOther, "Position Other");
+      stateMap.put(State.PositionAmp, "Position Amplifier");
 
-        if (GetIntakeMotorAngle().getDegrees() <= Intake.PosUpAngle) {
-            m_CurrentState = State.PositionUp;
-        } else if (GetIntakeMotorAngle().getDegrees() >= Intake.PosDownAngle) {
-            m_CurrentState = State.PositionDown;
-        } else if (Math.abs(GetIntakeMotorAngle().getDegrees() - Intake.PosAmpAngle) <= 1)
-            m_CurrentState = State.PositionAmp;
-        else
-            m_CurrentState = State.PositionOther;
+      return stateMap.get(this);
     }
+  }
 
-    public State GetIntakeState() {
-        return m_CurrentState;
-    }
+  private CANSparkMax intakeAngleMtr =
+      new CANSparkMax(
+          Constants.Intake.AngleMtrC, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
-    public Command ManualRaiseIntakeCommand() {
-        return this.runEnd(this::RaiseIntake, this::StopIntake);
-    }
+  private State m_CurrentState = State.PositionUp;
 
-    public void RaiseIntake() {
-        intakeAngleMtr.set(-.35);
-    }
+  private IntakeWheels m_IntakeWheels = new IntakeWheels();
 
-    public Command autoIntakeUp() {
-        return this.runEnd(
-                () -> {
-                    if (GetIntakeMotorAngle().getDegrees() <= 30) {
-                        intakeAngleMtr.set(0);
-                    } else {
-                        intakeAngleMtr.set(-.25);
-                    }
-                },
-                this::StopIntake);
-    }
+  private static final double s_AngleDownStopDegrees = 95;
+  private static final double s_AngleUpStopDegrees = 45;
 
-    public Command autoAmp() {
-        return this.runEnd(
-                () -> {
-                    double angleLo = 67.5;
-                    double angleHi = 72.5;
+  // TODO WILL ONLY BE 1 WHEEL MTR not 2!!
+  public RelativeEncoder intakeAngleMtrEnc = intakeAngleMtr.getEncoder();
+  // public int IntakePos = 1;
+  public static final double GEAR_RATIO = 30.0; // TODO: TARGET ANGLE IN DEGREES OF THE MOTOR
 
-                    double angle = GetIntakeMotorAngle().getDegrees();
-                    if (angle < angleLo) {
-                        intakeAngleMtr.set(0.25);
-                    } else if (angle > angleHi) {
-                        intakeAngleMtr.set(-0.25);
-                    } else if (angle > angleLo && angle < angleHi) {
-                        intakeAngleMtr.set(0);
+  public static final double PosDownAngle = 140; // Down
+  public static final double PosUpAngle = 5; // starting
+  public static final double PosAmpAngle = 30; // This needs to be measured TODO
+  public static final double PositionDown = 60;
+  public static final double PositionUp = 20;
 
-                    }
-                },
-                this::StopIntake); // pos amp
-    }
+  private static final double s_IntakeAngleSpeedUp = -0.25;
+  private static final double s_IntakeAngleSpeedDown = 0.35;
 
-    public Command autoIntakeDown() {
-        return this.runEnd(
-                () -> {
-                    if (GetIntakeMotorAngle().getDegrees() >= 90) {
-                        intakeAngleMtr.set(0);
-                    } else {
-                        intakeAngleMtr.set(0.25);
-                    }
-                },
-                this::StopIntake);
-    }
+  /**
+   * A Rev Color Sensor V3 object is constructed with an I2C port as a parameter. The device will be
+   * automatically initialized with default parameters.
+   */
+  public Intake() {
+    // intakeWheelMtr1.follow(intakeWheelMtr2);
+    double intakeAngleMotorPositionConversion =
+        2 * Math.PI / Intake.GEAR_RATIO; // revolutions -> radians
+    double intakeAngleMotorVelocityConversion =
+        intakeAngleMotorPositionConversion / 60; // rpm -> radians/second
+    intakeAngleMtrEnc.setPositionConversionFactor(intakeAngleMotorPositionConversion);
+    intakeAngleMtrEnc.setVelocityConversionFactor(intakeAngleMotorVelocityConversion);
+    resetIntakeAngle();
+    setName("Intake/Angle");
+  }
 
-    public Command ManualLowerIntakeCommand() {
-        return this.runEnd(this::LowerIntake, this::StopIntake);
-    }
+  @Override
+  public void periodic() {
+    super.periodic();
 
-    public void LowerIntake() {
-        intakeAngleMtr.set(0.35);
-    }
+    if (GetIntakeMotorAngle().getDegrees() <= Intake.PosUpAngle) {
+      m_CurrentState = State.PositionUp;
+    } else if (GetIntakeMotorAngle().getDegrees() >= Intake.PosDownAngle) {
+      m_CurrentState = State.PositionDown;
+    } else if (Math.abs(GetIntakeMotorAngle().getDegrees() - Intake.PosAmpAngle) <= 1)
+      m_CurrentState = State.PositionAmp;
+    else m_CurrentState = State.PositionOther;
+  }
 
-    public Command StopIntakeCommand() {
-        return this.runOnce(this::StopIntake);
-    }
+  public IntakeWheels GetIntakeWheels() {
+    return m_IntakeWheels;
+  }
 
-    public void StopIntake() {
-        intakeAngleMtr.set(0);
-    }
+  public State GetIntakeState() {
+    return m_CurrentState;
+  }
 
-    public Rotation2d GetIntakeMotorAngle() {
-        return Rotation2d.fromRadians(intakeAngleMtrEnc.getPosition());
-    }
+  public Command ManualRaiseIntakeCommand() {
+    return this.runEnd(this::RaiseIntake, this::StopIntake);
+  }
 
-    public void resetIntakeAngle() {
-        intakeAngleMtrEnc.setPosition(0);
-    }
+  public void RaiseIntake() {
+    intakeAngleMtr.set(s_IntakeAngleSpeedUp);
+  }
 
-    public Command resetIntakePos() {
-        return runOnce(this::resetIntakeAngle);
-    }
+  public boolean NoteIsLoaded() {
+    return m_IntakeWheels.NoteIsLoaded();
+  }
 
-    @Override
-    public void initSendable(SendableBuilder builder)
-    {
-        super.initSendable(builder);
+  public Command autoIntakeUp() {
+    return this.run(this::RaiseIntake)
+        .onlyWhile(() -> GetIntakeMotorAngle().getDegrees() > Intake.s_AngleUpStopDegrees)
+        .finallyDo(this::StopIntake);
+  }
 
-        builder.addDoubleProperty("Angle", () -> this.GetIntakeMotorAngle().getDegrees(), null);
-        builder.addDoubleProperty("Motor/Position", intakeAngleMtrEnc::getPosition, null);
-        builder.addDoubleProperty("Motor/Velocity", intakeAngleMtrEnc::getVelocity, null);
-        builder.addStringProperty("State", () -> this.GetIntakeState().toString(), null);
-    }
+  public Command autoAmp() {
+    double angleLo = 67.5;
+    double angleHi = 72.5;
 
+    return this.runEnd(
+        () -> {
+          double angle = GetIntakeMotorAngle().getDegrees();
+          if (angle < angleLo) {
+            intakeAngleMtr.set(0.25);
+          } else if (angle > angleHi) {
+            intakeAngleMtr.set(-0.25);
+          } else if (angle > angleLo && angle < angleHi) {
+            intakeAngleMtr.set(0);
+          }
+        },
+        this::StopIntake); // pos amp
+  }
+
+  public Command autoIntakeDown() {
+    return this.run(this::LowerIntake)
+        .onlyWhile(() -> GetIntakeMotorAngle().getDegrees() < Intake.s_AngleDownStopDegrees)
+        .finallyDo(this::StopIntake);
+  }
+
+  public Command ManualLowerIntakeCommand() {
+    return this.runEnd(this::LowerIntake, this::StopIntake);
+  }
+
+  public void LowerIntake() {
+    intakeAngleMtr.set(s_IntakeAngleSpeedDown);
+  }
+
+  public Command StopIntakeCommand() {
+    return this.runOnce(this::StopIntake);
+  }
+
+  public void StopIntake() {
+    intakeAngleMtr.set(0);
+  }
+
+  public Rotation2d GetIntakeMotorAngle() {
+    return Rotation2d.fromRadians(intakeAngleMtrEnc.getPosition());
+  }
+
+  public void resetIntakeAngle() {
+    intakeAngleMtrEnc.setPosition(0);
+  }
+
+  public Command resetIntakePos() {
+    return runOnce(this::resetIntakeAngle);
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    super.initSendable(builder);
+
+    m_IntakeWheels.initSendable(builder);
+
+    builder.addDoubleProperty("Angle", () -> this.GetIntakeMotorAngle().getDegrees(), null);
+    builder.addDoubleProperty("Motor/Position", intakeAngleMtrEnc::getPosition, null);
+    builder.addDoubleProperty("Motor/Velocity", intakeAngleMtrEnc::getVelocity, null);
+    builder.addStringProperty("State", () -> this.GetIntakeState().toString(), null);
+  }
 }

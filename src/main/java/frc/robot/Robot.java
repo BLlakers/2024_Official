@@ -7,18 +7,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-//some imports no longer needed but leaving them here untill final version
+// some imports no longer needed but leaving them here untill final version
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   String codeVersion = "0.0";
   private PowerDistribution PDH = new PowerDistribution(20, PowerDistribution.ModuleType.kRev);
+
   // commit
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    CameraServer.startAutomaticCapture();
+    m_robotContainer.m_DriveTrain.ZeroGyro().schedule();
+    var cam = CameraServer.startAutomaticCapture();
+    cam.setResolution(100, 100);
+    cam.setFPS(60);
 
     SmartDashboard.putString("Code Version", codeVersion);
   }
@@ -30,15 +34,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {
-
-  }
+  public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {
-    // System.out.println(m_robotContainer.m_DriveTrain.m_frontLeft.m_turningEncoder.getAbsolutePosition());
-    // how we get encoder offsets
-  }
+  public void disabledPeriodic() {}
 
   @Override
   public void autonomousInit() {
@@ -51,9 +50,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {
-
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -63,12 +60,10 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.AutoIntakeNoteCommand.cancel();
-    
   }
 
   @Override
-  public void teleopPeriodic() {
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
@@ -76,17 +71,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-
-  }
+  public void testPeriodic() {}
 
   @Override
-  public void simulationInit() {
-
-  }
+  public void simulationInit() {}
 
   @Override
-  public void simulationPeriodic() {
-
-  }
+  public void simulationPeriodic() {}
 }
