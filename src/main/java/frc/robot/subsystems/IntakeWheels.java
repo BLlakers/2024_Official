@@ -32,7 +32,7 @@ public class IntakeWheels extends SubsystemBase {
   }
 
   public boolean NoteIsLoaded() {
-    return m_colorSensorV3.getIR() >= 200;
+    return m_colorSensorV3.getIR() >= 50;
   }
 
   public Command PowerOnIntakeWheelsCommand() {
