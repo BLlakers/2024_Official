@@ -108,30 +108,33 @@ public class Shooter extends SubsystemBase {
     return this.runEnd(this::ShootAmpVoltage, this::StopShooter);
   }
 
-  public Command ShooterSpeakerPIDSpeedCommand()
-  {
-    return this.ShooterSpeakerPIDSpeedCommand(s_LeftMtrSpeakerTargetRPM, s_RightMtrSpeakerTargetRPM);
+  public Command ShooterSpeakerPIDSpeedCommand() {
+    return this.ShooterSpeakerPIDSpeedCommand(
+        s_LeftMtrSpeakerTargetRPM, s_RightMtrSpeakerTargetRPM);
   }
 
-  public Command ShooterSpeakerPIDSpeedCommand(double leftTargetRPM, double rightTargetRPM)
-  {
-    return this.runEnd(() -> {
-      double leftVel = m_shooterMtrLeftEnc.getVelocity();
-      double rightVel = m_shooterMtrRightEnc.getVelocity();
+  public Command ShooterSpeakerPIDSpeedCommand(double leftTargetRPM, double rightTargetRPM) {
+    return this.runEnd(
+        () -> {
+          double leftVel = m_shooterMtrLeftEnc.getVelocity();
+          double rightVel = m_shooterMtrRightEnc.getVelocity();
 
-      m_LeftMtrSpeedController.setSetpoint(leftTargetRPM);
-      m_RightMtrSpeedController.setSetpoint(rightTargetRPM);
+          m_LeftMtrSpeedController.setSetpoint(leftTargetRPM);
+          m_RightMtrSpeedController.setSetpoint(rightTargetRPM);
 
-      double leftVelUpdate = m_LeftMtrSpeedController.calculate(leftVel);
-      double rightVelUpdate = m_RightMtrSpeedController.calculate(rightVel);
+          double leftVelUpdate = m_LeftMtrSpeedController.calculate(leftVel);
+          double rightVelUpdate = m_RightMtrSpeedController.calculate(rightVel);
 
-      double newLeftVelPct = MathUtil.clamp((leftVel + leftVelUpdate) / Constants.Conversion.NeoMaxSpeedRPM, -1.0, 1.0);
-      double newRightVelPct = MathUtil.clamp((rightVel + rightVelUpdate) / Constants.Conversion.NeoMaxSpeedRPM, -1.0, 1.0);
+          double newLeftVelPct =
+              MathUtil.clamp(
+                  (leftVel + leftVelUpdate) / Constants.Conversion.NeoMaxSpeedRPM, -1.0, 1.0);
+          double newRightVelPct =
+              MathUtil.clamp(
+                  (rightVel + rightVelUpdate) / Constants.Conversion.NeoMaxSpeedRPM, -1.0, 1.0);
 
-      this.SetShootingSpeed(newLeftVelPct, newRightVelPct);
-
-    },
-    this::StopShooter);
+          this.SetShootingSpeed(newLeftVelPct, newRightVelPct);
+        },
+        this::StopShooter);
   }
 
   public Command ShootSpeakerCommand() {
