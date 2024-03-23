@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -34,6 +36,9 @@ public class Shooter extends SubsystemBase {
   public static final double s_LeftMtrSpeakerTargetRPM = 3400;
   public static final double s_RightMtrAmpTargetRPM = -3300;
   public static final double s_LeftMtrAmpTargetRPM = 3300;
+
+  private final PIDController m_LeftMtrSpeedController = new PIDController(1.0, 0.0, 0.0);
+  private final PIDController m_RightMtrSpeedController = new PIDController(1.0, 0.0, 0.0);
 
   private static final double LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET = Units.inchesToMeters(5.4375);
   private static final double LENGTH_OF_SHOOTER_LINK = Units.inchesToMeters(3.9453125);
@@ -101,6 +106,32 @@ public class Shooter extends SubsystemBase {
   public Command ShootAmpCommand() {
 
     return this.runEnd(this::ShootAmpVoltage, this::StopShooter);
+  }
+
+  public Command ShooterSpeakerPIDSpeedCommand()
+  {
+    return this.ShooterSpeakerPIDSpeedCommand(s_LeftMtrSpeakerTargetRPM, s_RightMtrSpeakerTargetRPM);
+  }
+
+  public Command ShooterSpeakerPIDSpeedCommand(double leftTargetRPM, double rightTargetRPM)
+  {
+    return this.runEnd(() -> {
+      double leftVel = m_shooterMtrLeftEnc.getVelocity();
+      double rightVel = m_shooterMtrRightEnc.getVelocity();
+
+      m_LeftMtrSpeedController.setSetpoint(leftTargetRPM);
+      m_RightMtrSpeedController.setSetpoint(rightTargetRPM);
+
+      double leftVelUpdate = m_LeftMtrSpeedController.calculate(leftVel);
+      double rightVelUpdate = m_RightMtrSpeedController.calculate(rightVel);
+
+      double newLeftVelPct = MathUtil.clamp((leftVel + leftVelUpdate) / Constants.Conversion.NeoMaxSpeedRPM, -1.0, 1.0);
+      double newRightVelPct = MathUtil.clamp((rightVel + rightVelUpdate) / Constants.Conversion.NeoMaxSpeedRPM, -1.0, 1.0);
+
+      this.SetShootingSpeed(newLeftVelPct, newRightVelPct);
+
+    },
+    this::StopShooter);
   }
 
   public Command ShootSpeakerCommand() {
