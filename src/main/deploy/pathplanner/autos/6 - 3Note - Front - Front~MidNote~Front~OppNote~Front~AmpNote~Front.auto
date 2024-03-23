@@ -78,7 +78,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Front - OppNote"
+                        "pathName": "Blue - Front - AmpNote"
                       }
                     }
                   ]
@@ -96,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - OppNote - Front"
+            "pathName": "Blue - AmpNote - Front"
           }
         },
         {
@@ -122,7 +122,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Blue - Front - AmpNote"
+                        "pathName": "Blue - Front - OppNote"
                       }
                     }
                   ]
@@ -140,7 +140,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - AmpNote - Front"
+            "pathName": "Blue - OppNote - Front"
           }
         },
         {
