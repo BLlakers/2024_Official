@@ -80,18 +80,22 @@ public class RobotContainer {
           .withTimeout(1.5) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoOnlyShootNote = m_Shooter.ShootSpeakerCommand().withName("Auto Shoot Command");
-  final Command AutoIntakeOut = m_Intake.GetIntakeWheels() // shooter speed up
+  final Command AutoIntakeOut =
+      m_Intake
+          .GetIntakeWheels() // shooter speed up
           .EjectNoteCommand()
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
-  final Command AutoIntakeNoteCommand = m_Intake.autoIntakeDown()
+  final Command AutoIntakeNoteCommand =
+      m_Intake
+          .autoIntakeDown()
           .onlyIf(() -> !m_Intake.NoteIsLoaded())
           .alongWith(m_Intake.GetIntakeWheels().IntakeNoteCommand())
           .finallyDo(m_Intake.autoIntakeUp()::schedule);
-  final Command AutoEjectNoteCommand = m_Intake.autoIntakeDown()
-          .andThen(
-            m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5)
-            );
+  final Command AutoEjectNoteCommand =
+      m_Intake
+          .autoIntakeDown()
+          .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5));
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -269,6 +273,5 @@ public class RobotContainer {
 
     return autoCommand.beforeStarting(
         () -> m_DriveTrain.resetPose(new Pose2d(1.27, 5.55, new Rotation2d())));
-
   }
 }

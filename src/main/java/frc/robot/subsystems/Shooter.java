@@ -114,20 +114,16 @@ public class Shooter extends SubsystemBase {
 
   public boolean IsShooterAtSpeakerSpeed() {
     if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrSpeakerTargetRPM
-        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrSpeakerTargetRPM)
-      return true;
+        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrSpeakerTargetRPM) return true;
 
     return false;
-
   }
 
   public boolean IsShooterAtAmpSpeed() {
     if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrAmpTargetRPM
-        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrAmpTargetRPM)
-      return true;
+        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrAmpTargetRPM) return true;
 
     return false;
-
   }
 
   public void StopShooter() {
