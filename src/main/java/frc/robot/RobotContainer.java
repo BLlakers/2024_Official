@@ -50,57 +50,48 @@ public class RobotContainer {
   // commands
   final Command ShootNoteCommandNoWait =
       m_Shooter
-          .RunShooter()
+          .ShootSpeakerCommand()
           .alongWith(m_Intake.GetIntakeWheels().EjectNoteCommand())
           .withTimeout(0.5)
-          .withName("Shoot Command No Wait");
+          .withName("Shoot Speaker No Wait");
 
   final Command ShootNoteCommand =
       m_Shooter
-          .RunShooter()
+          .ShootSpeakerCommand()
           .alongWith(
-              Commands.waitUntil(m_Shooter::ShouldWeShoot)
+              Commands.waitUntil(m_Shooter::IsShooterAtSpeakerSpeed)
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
-          .withName("Shoot Command");
+          .withName("Shoot Speaker When At Target Speed");
 
   final Command AmpCommand =
       m_Shooter
-          .ShootAmp()
+          .ShootAmpCommand()
           .alongWith(
-              Commands.waitUntil(m_Shooter::ShouldWeShoot)
+              Commands.waitUntil(m_Shooter::IsShooterAtAmpSpeed)
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
-          .withName("Shoot Command");
+          .withName("Shoot Amp When at Target Speed");
 
   final Command AutoShootNote =
       m_Shooter
-          .RunShooter()
+          .ShootSpeakerCommand()
           .alongWith(
-              Commands.waitUntil(m_Shooter::ShouldWeShoot)
+              Commands.waitUntil(m_Shooter::IsShooterAtSpeakerSpeed)
                   .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand()))
           .withTimeout(1.5) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
-  final Command AutoOnlyShootNote = m_Shooter.RunShooter().withName("Auto Shoot Command");
-  final Command AutoIntakeOut =
-
-      // shooter speed up
-      m_Intake
-          .GetIntakeWheels()
+  final Command AutoOnlyShootNote = m_Shooter.ShootSpeakerCommand().withName("Auto Shoot Command");
+  final Command AutoIntakeOut = m_Intake.GetIntakeWheels() // shooter speed up
           .EjectNoteCommand()
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
-  final Command AutoIntakeNoteCommand =
-      m_Intake
-          .autoIntakeDown()
+  final Command AutoIntakeNoteCommand = m_Intake.autoIntakeDown()
           .onlyIf(() -> !m_Intake.NoteIsLoaded())
           .alongWith(m_Intake.GetIntakeWheels().IntakeNoteCommand())
           .finallyDo(m_Intake.autoIntakeUp()::schedule);
-  final Command AutoEjectNoteCommand =
-      m_Intake
-          .autoIntakeDown()
-          .andThen(m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5));
-
-  final Command AprilAlignRadialCommand =
-      new AprilAlignToSpeakerRadiallyCommand(m_Limelight::getCurrentAprilTag, m_DriveTrain);
+  final Command AutoEjectNoteCommand = m_Intake.autoIntakeDown()
+          .andThen(
+            m_Intake.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5)
+            );
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -200,8 +191,6 @@ public class RobotContainer {
     driverController.start().onTrue(m_DriveTrain.resetPose2d()); // RESETING OUR POSE 2d/ odometry
     driverController.rightStick().onTrue(m_DriveTrain.WheelLockCommand()); // lock wheels
 
-    driverController.y().whileTrue(AprilAlignRadialCommand);
-
     // Manipulator Controller commands
     manipController
         .leftBumper() // Angle down the shooter
@@ -232,7 +221,7 @@ public class RobotContainer {
     manipController
         .y() // eject the intake command
         .whileTrue(m_Intake.GetIntakeWheels().EjectNoteCommand());
-    manipController.rightTrigger(0.5).whileTrue(m_Shooter.RunShooter());
+    manipController.rightTrigger(0.5).whileTrue(m_Shooter.ShootSpeakerCommand());
     manipController
         .leftTrigger(0.5)
         .whileTrue(m_Intake.GetIntakeWheels().IntakeNoteCommandrunRegardless());
@@ -264,27 +253,22 @@ public class RobotContainer {
 
     // Add subsystems
     SmartDashboard.putData(m_DriveTrain);
-    SmartDashboard.putData("DriveTrain/Reset Pose 2D", m_DriveTrain.resetPose2d());
+    SmartDashboard.putData(m_DriveTrain.getName() + "/Reset Pose 2D", m_DriveTrain.resetPose2d());
 
     SmartDashboard.putData(m_Shooter);
     SmartDashboard.putData(m_Hanger);
     SmartDashboard.putData(m_Intake);
     SmartDashboard.putData(m_Intake.GetIntakeWheels());
     SmartDashboard.putData(m_Limelight);
-
-    SmartDashboard.putData("DriveTrain/AprilAlignCommand", AprilAlignRadialCommand);
   }
 
   public Command getAutonomousCommand() {
     // loads New Auto auto file
-    // return new PathPlannerAuto("New Auto");
 
     Command autoCommand = autoChooser.getSelected();
 
     return autoCommand.beforeStarting(
         () -> m_DriveTrain.resetPose(new Pose2d(1.27, 5.55, new Rotation2d())));
-
-    // return autoChooser.getSelected();
 
   }
 }

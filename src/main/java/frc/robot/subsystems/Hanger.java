@@ -105,11 +105,10 @@ public class Hanger extends SubsystemBase {
   }
 
   public boolean HangersDown() {
-    if (RightHangIsDown() && LeftHangIsDown()) {
+    if (RightHangIsDown() && LeftHangIsDown()) 
       return true;
-    } else {
-      return false;
-    }
+
+    return false;
   }
 
   /** Lowers hang when Held. Will stop when it hits the limit switch */
@@ -118,8 +117,9 @@ public class Hanger extends SubsystemBase {
         Commands.parallel(
                 Commands.runEnd(this::RightHangDown, this::RightHangStop)
                     .until(this::RightHangIsDown),
-                Commands.runEnd(this::LeftHangDown, this::LeftHangStop).until(this::LeftHangIsDown))
-            .finallyDo(this::HangStop);
+                Commands.runEnd(this::LeftHangDown, this::LeftHangStop)
+                    .until(this::LeftHangIsDown)
+            ).finallyDo(this::HangStop);
 
     cmd.addRequirements(this);
 

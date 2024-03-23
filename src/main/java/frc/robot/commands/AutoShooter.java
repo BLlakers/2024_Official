@@ -89,7 +89,7 @@ public class AutoShooter extends Command {
     m_orientShooterAngleCommand.end(interrupted);
 
     if (!interrupted && m_shooterLoaded.getAsBoolean())
-      m_shooter.Shoot(); // shoot if we actually reached the target
+      m_shooter.ShootSpeakerSpeed(); // shoot if we actually reached the target
   }
 
   @Override

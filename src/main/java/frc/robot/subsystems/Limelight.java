@@ -92,33 +92,4 @@ public class Limelight extends SubsystemBase {
     builder.addDoubleProperty("AprilTag/pose/Y", m_currentAprilTag.pose::getY, null);
     builder.addDoubleProperty("AprilTag/pose/Z", m_currentAprilTag.pose::getZ, null);
   }
-  /*
-  public Command resetBotPoseRelativeToField(DriveTrain drivetrain) {
-    return this.run(
-            () -> {
-              m_currentAprilTag = this.getCurrentAprilTag();
-            })
-        .onlyWhile(() -> m_currentAprilTag.ID < 0)
-        .andThen(
-            () -> { // set the robot's pose relative to the field
-              // grab the currently viewed april tag
-              AprilTag tag = m_currentAprilTag;
-
-              // Perform the calculations to determine the bot's position rel. to tag
-              Transform2d Tag2Bot = tag.pose.toPose2d().minus(new Pose2d()).inverse();
-
-              // Depending on which team we are in, reset the pose of the robot relative to speaker
-              // tag
-              Pose2d Origin2Tag = Constants.AprilTagID.BlueSpeakerCenterPose;
-              Pose2d Origin2Bot = Origin2Tag.transformBy(Tag2Bot);
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                if (alliance.get() == Alliance.Red) // only need blue, flip if red
-                Origin2Bot = GeometryUtil.flipFieldPose(Origin2Bot);
-              }
-
-              drivetrain.resetPose(Origin2Bot);
-            });
-  }
-  */
 }

@@ -30,10 +30,10 @@ public class Shooter extends SubsystemBase {
   private DigitalInput m_limitSwitchBottom = null;
 
   // Constants to calculate the angle of the shooter
-  public static final double s_RightMtrShooterRpm = -3300;
-  public static final double s_LeftMtrShooterRpm = 3400;
-  public static final double s_RightMtrAmpRpm = -3300;
-  public static final double s_LeftMtrAmpRpm = 3300;
+  public static final double s_RightMtrSpeakerTargetRPM = -3300;
+  public static final double s_LeftMtrSpeakerTargetRPM = 3400;
+  public static final double s_RightMtrAmpTargetRPM = -3300;
+  public static final double s_LeftMtrAmpTargetRPM = 3300;
 
   private static final double LEAD_SCREW_CONNECTOR_HORIZONTAL_OFFSET = Units.inchesToMeters(5.4375);
   private static final double LENGTH_OF_SHOOTER_LINK = Units.inchesToMeters(3.9453125);
@@ -86,43 +86,51 @@ public class Shooter extends SubsystemBase {
     // });
   }
 
-  public void Shoot() {
+  public void ShootSpeakerSpeed() {
     SetShootingSpeed(s_LeftMotorShooterSpeed, s_RightMotorShooterSpeed);
   }
 
-  public void ShootV() {
+  public void ShootSpeakerVoltage() {
     SetShootingSpeedVoltage(s_LeftMotorShooterVoltage, s_RightMotorShooterVoltage);
   }
 
-  public void ShootA() {
+  public void ShootAmpVoltage() {
     SetShootingSpeedVoltage(s_LeftMotorAmpVoltage, s_RightMotorAmpVoltage);
   }
 
-  public Command ShootAmp() {
+  public Command ShootAmpCommand() {
 
-    return this.runEnd(this::ShootA, this::StopShooter);
+    return this.runEnd(this::ShootAmpVoltage, this::StopShooter);
   }
 
-  public Command RunShooter() {
+  public Command ShootSpeakerCommand() {
 
-    return this.runEnd(this::ShootV, this::StopShooter);
+    return this.runEnd(this::ShootSpeakerVoltage, this::StopShooter);
   }
 
   public Command StopShooterCommand() {
     return this.runOnce(this::StopShooter);
   }
 
-  public boolean ShouldWeShoot() {
-    if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrShooterRpm
-        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrShooterRpm) {
+  public boolean IsShooterAtSpeakerSpeed() {
+    if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrSpeakerTargetRPM
+        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrSpeakerTargetRPM)
       return true;
-    } else {
-      return false;
-    }
+
+    return false;
+
+  }
+
+  public boolean IsShooterAtAmpSpeed() {
+    if (m_shooterMtrLeftEnc.getVelocity() >= s_LeftMtrAmpTargetRPM
+        && m_shooterMtrRightEnc.getVelocity() <= s_RightMtrAmpTargetRPM)
+      return true;
+
+    return false;
+
   }
 
   public void StopShooter() {
-
     m_shooterMtrLeft.stopMotor();
     m_shooterMtrRight.stopMotor();
   }
@@ -280,7 +288,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-    builder.addBooleanProperty("Should We Shoot?", () -> ShouldWeShoot(), null);
+    builder.addBooleanProperty("Should We Shoot?", this::IsShooterAtSpeakerSpeed, null);
     builder.addDoubleProperty("Motor Left/Speed", m_shooterMtrLeftEnc::getVelocity, null);
     builder.addDoubleProperty(
         "Motor Left/Speed Percentage",
