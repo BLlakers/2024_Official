@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.11,
-      "y": 4.7
+      "x": 0.76,
+      "y": 4.47
     },
-    "rotation": -35.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Blue - Opp - Note5"
+                  "pathName": "Blue - SquareOpp - Note5"
                 }
               }
             ]
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue - Note5 - Opp"
+            "pathName": "Blue - Note5 - SquareOpp"
           }
         },
         {
