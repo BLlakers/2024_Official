@@ -30,8 +30,8 @@ public class Shooter extends SubsystemBase {
   private DigitalInput m_limitSwitchBottom = null;
 
   // Constants to calculate the angle of the shooter
-  public static final double s_RightMtrSpeakerTargetRPM = -3300;
-  public static final double s_LeftMtrSpeakerTargetRPM = 3400;
+  public static final double s_RightMtrSpeakerTargetRPM = -3600;
+  public static final double s_LeftMtrSpeakerTargetRPM = 3600;
   public static final double s_RightMtrAmpTargetRPM = -3300;
   public static final double s_LeftMtrAmpTargetRPM = 3300;
 
@@ -58,8 +58,8 @@ public class Shooter extends SubsystemBase {
 
   private static double s_LeftMotorShooterSpeed = 0.85;
   private static double s_RightMotorShooterSpeed = -0.85;
-  private static double s_LeftMotorShooterVoltage = 11;
-  private static double s_RightMotorShooterVoltage = -11;
+  private static double s_LeftMotorShooterVoltage = 12;
+  private static double s_RightMotorShooterVoltage = -12;
   private static double s_LeftMotorAmpVoltage = 2.2;
   private static double s_RightMotorAmpVoltage = -2.2;
 

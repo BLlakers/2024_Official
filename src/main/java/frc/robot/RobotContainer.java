@@ -207,7 +207,7 @@ public class RobotContainer {
 
     manipController
         .a() // Shoot the note
-        .whileTrue(ShootNoteCommand.withTimeout(1.5));
+        .whileTrue(ShootNoteCommand.withTimeout(2.5));
     manipController.b().whileTrue(AutoIntakeNoteCommand);
     manipController
         .x() // eject the intake command

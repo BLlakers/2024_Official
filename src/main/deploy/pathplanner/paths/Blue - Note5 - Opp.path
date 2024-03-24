@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.12401016726024,
-        "y": 0.7702308991316326
+        "x": 8.118015665417921,
+        "y": 0.6909393562011086
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4982297316765436,
-        "y": 1.1332668320508608
+        "x": 3.4922352298342254,
+        "y": 1.0539752891203369
       },
       "isLocked": false,
       "linkedName": "Blue - LastCenterNotePickup"
