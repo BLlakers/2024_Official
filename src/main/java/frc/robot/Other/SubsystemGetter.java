@@ -1,4 +1,5 @@
 package frc.robot.Other;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.*;
 import frc.robot.*;
@@ -35,6 +36,4 @@ public class SubsystemGetter extends SubsystemBase {
   public Intake IntakeSub() {
     return m_Intake;
   }
-
- 
 }

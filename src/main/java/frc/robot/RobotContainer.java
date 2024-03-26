@@ -23,6 +23,7 @@ public class RobotContainer {
   // Creates our objects from our methods for our classes
   SubsystemGetter Get = new SubsystemGetter();
   SmartDashboardSetup SDS = new SmartDashboardSetup();
+
   // Shooter
 
   /**
@@ -232,12 +233,10 @@ public class RobotContainer {
     // - Manual hanger commands
     debugController
         .leftBumper() // Left Hanger arm down
-        .whileTrue(
-            Get.HangSub().runEnd(Get.HangSub()::LeftHangDown, Get.HangSub()::LeftHangStop));
+        .whileTrue(Get.HangSub().runEnd(Get.HangSub()::LeftHangDown, Get.HangSub()::LeftHangStop));
     debugController
         .a() // Left Hanger arm up
-        .whileTrue(
-            Get.HangSub().runEnd(Get.HangSub()::LeftHangUp, Get.HangSub()::LeftHangStop));
+        .whileTrue(Get.HangSub().runEnd(Get.HangSub()::LeftHangUp, Get.HangSub()::LeftHangStop));
 
     debugController
         .rightBumper() // Right Hanger arm down
@@ -245,8 +244,7 @@ public class RobotContainer {
             Get.HangSub().runEnd(Get.HangSub()::RightHangDown, Get.HangSub()::RightHangStop));
     debugController
         .b() // Right Hanger arm up
-        .whileTrue(
-            Get.HangSub().runEnd(Get.HangSub()::RightHangUp, Get.HangSub()::RightHangStop));
+        .whileTrue(Get.HangSub().runEnd(Get.HangSub()::RightHangUp, Get.HangSub()::RightHangStop));
 
     debugController.povUp().whileTrue(Get.ShooterSub().ManualAngleUp());
     debugController.x().whileTrue(DriveForward);

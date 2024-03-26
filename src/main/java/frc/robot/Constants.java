@@ -133,7 +133,7 @@ public final class Constants {
   }
 
   public interface RobotVersionConstants {
-    public static final double flTurnEncoderOffset =  0;
+    public static final double flTurnEncoderOffset = 0;
     public static final double frTurnEncoderOffset = 0;
     public static final double blTurnEncoderOffset = 0;
     public static final double brTurnEncoderOffset = 0;
