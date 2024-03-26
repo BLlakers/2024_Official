@@ -11,9 +11,10 @@ import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import frc.robot.subsystems.*;
+
 public class Intake extends SubsystemBase {
   private SubsystemGetter Sub = new SubsystemGetter();
+
   // tells which state the intake is in currently
   public enum State {
     PositionUp,
@@ -38,8 +39,6 @@ public class Intake extends SubsystemBase {
           Constants.Intake.AngleMtrC, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
 
   private State m_CurrentState = State.PositionUp;
-
-
 
   private static final double s_AngleDownStopDegrees = 95;
   private static final double s_AngleUpStopDegrees = 45;
@@ -86,8 +85,6 @@ public class Intake extends SubsystemBase {
       m_CurrentState = State.PositionAmp;
     else m_CurrentState = State.PositionOther;
   }
-
-
 
   public State GetIntakeState() {
     return m_CurrentState;

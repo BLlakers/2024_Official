@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -40,7 +39,8 @@ public class RobotContainer {
       new SwerveDriveCommand(() -> 1, () -> 0, () -> 0, () -> .3, Sub.GetDriveTrain());
   final Command DriveSide =
       new SwerveDriveCommand(() -> 0, () -> 1, () -> 0, () -> .3, Sub.GetDriveTrain());
-  final Command Rotate = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, Sub.GetDriveTrain());
+  final Command Rotate =
+      new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, Sub.GetDriveTrain());
   // commands
   final Command ShootNoteCommandNoWait =
       Sub.GetShooter()
@@ -58,7 +58,7 @@ public class RobotContainer {
           .withName("Shoot Speaker When At Target Speed");
 
   final Command AmpCommand =
-Sub.GetShooter()
+      Sub.GetShooter()
           .ShootAmpCommand()
           .alongWith(
               Commands.waitUntil(Sub.GetShooter()::IsShooterAtAmpSpeed)
@@ -73,7 +73,8 @@ Sub.GetShooter()
                   .andThen(Sub.GetIntakeWheels().EjectNoteCommand()))
           .withTimeout(1.5) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
-  final Command AutoOnlyShootNote = Sub.GetShooter().ShootSpeakerCommand().withName("Auto Shoot Command");
+  final Command AutoOnlyShootNote =
+      Sub.GetShooter().ShootSpeakerCommand().withName("Auto Shoot Command");
   final Command AutoIntakeOut =
       Sub.GetIntakeWheels() // shooter speed up
           .EjectNoteCommand()
@@ -81,7 +82,7 @@ Sub.GetShooter()
           .withName("Auto Shoot Command");
   final Command AutoIntakeNoteCommand =
       Sub.GetIntake()
-      .autoIntakeDown()
+          .autoIntakeDown()
           .onlyIf(() -> !Sub.GetIntakeWheels().NoteIsLoaded())
           .alongWith(Sub.GetIntakeWheels().IntakeNoteCommand())
           .finallyDo(Sub.GetIntake().autoIntakeUp()::schedule);
@@ -172,20 +173,23 @@ Sub.GetShooter()
      * <p>Controls: - Left Stick: Steering - Right Stick: Rotate the robot - Right Trigger: provide
      * gas - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
      */
-    Sub.GetDriveTrain().setDefaultCommand(
-        new SwerveDriveCommand(
-            () -> driverController.getLeftY(),
-            () -> driverController.getLeftX(),
-            () -> driverController.getRightX(),
-            () -> driverController.getRightTriggerAxis(),
-            Sub.GetDriveTrain(),
-            () -> driverController.getLeftTriggerAxis() >= 0.5));
+    Sub.GetDriveTrain()
+        .setDefaultCommand(
+            new SwerveDriveCommand(
+                () -> driverController.getLeftY(),
+                () -> driverController.getLeftX(),
+                () -> driverController.getRightX(),
+                () -> driverController.getRightTriggerAxis(),
+                Sub.GetDriveTrain(),
+                () -> driverController.getLeftTriggerAxis() >= 0.5));
 
     // Driver Controller commands
     // - DriveTrain commands (outside of actual driving)
     driverController.a().onTrue(Sub.GetDriveTrain().toggleFieldRelativeEnable());
     driverController.b().onTrue(Sub.GetDriveTrain().ZeroGyro());
-    driverController.start().onTrue(Sub.GetDriveTrain().resetPose2d()); // RESETING OUR POSE 2d/ odometry
+    driverController
+        .start()
+        .onTrue(Sub.GetDriveTrain().resetPose2d()); // RESETING OUR POSE 2d/ odometry
     driverController.rightStick().onTrue(Sub.GetDriveTrain().WheelLockCommand()); // lock wheels
 
     // Manipulator Controller commands
@@ -227,17 +231,21 @@ Sub.GetShooter()
     // - Manual hanger commands
     debugController
         .leftBumper() // Left Hanger arm down
-        .whileTrue(Sub.GetHanger().runEnd(Sub.GetHanger()::LeftHangDown, Sub.GetHanger()::LeftHangStop));
+        .whileTrue(
+            Sub.GetHanger().runEnd(Sub.GetHanger()::LeftHangDown, Sub.GetHanger()::LeftHangStop));
     debugController
         .a() // Left Hanger arm up
-        .whileTrue(Sub.GetHanger().runEnd(Sub.GetHanger()::LeftHangUp, Sub.GetHanger()::LeftHangStop));
+        .whileTrue(
+            Sub.GetHanger().runEnd(Sub.GetHanger()::LeftHangUp, Sub.GetHanger()::LeftHangStop));
 
     debugController
         .rightBumper() // Right Hanger arm down
-        .whileTrue(Sub.GetHanger().runEnd(Sub.GetHanger()::RightHangDown, Sub.GetHanger()::RightHangStop));
+        .whileTrue(
+            Sub.GetHanger().runEnd(Sub.GetHanger()::RightHangDown, Sub.GetHanger()::RightHangStop));
     debugController
         .b() // Right Hanger arm up
-        .whileTrue(Sub.GetHanger().runEnd(Sub.GetHanger()::RightHangUp, Sub.GetHanger()::RightHangStop));
+        .whileTrue(
+            Sub.GetHanger().runEnd(Sub.GetHanger()::RightHangUp, Sub.GetHanger()::RightHangStop));
 
     debugController.povUp().whileTrue(Sub.GetShooter().ManualAngleUp());
     debugController.x().whileTrue(DriveForward);

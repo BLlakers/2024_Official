@@ -154,8 +154,8 @@ public final class Constants {
   }
 
   private static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
-  
-  public static RobotVersion CurrentRobotVersion(){
+
+  public static RobotVersion CurrentRobotVersion() {
     return defaultRobotVersion;
   }
 }
