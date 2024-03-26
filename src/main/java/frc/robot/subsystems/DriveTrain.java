@@ -334,7 +334,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * This is a runnable command.
+   * This is a command.
    * <li>This resets the gyro's position.
    * <li>This is needed for Auto, Limelight, and the DriveTrain.
    *
@@ -349,9 +349,9 @@ public class DriveTrain extends SubsystemBase {
   }
 
   /**
-   * This is a runnable command.
+   * This is a command.
    * <li>This toggles field relative on and off.
-   * <li>If
+   * <li>If pressed, will change the robot from field relative to Robot relative. DO NOT RECOMMEND.
    *
    * @author Jared Forchheimer, Dimitri Lezcano
    * @return Pose2d

@@ -13,7 +13,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class Intake extends SubsystemBase {
-  private SubsystemGetter Sub = new SubsystemGetter();
+  private SubsystemGetter Get = new SubsystemGetter();
 
   // tells which state the intake is in currently
   public enum State {
@@ -99,7 +99,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean NoteIsLoaded() {
-    return Sub.GetIntakeWheels().NoteIsLoaded();
+    return Get.IntakeWheelsSub().NoteIsLoaded();
   }
 
   public Command autoIntakeUp() {
@@ -164,7 +164,7 @@ public class Intake extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    Sub.GetIntakeWheels().initSendable(builder);
+    Get.IntakeWheelsSub().initSendable(builder);
 
     builder.addDoubleProperty("Angle", () -> this.GetIntakeMotorAngle().getDegrees(), null);
     builder.addDoubleProperty("Motor/Position", intakeAngleMtrEnc::getPosition, null);

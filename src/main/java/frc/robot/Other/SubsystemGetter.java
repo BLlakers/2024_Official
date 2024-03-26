@@ -1,7 +1,4 @@
 package frc.robot.Other;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.*;
 import frc.robot.*;
@@ -15,38 +12,29 @@ public class SubsystemGetter extends SubsystemBase {
   private Shooter m_Shooter = new Shooter();
   private IntakeWheels m_IntakeWheels = new IntakeWheels();
 
-  public IntakeWheels GetIntakeWheels() {
+  public IntakeWheels IntakeWheelsSub() {
     return m_IntakeWheels;
   }
 
-  public DriveTrain GetDriveTrain() {
+  public DriveTrain DriveTrainSub() {
     return m_DriveTrain;
   }
 
-  public Hanger GetHanger() {
+  public Hanger HangSub() {
     return m_Hanger;
   }
 
-  public Limelight GetLimelight() {
+  public Limelight LimelightSub() {
     return m_Limelight;
   }
 
-  public Shooter GetShooter() {
+  public Shooter ShooterSub() {
     return m_Shooter;
   }
 
-  public Intake GetIntake() {
+  public Intake IntakeSub() {
     return m_Intake;
   }
 
-  public void SmartDashboardSetup() {
-    SmartDashboard.putData(m_DriveTrain);
-    SmartDashboard.putData(m_Shooter);
-    SmartDashboard.putData(m_Hanger);
-    SmartDashboard.putData(m_Intake);
-    SmartDashboard.putData(m_IntakeWheels);
-    SmartDashboard.putData(m_Limelight);
-    SmartDashboard.putData(m_DriveTrain.getName() + "/Reset Pose 2D", m_DriveTrain.resetPose2d());
-    SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
-  }
+ 
 }

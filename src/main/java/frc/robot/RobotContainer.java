@@ -14,14 +14,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Other.SmartDashboardSetup;
 import frc.robot.Other.SubsystemGetter;
 import frc.robot.commands.AutoIntake;
 import frc.robot.commands.SwerveDriveCommand;
 
 public class RobotContainer {
   // Creates our objects from our methods for our classes
-  SubsystemGetter Sub = new SubsystemGetter();
-
+  SubsystemGetter Get = new SubsystemGetter();
+  SmartDashboardSetup SDS = new SmartDashboardSetup();
   // Shooter
 
   /**
@@ -36,60 +37,60 @@ public class RobotContainer {
   CommandXboxController debugController =
       new CommandXboxController(Constants.Controller.DebugControllerChannel);
   final Command DriveForward =
-      new SwerveDriveCommand(() -> 1, () -> 0, () -> 0, () -> .3, Sub.GetDriveTrain());
+      new SwerveDriveCommand(() -> 1, () -> 0, () -> 0, () -> .3, Get.DriveTrainSub());
   final Command DriveSide =
-      new SwerveDriveCommand(() -> 0, () -> 1, () -> 0, () -> .3, Sub.GetDriveTrain());
+      new SwerveDriveCommand(() -> 0, () -> 1, () -> 0, () -> .3, Get.DriveTrainSub());
   final Command Rotate =
-      new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, Sub.GetDriveTrain());
+      new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, Get.DriveTrainSub());
   // commands
   final Command ShootNoteCommandNoWait =
-      Sub.GetShooter()
+      Get.ShooterSub()
           .ShootSpeakerCommand()
-          .alongWith(Sub.GetIntakeWheels().EjectNoteCommand())
+          .alongWith(Get.IntakeWheelsSub().EjectNoteCommand())
           .withTimeout(0.5)
           .withName("Shoot Speaker No Wait");
 
   final Command ShootNoteCommand =
-      Sub.GetShooter()
+      Get.ShooterSub()
           .ShootSpeakerCommand()
           .alongWith(
-              Commands.waitUntil(Sub.GetShooter()::IsShooterAtSpeakerSpeed)
-                  .andThen(Sub.GetIntakeWheels().EjectNoteCommand()))
+              Commands.waitUntil(Get.ShooterSub()::IsShooterAtSpeakerSpeed)
+                  .andThen(Get.IntakeWheelsSub().EjectNoteCommand()))
           .withName("Shoot Speaker When At Target Speed");
 
   final Command AmpCommand =
-      Sub.GetShooter()
+      Get.ShooterSub()
           .ShootAmpCommand()
           .alongWith(
-              Commands.waitUntil(Sub.GetShooter()::IsShooterAtAmpSpeed)
-                  .andThen(Sub.GetIntakeWheels().EjectNoteCommand()))
+              Commands.waitUntil(Get.ShooterSub()::IsShooterAtAmpSpeed)
+                  .andThen(Get.IntakeWheelsSub().EjectNoteCommand()))
           .withName("Shoot Amp When at Target Speed");
 
   final Command AutoShootNote =
-      Sub.GetShooter()
+      Get.ShooterSub()
           .ShootSpeakerCommand()
           .alongWith(
-              Commands.waitUntil(Sub.GetShooter()::IsShooterAtSpeakerSpeed)
-                  .andThen(Sub.GetIntakeWheels().EjectNoteCommand()))
+              Commands.waitUntil(Get.ShooterSub()::IsShooterAtSpeakerSpeed)
+                  .andThen(Get.IntakeWheelsSub().EjectNoteCommand()))
           .withTimeout(1.5) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoOnlyShootNote =
-      Sub.GetShooter().ShootSpeakerCommand().withName("Auto Shoot Command");
+      Get.ShooterSub().ShootSpeakerCommand().withName("Auto Shoot Command");
   final Command AutoIntakeOut =
-      Sub.GetIntakeWheels() // shooter speed up
+      Get.IntakeWheelsSub() // shooter speed up
           .EjectNoteCommand()
           .withTimeout(1.0) // 0.5 (shooter) + 0.5 command
           .withName("Auto Shoot Command");
   final Command AutoIntakeNoteCommand =
-      Sub.GetIntake()
+      Get.IntakeSub()
           .autoIntakeDown()
-          .onlyIf(() -> !Sub.GetIntakeWheels().NoteIsLoaded())
-          .alongWith(Sub.GetIntakeWheels().IntakeNoteCommand())
-          .finallyDo(Sub.GetIntake().autoIntakeUp()::schedule);
+          .onlyIf(() -> !Get.IntakeWheelsSub().NoteIsLoaded())
+          .alongWith(Get.IntakeWheelsSub().IntakeNoteCommand())
+          .finallyDo(Get.IntakeSub().autoIntakeUp()::schedule);
   final Command AutoEjectNoteCommand =
-      Sub.GetIntake()
+      Get.IntakeSub()
           .autoIntakeDown()
-          .andThen(Sub.GetIntakeWheels().EjectNoteCommand().withTimeout(0.5));
+          .andThen(Get.IntakeWheelsSub().EjectNoteCommand().withTimeout(0.5));
 
   // A chooser for autonomous commands
   private final SendableChooser<Command> autoChooser;
@@ -99,7 +100,7 @@ public class RobotContainer {
   List<Pose2d> currentPath = new ArrayList<Pose2d>();
 
   public RobotContainer() {
-    Sub.GetDriveTrain().setName("DriveTrain");
+    Get.DriveTrainSub().setName("DriveTrain");
 
     configureShuffleboard();
     configureBindings();
@@ -111,12 +112,12 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "AutoLowerIntake",
         new AutoIntake(
-            Sub.GetIntake(), Sub.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeDown));
+            Get.IntakeSub(), Get.IntakeWheelsSub(), AutoIntake.DrivingState.DriveIntakeDown));
     NamedCommands.registerCommand(
         "AutoRaiseIntake",
         new AutoIntake(
-            Sub.GetIntake(), Sub.GetIntakeWheels(), AutoIntake.DrivingState.DriveIntakeUp));
-    NamedCommands.registerCommand("Intake", new AutoIntake(Sub.GetIntake(), Sub.GetIntakeWheels()));
+            Get.IntakeSub(), Get.IntakeWheelsSub(), AutoIntake.DrivingState.DriveIntakeUp));
+    NamedCommands.registerCommand("Intake", new AutoIntake(Get.IntakeSub(), Get.IntakeWheelsSub()));
     autoChooser = AutoBuilder.buildAutoChooser();
 
     // Another option that allows you to specify the default auto by its name:
@@ -152,7 +153,7 @@ public class RobotContainer {
 
   public void periodic() {
     // us trying to set pose for field2d
-    field.setRobotPose(Sub.GetDriveTrain().getPose2d());
+    field.setRobotPose(Get.DriveTrainSub().getPose2d());
   }
 
   /**
@@ -173,34 +174,34 @@ public class RobotContainer {
      * <p>Controls: - Left Stick: Steering - Right Stick: Rotate the robot - Right Trigger: provide
      * gas - Left Trigger: reduce maximum driving speed by 50% RECOMMENDED TO USE
      */
-    Sub.GetDriveTrain()
+    Get.DriveTrainSub()
         .setDefaultCommand(
             new SwerveDriveCommand(
                 () -> driverController.getLeftY(),
                 () -> driverController.getLeftX(),
                 () -> driverController.getRightX(),
                 () -> driverController.getRightTriggerAxis(),
-                Sub.GetDriveTrain(),
+                Get.DriveTrainSub(),
                 () -> driverController.getLeftTriggerAxis() >= 0.5));
 
     // Driver Controller commands
     // - DriveTrain commands (outside of actual driving)
-    driverController.a().onTrue(Sub.GetDriveTrain().toggleFieldRelativeEnable());
-    driverController.b().onTrue(Sub.GetDriveTrain().ZeroGyro());
+    driverController.a().onTrue(Get.DriveTrainSub().toggleFieldRelativeEnable());
+    driverController.b().onTrue(Get.DriveTrainSub().ZeroGyro());
     driverController
         .start()
-        .onTrue(Sub.GetDriveTrain().resetPose2d()); // RESETING OUR POSE 2d/ odometry
-    driverController.rightStick().onTrue(Sub.GetDriveTrain().WheelLockCommand()); // lock wheels
+        .onTrue(Get.DriveTrainSub().resetPose2d()); // RESETING OUR POSE 2d/ odometry
+    driverController.rightStick().onTrue(Get.DriveTrainSub().WheelLockCommand()); // lock wheels
 
     // Manipulator Controller commands
     manipController
         .leftBumper() // Angle down the shooter
-        .whileTrue(Sub.GetHanger().LowerHangAuto());
+        .whileTrue(Get.HangSub().LowerHangAuto());
     manipController
         .rightBumper() // Angle up the shooter
-        .whileTrue(Sub.GetHanger().RaiseHangAuto());
+        .whileTrue(Get.HangSub().RaiseHangAuto());
 
-    manipController.start().onTrue(Sub.GetIntake().resetIntakePos());
+    manipController.start().onTrue(Get.IntakeSub().resetIntakePos());
 
     manipController
         .a() // Shoot the note
@@ -208,53 +209,53 @@ public class RobotContainer {
     manipController.b().whileTrue(AutoIntakeNoteCommand);
     manipController
         .x() // eject the intake command
-        .whileTrue(Sub.GetIntakeWheels().IntakeNoteCommand());
+        .whileTrue(Get.IntakeWheelsSub().IntakeNoteCommand());
 
-    manipController.povUp().onTrue(Sub.GetIntake().autoIntakeUp());
-    manipController.povDown().onTrue(Sub.GetIntake().autoIntakeDown());
+    manipController.povUp().onTrue(Get.IntakeSub().autoIntakeUp());
+    manipController.povDown().onTrue(Get.IntakeSub().autoIntakeDown());
     manipController
         .povLeft()
-        .whileTrue(Sub.GetIntake().ManualLowerIntakeCommand()); // lower the intake arm
+        .whileTrue(Get.IntakeSub().ManualLowerIntakeCommand()); // lower the intake arm
     manipController
         .povRight()
-        .whileTrue(Sub.GetIntake().ManualRaiseIntakeCommand()); // raise the intake arm
+        .whileTrue(Get.IntakeSub().ManualRaiseIntakeCommand()); // raise the intake arm
 
     manipController
         .y() // eject the intake command
-        .whileTrue(Sub.GetIntakeWheels().EjectNoteCommand());
-    manipController.rightTrigger(0.5).whileTrue(Sub.GetShooter().ShootSpeakerCommand());
+        .whileTrue(Get.IntakeWheelsSub().EjectNoteCommand());
+    manipController.rightTrigger(0.5).whileTrue(Get.ShooterSub().ShootSpeakerCommand());
     manipController
         .leftTrigger(0.5)
-        .whileTrue(Sub.GetIntakeWheels().IntakeNoteCommandrunRegardless());
+        .whileTrue(Get.IntakeWheelsSub().IntakeNoteCommandrunRegardless());
 
     // Debug controller
     // - Manual hanger commands
     debugController
         .leftBumper() // Left Hanger arm down
         .whileTrue(
-            Sub.GetHanger().runEnd(Sub.GetHanger()::LeftHangDown, Sub.GetHanger()::LeftHangStop));
+            Get.HangSub().runEnd(Get.HangSub()::LeftHangDown, Get.HangSub()::LeftHangStop));
     debugController
         .a() // Left Hanger arm up
         .whileTrue(
-            Sub.GetHanger().runEnd(Sub.GetHanger()::LeftHangUp, Sub.GetHanger()::LeftHangStop));
+            Get.HangSub().runEnd(Get.HangSub()::LeftHangUp, Get.HangSub()::LeftHangStop));
 
     debugController
         .rightBumper() // Right Hanger arm down
         .whileTrue(
-            Sub.GetHanger().runEnd(Sub.GetHanger()::RightHangDown, Sub.GetHanger()::RightHangStop));
+            Get.HangSub().runEnd(Get.HangSub()::RightHangDown, Get.HangSub()::RightHangStop));
     debugController
         .b() // Right Hanger arm up
         .whileTrue(
-            Sub.GetHanger().runEnd(Sub.GetHanger()::RightHangUp, Sub.GetHanger()::RightHangStop));
+            Get.HangSub().runEnd(Get.HangSub()::RightHangUp, Get.HangSub()::RightHangStop));
 
-    debugController.povUp().whileTrue(Sub.GetShooter().ManualAngleUp());
+    debugController.povUp().whileTrue(Get.ShooterSub().ManualAngleUp());
     debugController.x().whileTrue(DriveForward);
-    debugController.povDown().whileTrue(Sub.GetShooter().ManualAngleDown());
-    debugController.rightTrigger(.5).whileTrue(Sub.GetIntakeWheels().ReIntakeNoteCommand());
+    debugController.povDown().whileTrue(Get.ShooterSub().ManualAngleDown());
+    debugController.rightTrigger(.5).whileTrue(Get.IntakeWheelsSub().ReIntakeNoteCommand());
   }
 
   private void configureShuffleboard() {
-    Sub.SmartDashboardSetup();
+    SDS.SmartDashboardConfig();
   }
 
   public Command getAutonomousCommand() {
@@ -263,6 +264,6 @@ public class RobotContainer {
     Command autoCommand = autoChooser.getSelected();
 
     return autoCommand.beforeStarting(
-        () -> Sub.GetDriveTrain().resetPose(new Pose2d(1.27, 5.55, new Rotation2d())));
+        () -> Get.DriveTrainSub().resetPose(new Pose2d(1.27, 5.55, new Rotation2d())));
   }
 }
