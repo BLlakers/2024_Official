@@ -98,12 +98,12 @@ public class DriveTrain extends SubsystemBase {
         this);
     // sets our wanted offsets. Varies between 2023 and 2024.
     double flTurnOffset = 0, frTurnOffset = 0, blTurnOffset = 0, brTurnOffset = 0;
-    if (Constants.defaultRobotVersion == RobotVersion.v2023) {
+    if (Constants.CurrentRobotVersion() == RobotVersion.v2023) {
       flTurnOffset = Constants.RobotVersion2023.flTurnEncoderOffset;
       frTurnOffset = Constants.RobotVersion2023.frTurnEncoderOffset;
       blTurnOffset = Constants.RobotVersion2023.blTurnEncoderOffset;
       brTurnOffset = Constants.RobotVersion2023.brTurnEncoderOffset;
-    } else if (Constants.defaultRobotVersion == RobotVersion.v2024) {
+    } else if (Constants.CurrentRobotVersion() == RobotVersion.v2024) {
       flTurnOffset = Constants.RobotVersion2024.flTurnEncoderOffset;
       frTurnOffset = Constants.RobotVersion2024.frTurnEncoderOffset;
       blTurnOffset = Constants.RobotVersion2024.blTurnEncoderOffset;

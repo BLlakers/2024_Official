@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.Other.SubsystemGetter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -10,8 +11,9 @@ import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
+import frc.robot.subsystems.*;
 public class Intake extends SubsystemBase {
+  private SubsystemGetter Sub = new SubsystemGetter();
   // tells which state the intake is in currently
   public enum State {
     PositionUp,
@@ -37,7 +39,7 @@ public class Intake extends SubsystemBase {
 
   private State m_CurrentState = State.PositionUp;
 
-  private IntakeWheels m_IntakeWheels = new IntakeWheels();
+
 
   private static final double s_AngleDownStopDegrees = 95;
   private static final double s_AngleUpStopDegrees = 45;
@@ -85,9 +87,7 @@ public class Intake extends SubsystemBase {
     else m_CurrentState = State.PositionOther;
   }
 
-  public IntakeWheels GetIntakeWheels() {
-    return m_IntakeWheels;
-  }
+
 
   public State GetIntakeState() {
     return m_CurrentState;
@@ -102,7 +102,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean NoteIsLoaded() {
-    return m_IntakeWheels.NoteIsLoaded();
+    return Sub.GetIntakeWheels().NoteIsLoaded();
   }
 
   public Command autoIntakeUp() {
@@ -167,7 +167,7 @@ public class Intake extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    m_IntakeWheels.initSendable(builder);
+    Sub.GetIntakeWheels().initSendable(builder);
 
     builder.addDoubleProperty("Angle", () -> this.GetIntakeMotorAngle().getDegrees(), null);
     builder.addDoubleProperty("Motor/Position", intakeAngleMtrEnc::getPosition, null);
