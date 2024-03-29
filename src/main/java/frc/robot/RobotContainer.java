@@ -31,27 +31,27 @@ public class RobotContainer {
   private Shooter m_Shooter = new Shooter();
   private IntakeWheels m_IntakeWheels = new IntakeWheels();
 
-  public IntakeWheels IntakeWheelsSub() {
+  public IntakeWheels GetIntakeWheelsSub() {
     return m_IntakeWheels;
   }
 
-  public DriveTrain DriveTrainSub() {
+  public DriveTrain GetDriveTrainSub() {
     return m_DriveTrain;
   }
 
-  public Hanger HangSub() {
+  public Hanger GetHangSub() {
     return m_Hanger;
   }
 
-  public Limelight LimelightSub() {
+  public Limelight GetLimelightSub() {
     return m_Limelight;
   }
 
-  public Shooter ShooterSub() {
+  public Shooter GetShootWerSub() {
     return m_Shooter;
   }
 
-  public Intake IntakeSub() {
+  public Intake GetIntakeSub() {
     return m_Intake;
   }
 
@@ -70,9 +70,14 @@ public class RobotContainer {
       new CommandXboxController(Constants.Controller.DebugControllerChannel);
   final Command DriveForward =
       new SwerveDriveCommand(() -> 1, () -> 0, () -> 0, () -> .3, m_DriveTrain);
-  final Command DriveSide =
+    final Command DriveBack =
+      new SwerveDriveCommand(() -> -1, () -> 0, () -> 0, () -> .3, m_DriveTrain);
+  final Command DriveRight =
       new SwerveDriveCommand(() -> 0, () -> 1, () -> 0, () -> .3, m_DriveTrain);
-  final Command Rotate = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
+    final Command DriveLeft =
+      new SwerveDriveCommand(() -> 0, () -> -1, () -> 0, () -> .3, m_DriveTrain);
+  final Command RotateRight = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
+  final Command RotateLeft = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
   // commands
   final Command ShootNoteCommandNoWait =
       m_Shooter

@@ -132,21 +132,21 @@ public final class Constants {
     public static final int RightMtrC = 10;
   }
 
-  public abstract class RobotVersionConstants {
+  public interface RobotVersionConstants {
     public static final double flTurnEncoderOffset = 0;
     public static final double frTurnEncoderOffset = 0;
     public static final double blTurnEncoderOffset = 0;
     public static final double brTurnEncoderOffset = 0;
   }
 
-  public class RobotVersion2023 extends RobotVersionConstants {
+  public class RobotVersion2023 implements RobotVersionConstants {
     public static final double flTurnEncoderOffset = 0.3459;
     public static final double frTurnEncoderOffset = 0.730;
     public static final double blTurnEncoderOffset = .1819;
     public static final double brTurnEncoderOffset = 0.9262;
   }
 
-  public class RobotVersion2024 extends RobotVersionConstants {
+  public class RobotVersion2024 implements RobotVersionConstants {
     public static final double flTurnEncoderOffset = 0.600;
     public static final double frTurnEncoderOffset = 0.772;
     public static final double blTurnEncoderOffset = 0.530;
