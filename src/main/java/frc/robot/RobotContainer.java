@@ -70,14 +70,16 @@ public class RobotContainer {
       new CommandXboxController(Constants.Controller.DebugControllerChannel);
   final Command DriveForward =
       new SwerveDriveCommand(() -> 1, () -> 0, () -> 0, () -> .3, m_DriveTrain);
-    final Command DriveBack =
+  final Command DriveBack =
       new SwerveDriveCommand(() -> -1, () -> 0, () -> 0, () -> .3, m_DriveTrain);
   final Command DriveRight =
       new SwerveDriveCommand(() -> 0, () -> 1, () -> 0, () -> .3, m_DriveTrain);
-    final Command DriveLeft =
+  final Command DriveLeft =
       new SwerveDriveCommand(() -> 0, () -> -1, () -> 0, () -> .3, m_DriveTrain);
-  final Command RotateRight = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
-  final Command RotateLeft = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
+  final Command RotateRight =
+      new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
+  final Command RotateLeft =
+      new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
   // commands
   final Command ShootNoteCommandNoWait =
       m_Shooter
