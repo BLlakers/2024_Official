@@ -23,11 +23,37 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer {
   // Creates our objects from our methods for our classes
-  DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
-  Limelight m_Limelight = new Limelight();
-  Intake m_Intake = new Intake();
-  Shooter m_Shooter = new Shooter();
-  Hanger m_Hanger = new Hanger();
+  
+  private DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
+  private Intake m_Intake = new Intake();
+  private Hanger m_Hanger = new Hanger();
+  private Limelight m_Limelight = new Limelight();
+  private Shooter m_Shooter = new Shooter();
+  private IntakeWheels m_IntakeWheels = new IntakeWheels();
+
+  public IntakeWheels IntakeWheelsSub() {
+    return m_IntakeWheels;
+  }
+
+  public DriveTrain DriveTrainSub() {
+    return m_DriveTrain;
+  }
+
+  public Hanger HangSub() {
+    return m_Hanger;
+  }
+
+  public Limelight LimelightSub() {
+    return m_Limelight;
+  }
+
+  public Shooter ShooterSub() {
+    return m_Shooter;
+  }
+
+  public Intake IntakeSub() {
+    return m_Intake;
+  }
 
   // Shooter
 
