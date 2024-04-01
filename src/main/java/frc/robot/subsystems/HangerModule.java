@@ -8,9 +8,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class HangerModule extends SubsystemBase {
-  public DigitalInput hangerMagSwitch;
-  public CANSparkMax hangerMtr;
-  public RelativeEncoder hangerMtrEnc;
+  private DigitalInput hangerMagSwitch;
+  private CANSparkMax hangerMtr;
+  private RelativeEncoder hangerMtrEnc;
 
   public HangerModule(
       int hangMtrPort,
@@ -19,12 +19,12 @@ public class HangerModule extends SubsystemBase {
     hangerMtr = new CANSparkMax(hangMtrPort, MotorType);
     hangerMtrEnc = hangerMtr.getEncoder();
     hangerMagSwitch = new DigitalInput(hangLimitSwitchPort);
-
     ResetHangEnc();
   }
 
+  
   public void ResetHangEnc() {
-    hangerMtrEnc.setPosition(0.0);
+    hangerMtrEnc.setPosition(0);
   }
 
   public Command ResetHangCmd() {
@@ -32,9 +32,15 @@ public class HangerModule extends SubsystemBase {
   }
 
   public void MoveHang(double speed) {
-    hangerMtr.set(speed); //
+    hangerMtr.set(speed);
+  }
+  public void MoveHangUp(){
+    MoveHang(Hanger.hangSpeedUp);
   }
 
+  public void MoveHangDown(){
+    MoveHang(Hanger.hangSpeedDown);
+  }
   public void HangStop() {
     hangerMtr.set(0);
   }
@@ -49,6 +55,13 @@ public class HangerModule extends SubsystemBase {
 
   public double GetPosition() {
     return hangerMtrEnc.getPosition();
+  }
+  public boolean atPosition(){
+    if (GetPosition() >= 140){
+      return true;
+    } else {
+    return false;
+    }
   }
 
   /** Raises hang when Held. Will stop at top position */

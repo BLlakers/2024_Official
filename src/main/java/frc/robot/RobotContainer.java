@@ -262,17 +262,17 @@ public class RobotContainer {
     // - Manual hanger commands
     debugController
         .leftBumper() // Left Hanger arm down
-        .whileTrue(m_Hanger.runEnd(m_Hanger::LeftHangDown, m_Hanger::LeftHangStop));
+        .whileTrue(m_Hanger.runEnd(()-> m_Hanger.leftHangerModule().MoveHangDown(),()-> m_Hanger.leftHangerModule().HangStop()));
     debugController
         .a() // Left Hanger arm up
-        .whileTrue(m_Hanger.runEnd(m_Hanger::LeftHangUp, m_Hanger::LeftHangStop));
+        .whileTrue(m_Hanger.runEnd(()-> m_Hanger.leftHangerModule().MoveHangUp(),()-> m_Hanger.leftHangerModule().HangStop()));
 
     debugController
         .rightBumper() // Right Hanger arm down
-        .whileTrue(m_Hanger.runEnd(m_Hanger::RightHangDown, m_Hanger::RightHangStop));
+        .whileTrue(m_Hanger.runEnd(()-> m_Hanger.rightHangerModule().MoveHangDown(),()-> m_Hanger.leftHangerModule().HangStop()));
     debugController
         .b() // Right Hanger arm up
-        .whileTrue(m_Hanger.runEnd(m_Hanger::RightHangUp, m_Hanger::RightHangStop));
+        .whileTrue(m_Hanger.runEnd(()-> m_Hanger.rightHangerModule().MoveHangUp(),()-> m_Hanger.leftHangerModule().HangStop()));
 
     debugController.povUp().whileTrue(m_Shooter.ManualAngleUp());
     debugController.x().whileTrue(DriveForward);
