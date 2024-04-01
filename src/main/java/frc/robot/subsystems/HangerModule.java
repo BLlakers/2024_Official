@@ -22,7 +22,6 @@ public class HangerModule extends SubsystemBase {
     ResetHangEnc();
   }
 
-  
   public void ResetHangEnc() {
     hangerMtrEnc.setPosition(0);
   }
@@ -34,13 +33,15 @@ public class HangerModule extends SubsystemBase {
   public void MoveHang(double speed) {
     hangerMtr.set(speed);
   }
-  public void MoveHangUp(){
+
+  public void MoveHangUp() {
     MoveHang(Hanger.hangSpeedUp);
   }
 
-  public void MoveHangDown(){
+  public void MoveHangDown() {
     MoveHang(Hanger.hangSpeedDown);
   }
+
   public void HangStop() {
     hangerMtr.set(0);
   }
@@ -56,11 +57,12 @@ public class HangerModule extends SubsystemBase {
   public double GetPosition() {
     return hangerMtrEnc.getPosition();
   }
-  public boolean atPosition(){
-    if (GetPosition() >= 140){
+
+  public boolean atPosition() {
+    if (GetPosition() >= 140) {
       return true;
     } else {
-    return false;
+      return false;
     }
   }
 

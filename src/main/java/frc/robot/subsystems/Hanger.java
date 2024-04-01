@@ -34,7 +34,7 @@ public class Hanger extends SubsystemBase {
   }
 
   public void StopHangers() {
-     leftHangerModule().HangStop();
+    leftHangerModule().HangStop();
     rightHangerModule().HangStop();
   }
 
@@ -43,25 +43,28 @@ public class Hanger extends SubsystemBase {
   }
 
   public void ResetHangEnc() {
-     leftHangerModule().ResetHangEnc();
+    leftHangerModule().ResetHangEnc();
     rightHangerModule().ResetHangEnc();
   }
 
-public HangerModule leftHangerModule(){
-  return m_leftHanger;
-}
+  public HangerModule leftHangerModule() {
+    return m_leftHanger;
+  }
 
-public HangerModule rightHangerModule(){
-  return m_rightHanger;
-}
-  
+  public HangerModule rightHangerModule() {
+    return m_rightHanger;
+  }
+
   /** Raises hang when Held. Will stop at top position */
   public Command RaiseHangAuto() {
     Command cmd =
         Commands.parallel(
-                Commands.runEnd(()-> rightHangerModule().MoveHangUp(), ()-> rightHangerModule().HangStop())
-                    .until(() ->  rightHangerModule().atPosition()),
-                Commands.runEnd(()-> leftHangerModule().MoveHangUp(), ()->leftHangerModule().HangStop())
+                Commands.runEnd(
+                        () -> rightHangerModule().MoveHangUp(),
+                        () -> rightHangerModule().HangStop())
+                    .until(() -> rightHangerModule().atPosition()),
+                Commands.runEnd(
+                        () -> leftHangerModule().MoveHangUp(), () -> leftHangerModule().HangStop())
                     .until(() -> leftHangerModule().atPosition()))
             .finallyDo(this::StopHangers);
 
@@ -70,15 +73,17 @@ public HangerModule rightHangerModule(){
     return cmd;
   }
 
- 
-
   /** Lowers hang when Held. Will stop when it hits the limit switch */
   public Command LowerHangAuto() {
     Command cmd =
         Commands.parallel(
-                Commands.runEnd(() ->  rightHangerModule().MoveHangDown(), () ->  rightHangerModule().HangStop())
+                Commands.runEnd(
+                        () -> rightHangerModule().MoveHangDown(),
+                        () -> rightHangerModule().HangStop())
                     .until(() -> rightHangerModule().HangIsDown()),
-                Commands.runEnd(() -> leftHangerModule().MoveHangDown(), () ->  leftHangerModule().HangStop())
+                Commands.runEnd(
+                        () -> leftHangerModule().MoveHangDown(),
+                        () -> leftHangerModule().HangStop())
                     .until(() -> leftHangerModule().HangIsDown()))
             .finallyDo(this::StopHangers);
 
@@ -90,7 +95,7 @@ public HangerModule rightHangerModule(){
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-    SmartDashboard.putData("Hanger/" +  leftHangerModule().getName(),  leftHangerModule());
+    SmartDashboard.putData("Hanger/" + leftHangerModule().getName(), leftHangerModule());
     SmartDashboard.putData("Hanger/" + rightHangerModule().getName(), rightHangerModule());
   }
 }
