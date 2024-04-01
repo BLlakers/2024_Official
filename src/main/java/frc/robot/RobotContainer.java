@@ -23,11 +23,37 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer {
   // Creates our objects from our methods for our classes
-  DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
-  Limelight m_Limelight = new Limelight();
-  Intake m_Intake = new Intake();
-  Shooter m_Shooter = new Shooter();
-  Hanger m_Hanger = new Hanger();
+
+  private DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
+  private Intake m_Intake = new Intake();
+  private Hanger m_Hanger = new Hanger();
+  private Limelight m_Limelight = new Limelight();
+  private Shooter m_Shooter = new Shooter();
+  private IntakeWheels m_IntakeWheels = new IntakeWheels();
+
+  public IntakeWheels GetIntakeWheelsSub() {
+    return m_IntakeWheels;
+  }
+
+  public DriveTrain GetDriveTrainSub() {
+    return m_DriveTrain;
+  }
+
+  public Hanger GetHangSub() {
+    return m_Hanger;
+  }
+
+  public Limelight GetLimelightSub() {
+    return m_Limelight;
+  }
+
+  public Shooter GetShootWerSub() {
+    return m_Shooter;
+  }
+
+  public Intake GetIntakeSub() {
+    return m_Intake;
+  }
 
   // Shooter
 
@@ -44,9 +70,16 @@ public class RobotContainer {
       new CommandXboxController(Constants.Controller.DebugControllerChannel);
   final Command DriveForward =
       new SwerveDriveCommand(() -> 1, () -> 0, () -> 0, () -> .3, m_DriveTrain);
-  final Command DriveSide =
+  final Command DriveBack =
+      new SwerveDriveCommand(() -> -1, () -> 0, () -> 0, () -> .3, m_DriveTrain);
+  final Command DriveRight =
       new SwerveDriveCommand(() -> 0, () -> 1, () -> 0, () -> .3, m_DriveTrain);
-  final Command Rotate = new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
+  final Command DriveLeft =
+      new SwerveDriveCommand(() -> 0, () -> -1, () -> 0, () -> .3, m_DriveTrain);
+  final Command RotateRight =
+      new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
+  final Command RotateLeft =
+      new SwerveDriveCommand(() -> 0, () -> 0, () -> .3, () -> 0, m_DriveTrain);
   // commands
   final Command ShootNoteCommandNoWait =
       m_Shooter

@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    m_robotContainer.m_DriveTrain.ZeroGyro().schedule();
+    m_robotContainer.GetDriveTrainSub().ZeroGyro().schedule();
     var cam = CameraServer.startAutomaticCapture();
     cam.setResolution(100, 100);
     cam.setFPS(60);
@@ -41,8 +41,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_robotContainer.m_Intake.resetIntakeAngle();
-    m_robotContainer.m_DriveTrain.m_FieldRelativeEnable = false;
+    m_robotContainer.GetIntakeSub().resetIntakeAngle();
+    m_robotContainer.GetDriveTrainSub().m_FieldRelativeEnable = false;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.m_DriveTrain.m_FieldRelativeEnable = true;
+    m_robotContainer.GetDriveTrainSub().m_FieldRelativeEnable = true;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
