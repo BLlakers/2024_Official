@@ -29,11 +29,7 @@ public class RobotContainer {
   private Hanger m_Hanger = new Hanger();
   private Limelight m_Limelight = new Limelight();
   private Shooter m_Shooter = new Shooter();
-  private IntakeWheels m_IntakeWheels = new IntakeWheels();
-
-  public IntakeWheels GetIntakeWheelsSub() {
-    return m_IntakeWheels;
-  }
+ 
 
   public DriveTrain GetDriveTrainSub() {
     return m_DriveTrain;
