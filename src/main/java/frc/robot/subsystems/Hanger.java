@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,18 +10,23 @@ import frc.robot.Constants;
 public class Hanger extends SubsystemBase {
   private HangerModule leftHanger;
   private HangerModule rightHanger;
-  
+
   double hangSpeedUp = 0.75;
   double hangSpeedDown = -0.75;
 
   public Hanger() { // Limelight - get Rotation3d rel to tag. / get navx pose (Can navx get 3d?)
     setName("Hanger");
-    leftHanger = new HangerModule(Constants.Hanger.LeftMtrC, CANSparkLowLevel.MotorType.kBrushless, Constants.Port.hangerLeftMagSwitchDIOC);
-    rightHanger = new HangerModule(Constants.Hanger.RightMtrC, CANSparkLowLevel.MotorType.kBrushless, Constants.Port.hangerRightMagSwitchDIOC);
-  
+    leftHanger =
+        new HangerModule(
+            Constants.Hanger.LeftMtrC,
+            CANSparkLowLevel.MotorType.kBrushless,
+            Constants.Port.hangerLeftMagSwitchDIOC);
+    rightHanger =
+        new HangerModule(
+            Constants.Hanger.RightMtrC,
+            CANSparkLowLevel.MotorType.kBrushless,
+            Constants.Port.hangerRightMagSwitchDIOC);
   }
-
-  
 
   public Command ResetHangCmd() {
     return this.runOnce(this::ResetHangEnc);
@@ -78,10 +80,11 @@ public class Hanger extends SubsystemBase {
   public double GetRightPosition() {
     return rightHanger.GetPosition();
   }
-  public void ResetHangEnc (){
-  leftHanger.ResetHangEnc(); 
-  rightHanger.ResetHangEnc();
-}
+
+  public void ResetHangEnc() {
+    leftHanger.ResetHangEnc();
+    rightHanger.ResetHangEnc();
+  }
 
   /** Raises hang when Held. Will stop at top position */
   public Command RaiseHangAuto() {
