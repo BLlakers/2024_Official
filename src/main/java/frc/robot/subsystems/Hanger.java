@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -59,13 +58,14 @@ public class Hanger extends SubsystemBase {
   public Command RaiseHangAuto() {
     Command cmd =
         Commands.parallel(
-                Commands.runEnd(
-                        () -> rightHangerModule().MoveHangUp(),
-                        () -> rightHangerModule().HangStop())
-                    .until(() -> rightHangerModule().atPosition()),
-                Commands.runEnd(
-                        () -> leftHangerModule().MoveHangUp(), () -> leftHangerModule().HangStop())
-                    .until(() -> leftHangerModule().atPosition()))
+                rightHangerModule().runEnd(
+                        rightHangerModule()::MoveHangUp,
+                        rightHangerModule()::HangStop)
+                    .until(rightHangerModule()::HangIsAtPosition),
+                leftHangerModule().runEnd(
+                        leftHangerModule()::MoveHangUp, 
+                        leftHangerModule()::HangStop)
+                    .until(leftHangerModule()::HangIsAtPosition))
             .finallyDo(this::StopHangers);
 
     cmd.addRequirements(this);
@@ -77,25 +77,25 @@ public class Hanger extends SubsystemBase {
   public Command LowerHangAuto() {
     Command cmd =
         Commands.parallel(
-                Commands.runEnd(
-                        () -> rightHangerModule().MoveHangDown(),
-                        () -> rightHangerModule().HangStop())
-                    .until(() -> rightHangerModule().HangIsDown()),
-                Commands.runEnd(
-                        () -> leftHangerModule().MoveHangDown(),
-                        () -> leftHangerModule().HangStop())
-                    .until(() -> leftHangerModule().HangIsDown()))
+                rightHangerModule().runEnd(
+                  rightHangerModule()::MoveHangDown, 
+                  rightHangerModule()::HangStop)
+                  .until(rightHangerModule()::HangIsDown),
+                leftHangerModule().runEnd(
+                        leftHangerModule()::MoveHangDown,
+                      leftHangerModule()::HangStop)
+                    .until(leftHangerModule()::HangIsDown))
             .finallyDo(this::StopHangers);
 
     cmd.addRequirements(this);
-
+    
     return cmd;
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-    SmartDashboard.putData("Hanger/" + leftHangerModule().getName(), leftHangerModule());
-    SmartDashboard.putData("Hanger/" + rightHangerModule().getName(), rightHangerModule());
+   leftHangerModule().initSendable(builder);
+   rightHangerModule().initSendable(builder);
   }
 }

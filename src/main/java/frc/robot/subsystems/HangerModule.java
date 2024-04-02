@@ -58,7 +58,7 @@ public class HangerModule extends SubsystemBase {
     return hangerMtrEnc.getPosition();
   }
 
-  public boolean atPosition() {
+  public boolean HangIsAtPosition() {
     if (GetPosition() >= 140) {
       return true;
     } else {

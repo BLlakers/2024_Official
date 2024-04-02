@@ -1,27 +1,29 @@
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.PathPlannerLogging;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.commands.AutoIntake;
+import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Hanger;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
-
-public class RobotContainer {
+public class RobotContainer{
   // Creates our objects from our methods for our classes
 
   private DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
@@ -261,30 +263,30 @@ public class RobotContainer {
     // Debug controller
     // - Manual hanger commands
     debugController
-        .leftBumper() // Left Hanger arm down
-        .whileTrue(
-            m_Hanger.runEnd(
-                () -> m_Hanger.leftHangerModule().MoveHangDown(),
-                () -> m_Hanger.leftHangerModule().HangStop()));
+    .a() // Left Hanger arm down
+    .whileTrue(
+        m_Hanger.leftHangerModule().runEnd(
+        m_Hanger.leftHangerModule()::MoveHangDown,
+        m_Hanger.leftHangerModule()::HangStop));
     debugController
-        .a() // Left Hanger arm up
+        .leftBumper() // Left Hanger arm up
         .whileTrue(
-            m_Hanger.runEnd(
-                () -> m_Hanger.leftHangerModule().MoveHangUp(),
-                () -> m_Hanger.leftHangerModule().HangStop()));
+            m_Hanger.leftHangerModule().runEnd(
+                m_Hanger.leftHangerModule()::MoveHangUp,
+                m_Hanger.leftHangerModule()::HangStop));
 
     debugController
-        .rightBumper() // Right Hanger arm down
+        .b() // Right Hanger arm down
         .whileTrue(
-            m_Hanger.runEnd(
-                () -> m_Hanger.rightHangerModule().MoveHangDown(),
-                () -> m_Hanger.leftHangerModule().HangStop()));
+            m_Hanger.rightHangerModule().runEnd(
+                m_Hanger.rightHangerModule()::MoveHangDown,
+                m_Hanger.rightHangerModule()::HangStop));
     debugController
-        .b() // Right Hanger arm up
+        .rightBumper() // Right Hanger arm up
         .whileTrue(
-            m_Hanger.runEnd(
-                () -> m_Hanger.rightHangerModule().MoveHangUp(),
-                () -> m_Hanger.leftHangerModule().HangStop()));
+            m_Hanger.rightHangerModule().runEnd(
+                m_Hanger.rightHangerModule()::MoveHangUp,
+                m_Hanger.rightHangerModule()::HangStop));
 
     debugController.povUp().whileTrue(m_Shooter.ManualAngleUp());
     debugController.x().whileTrue(DriveForward);
@@ -293,6 +295,7 @@ public class RobotContainer {
   }
 
   private void configureShuffleboard() {
+    
     SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
 
     // Add subsystems
