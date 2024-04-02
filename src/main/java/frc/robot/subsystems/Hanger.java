@@ -58,13 +58,11 @@ public class Hanger extends SubsystemBase {
   public Command RaiseHangAuto() {
     Command cmd =
         Commands.parallel(
-                rightHangerModule().runEnd(
-                        rightHangerModule()::MoveHangUp,
-                        rightHangerModule()::HangStop)
+                rightHangerModule()
+                    .runEnd(rightHangerModule()::MoveHangUp, rightHangerModule()::HangStop)
                     .until(rightHangerModule()::HangIsAtPosition),
-                leftHangerModule().runEnd(
-                        leftHangerModule()::MoveHangUp, 
-                        leftHangerModule()::HangStop)
+                leftHangerModule()
+                    .runEnd(leftHangerModule()::MoveHangUp, leftHangerModule()::HangStop)
                     .until(leftHangerModule()::HangIsAtPosition))
             .finallyDo(this::StopHangers);
 
@@ -77,25 +75,23 @@ public class Hanger extends SubsystemBase {
   public Command LowerHangAuto() {
     Command cmd =
         Commands.parallel(
-                rightHangerModule().runEnd(
-                  rightHangerModule()::MoveHangDown, 
-                  rightHangerModule()::HangStop)
-                  .until(rightHangerModule()::HangIsDown),
-                leftHangerModule().runEnd(
-                        leftHangerModule()::MoveHangDown,
-                      leftHangerModule()::HangStop)
+                rightHangerModule()
+                    .runEnd(rightHangerModule()::MoveHangDown, rightHangerModule()::HangStop)
+                    .until(rightHangerModule()::HangIsDown),
+                leftHangerModule()
+                    .runEnd(leftHangerModule()::MoveHangDown, leftHangerModule()::HangStop)
                     .until(leftHangerModule()::HangIsDown))
             .finallyDo(this::StopHangers);
 
     cmd.addRequirements(this);
-    
+
     return cmd;
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-   leftHangerModule().initSendable(builder);
-   rightHangerModule().initSendable(builder);
+    leftHangerModule().initSendable(builder);
+    rightHangerModule().initSendable(builder);
   }
 }

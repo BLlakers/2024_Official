@@ -23,7 +23,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 
-public class RobotContainer{
+public class RobotContainer {
   // Creates our objects from our methods for our classes
 
   private DriveTrain m_DriveTrain = new DriveTrain(Constants.defaultRobotVersion);
@@ -263,30 +263,38 @@ public class RobotContainer{
     // Debug controller
     // - Manual hanger commands
     debugController
-    .a() // Left Hanger arm down
-    .whileTrue(
-        m_Hanger.leftHangerModule().runEnd(
-        m_Hanger.leftHangerModule()::MoveHangDown,
-        m_Hanger.leftHangerModule()::HangStop));
+        .a() // Left Hanger arm down
+        .whileTrue(
+            m_Hanger
+                .leftHangerModule()
+                .runEnd(
+                    m_Hanger.leftHangerModule()::MoveHangDown,
+                    m_Hanger.leftHangerModule()::HangStop));
     debugController
         .leftBumper() // Left Hanger arm up
         .whileTrue(
-            m_Hanger.leftHangerModule().runEnd(
-                m_Hanger.leftHangerModule()::MoveHangUp,
-                m_Hanger.leftHangerModule()::HangStop));
+            m_Hanger
+                .leftHangerModule()
+                .runEnd(
+                    m_Hanger.leftHangerModule()::MoveHangUp,
+                    m_Hanger.leftHangerModule()::HangStop));
 
     debugController
         .b() // Right Hanger arm down
         .whileTrue(
-            m_Hanger.rightHangerModule().runEnd(
-                m_Hanger.rightHangerModule()::MoveHangDown,
-                m_Hanger.rightHangerModule()::HangStop));
+            m_Hanger
+                .rightHangerModule()
+                .runEnd(
+                    m_Hanger.rightHangerModule()::MoveHangDown,
+                    m_Hanger.rightHangerModule()::HangStop));
     debugController
         .rightBumper() // Right Hanger arm up
         .whileTrue(
-            m_Hanger.rightHangerModule().runEnd(
-                m_Hanger.rightHangerModule()::MoveHangUp,
-                m_Hanger.rightHangerModule()::HangStop));
+            m_Hanger
+                .rightHangerModule()
+                .runEnd(
+                    m_Hanger.rightHangerModule()::MoveHangUp,
+                    m_Hanger.rightHangerModule()::HangStop));
 
     debugController.povUp().whileTrue(m_Shooter.ManualAngleUp());
     debugController.x().whileTrue(DriveForward);
@@ -295,7 +303,7 @@ public class RobotContainer{
   }
 
   private void configureShuffleboard() {
-    
+
     SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
 
     // Add subsystems

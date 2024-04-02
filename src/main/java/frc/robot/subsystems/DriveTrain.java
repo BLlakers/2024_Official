@@ -424,6 +424,5 @@ public class DriveTrain extends SubsystemBase {
     m_frontRight.initSendable(builder);
     m_backLeft.initSendable(builder);
     m_backRight.initSendable(builder);
-    
   }
 }
