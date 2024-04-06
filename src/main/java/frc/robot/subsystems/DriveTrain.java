@@ -420,10 +420,9 @@ public class DriveTrain extends SubsystemBase {
         "FieldRelativeEnabled",
         () -> this.m_FieldRelativeEnable,
         (boolean fre) -> m_FieldRelativeEnable = fre);
-
-    SmartDashboard.putData("DriveTrain/" + m_frontLeft.getName(), m_frontLeft);
-    SmartDashboard.putData("DriveTrain/" + m_frontRight.getName(), m_frontRight);
-    SmartDashboard.putData("DriveTrain/" + m_backLeft.getName(), m_backLeft);
-    SmartDashboard.putData("DriveTrain/" + m_backRight.getName(), m_backRight);
+    m_frontLeft.initSendable(builder);
+    m_frontRight.initSendable(builder);
+    m_backLeft.initSendable(builder);
+    m_backRight.initSendable(builder);
   }
 }
