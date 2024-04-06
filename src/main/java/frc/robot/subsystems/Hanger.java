@@ -9,8 +9,8 @@ import frc.robot.Constants;
 
 public class Hanger extends SubsystemBase {
 
-  // Here, We create each of our two Hangers: One on the left, and one on the right. 
-  // These will be initialized in the contructor, although this really doesnt matter. 
+  // Here, We create each of our two Hangers: One on the left, and one on the right.
+  // These will be initialized in the contructor, although this really doesnt matter.
   private HangerModule m_leftHanger;
   private HangerModule m_rightHanger;
 
@@ -18,20 +18,32 @@ public class Hanger extends SubsystemBase {
   public static final double s_hangSpeedUp = 0.75;
   public static final double s_hangSpeedDown = -0.75;
 
-/** This is the Hanger Class. <p>
- *In the Hanger Class, we have our Multi-HangModule Functions and Commands Such as:
- *<ul>  
- *<p> {@link #RaiseHangAuto()} (Which Automatically Raises the Hang Via encoder values) 
- *<p> {@link #LowerHangAuto()} (Which Automatically Lowers the Hang until the Switchs are hit) </ul>
- *<p> We also Define other commands, like:
- *<ul> <p> {@link #HangStopCommand()} (which Stops Both Hanger Modules)
- *<p> {@link #ResetHangCmd()} (Which Resets the position on each of the two encoders) </ul>
- *In order to Access each individual hanger run the following Functions: <ul> 
- *<p> {@link #leftHangerModule()} for the Left Hanger 
- *<p> {@link #rightHangerModule()} for the Right hanger.
- * @see 
- */
-  public Hanger() { 
+  /**
+   * This is the Hanger Class.
+   *
+   * <p>In the Hanger Class, we have our Multi-HangModule Functions and Commands Such as:
+   *
+   * <ul>
+   *   <p>{@link #RaiseHangAuto()} (Which Automatically Raises the Hang Via encoder values)
+   *   <p>{@link #LowerHangAuto()} (Which Automatically Lowers the Hang until the Switchs are hit)
+   * </ul>
+   *
+   * <p>We also Define other commands, like:
+   *
+   * <ul>
+   *   <p>{@link #HangStopCommand()} (which Stops Both Hanger Modules)
+   *   <p>{@link #ResetHangCmd()} (Which Resets the position on each of the two encoders)
+   * </ul>
+   *
+   * In order to Access each individual hanger run the following Functions:
+   *
+   * <ul>
+   *   <p>{@link #leftHangerModule()} for the Left Hanger
+   *   <p>{@link #rightHangerModule()} for the Right hanger.
+   *
+   * @see
+   */
+  public Hanger() {
     setName("Hanger");
     m_leftHanger =
         new HangerModule(
@@ -111,7 +123,8 @@ public class Hanger extends SubsystemBase {
     leftHangerModule().initSendable(builder);
     rightHangerModule().initSendable(builder);
   }
-  public static int Explanation(){
-  return 2;
+
+  public static int Explanation() {
+    return 2;
   }
 }

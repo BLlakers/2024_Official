@@ -111,8 +111,6 @@ public class SwerveDriveCommand extends Command {
   public boolean isFinished() {
     return false;
   }
-  
-  public interface SwerveDriveCommandExplanation{
-  
-  }
+
+  public interface SwerveDriveCommandExplanation {}
 }

@@ -174,7 +174,6 @@ public class Intake extends SubsystemBase {
     builder.addDoubleProperty("Motor/Velocity", intakeAngleMtrEnc::getVelocity, null);
     builder.addStringProperty("State", () -> this.GetIntakeState().toString(), null);
   }
-  public interface IntakeExplanation{
-  
-  }
+
+  public interface IntakeExplanation {}
 }

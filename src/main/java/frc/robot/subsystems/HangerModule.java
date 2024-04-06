@@ -77,7 +77,5 @@ public class HangerModule extends SubsystemBase {
     builder.addBooleanProperty("Left/MagSwitch Engaged", this::HangIsDown, null);
   }
 
-  public interface HangerModuleExplanation{
-  
-  }
+  public interface HangerModuleExplanation {}
 }

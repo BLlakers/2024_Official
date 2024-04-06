@@ -96,8 +96,6 @@ public class AutoShooter extends Command {
   public boolean isFinished() {
     return m_aprilAlignCommand.isFinished() && m_orientShooterAngleCommand.getController().atGoal();
   }
-  
-  public interface AutoShooterExplanation{
-  
-}
+
+  public interface AutoShooterExplanation {}
 }

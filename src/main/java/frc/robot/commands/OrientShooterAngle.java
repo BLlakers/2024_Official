@@ -108,8 +108,6 @@ public class OrientShooterAngle extends ProfiledPIDCommand {
     return false;
     return getController().atGoal();
   }
-  
-  public interface OrientShooterAngleExplanation{
-  
-  }
+
+  public interface OrientShooterAngleExplanation {}
 }
