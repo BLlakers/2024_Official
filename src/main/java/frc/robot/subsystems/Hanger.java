@@ -11,8 +11,8 @@ public class Hanger extends SubsystemBase {
   private HangerModule m_leftHanger;
   private HangerModule m_rightHanger;
 
-  public static final double hangSpeedUp = 0.75;
-  public static final double hangSpeedDown = -0.75;
+  public static final double s_hangSpeedUp = 0.75;
+  public static final double s_hangSpeedDown = -0.75;
 
   public Hanger() { // Limelight - get Rotation3d rel to tag. / get navx pose (Can navx get 3d?)
     setName("Hanger");

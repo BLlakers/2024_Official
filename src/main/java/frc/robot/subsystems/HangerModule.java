@@ -35,11 +35,11 @@ public class HangerModule extends SubsystemBase {
   }
 
   public void MoveHangUp() {
-    MoveHang(Hanger.hangSpeedUp);
+    MoveHang(Hanger.s_hangSpeedUp);
   }
 
   public void MoveHangDown() {
-    MoveHang(Hanger.hangSpeedDown);
+    MoveHang(Hanger.s_hangSpeedDown);
   }
 
   public void HangStop() {

@@ -15,14 +15,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutoIntake;
-import frc.robot.commands.SwerveDriveCommand;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Hanger;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Shooter;
-
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 public class RobotContainer {
   // Creates our objects from our methods for our classes
 
