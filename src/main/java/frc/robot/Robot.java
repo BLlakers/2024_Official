@@ -22,7 +22,6 @@ public class Robot extends TimedRobot {
     m_robotContainer.GetDriveTrainSub().ZeroGyro().schedule();
     CameraServer.startAutomaticCapture();
 
-
     SmartDashboard.putString("Code Version", codeVersion);
   }
 
