@@ -92,4 +92,8 @@ public class Limelight extends SubsystemBase {
     builder.addDoubleProperty("AprilTag/pose/Y", m_currentAprilTag.pose::getY, null);
     builder.addDoubleProperty("AprilTag/pose/Z", m_currentAprilTag.pose::getZ, null);
   }
+  
+  public interface LimelightExplanation{
+  
+  }
 }

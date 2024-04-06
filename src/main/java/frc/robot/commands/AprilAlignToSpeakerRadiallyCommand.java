@@ -147,4 +147,7 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
   public boolean isFinished() {
     return omegaController.atGoal() && RobotIsWithinGoalRadius();
   }
+  public interface AprilAlignToSpeakerRadiallyCommandExplanation{
+  
+  }
 }

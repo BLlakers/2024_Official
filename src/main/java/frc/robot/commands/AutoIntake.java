@@ -54,35 +54,7 @@ public class AutoIntake extends Command {
 
   @Override
   public void execute() {
-    // System.out.println(m_CurrentIntakeDrivingState);
-    /*
-     * if (m_IsAmp == true) {
-     * m_CurrentIntakeDrivingState = DrivingState.DriveIntakeAmp;
-     * if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosAmpAngle +
-     * s_IntakePositioningTolerence) {
-     * m_Intake.RaiseIntake();
-     * } else if (m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosAmpAngle -
-     * s_IntakePositioningTolerence) {
-     * m_Intake.LowerIntake();
-     * } else if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosAmpAngle +
-     * s_IntakePositioningTolerence
-     * && m_Intake.GetIntakeMotorAngle().getDegrees() > Intake.PosAmpAngle -
-     * s_IntakePositioningTolerence) {
-     * m_Intake.StopIntake();
-     * m_CommandIsFinished = true;
-     * }
-     *
-     * }
-     *
-     *
-     *
-     *
-     *
-     *
-     * else
-     */
     if (m_CurrentIntakeDrivingState == DrivingState.DriveIntakeDown) {
-      // if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle) {
       if (m_Intake.GetIntakeMotorAngle().getDegrees() < Intake.PosDownAngle - 40) {
         m_Intake.LowerIntake();
       } else {
@@ -118,31 +90,8 @@ public class AutoIntake extends Command {
   public boolean isFinished() {
     return m_CommandIsFinished;
   }
+  
+public interface AutoIntakeExplanation{
+  
+  }
 }
-/*
- * CurrentIntakePose = m_Intake.GetIntakeMotorAngle().getDegrees();
- * if (m_Intake.IntakePos == 1){
- * TargetDeg = Pos1;
- * if (CurrentIntakePose > TargetDeg + IntakeTolerence){
- * if (CurrentIntakePose > StaticSetpointDeg){
- * m_Intake.intakeAngleMtr.set(-.25);
- * } else {
- * m_Intake.intakeAngleMtr.set(-.45);
- * }
- * } else{
- * m_Intake.intakeAngleMtr.set(0);
- * m_Intake.intakeAngleMtrEnc.setPosition(0);
- * }
- * }
- *
- * if (m_Intake.IntakePos == 2){
- * TargetDeg = Pos2;
- * if (CurrentIntakePose < TargetDeg - IntakeTolerence){
- * m_Intake.intakeAngleMtr.set(.17);
- * }
- * else {
- * m_Intake.intakeAngleMtr.set(0);
- * }
- * }
- *
- */

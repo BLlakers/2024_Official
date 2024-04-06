@@ -74,4 +74,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void simulationPeriodic() {}
+  
+  public interface RobotExplanation{
+  
+  }
 }
