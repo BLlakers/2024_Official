@@ -76,13 +76,8 @@ public class HangerModule extends SubsystemBase {
     builder.addDoubleProperty("Left/Hang Velo", hangerMtrEnc::getVelocity, null);
     builder.addBooleanProperty("Left/MagSwitch Engaged", this::HangIsDown, null);
   }
-/** <b> DETAILED EXPLANATION </b>
-   * 
-   * 
-   * 
-   * 
-   * 
-   */
+
+  /** <b> DETAILED EXPLANATION </b> */
   public static int Explanation() {
     return 3;
   }

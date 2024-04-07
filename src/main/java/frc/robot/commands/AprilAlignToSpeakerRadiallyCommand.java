@@ -147,13 +147,8 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
   public boolean isFinished() {
     return omegaController.atGoal() && RobotIsWithinGoalRadius();
   }
-/** <b> DETAILED EXPLANATION </b>
-   * 
-   * 
-   * 
-   * 
-   * 
-   */
+
+  /** <b> DETAILED EXPLANATION </b> */
   public static int Explanation() {
     return 1;
   }

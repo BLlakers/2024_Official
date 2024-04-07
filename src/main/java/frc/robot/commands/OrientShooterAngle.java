@@ -108,13 +108,8 @@ public class OrientShooterAngle extends ProfiledPIDCommand {
     return false;
     return getController().atGoal();
   }
-/** <b> DETAILED EXPLANATION </b>
-   * 
-   * 
-   * 
-   * 
-   * 
-   */
+
+  /** <b> DETAILED EXPLANATION </b> */
   public static int Explanation() {
     return 5;
   }

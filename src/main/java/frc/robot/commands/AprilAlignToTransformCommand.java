@@ -144,13 +144,8 @@ public class AprilAlignToTransformCommand extends Command {
   public boolean isFinished() {
     return m_rotController.atGoal() && m_xController.atGoal() && m_yController.atGoal();
   }
-/** <b> DETAILED EXPLANATION </b>
-   * 
-   * 
-   * 
-   * 
-   * 
-   */
+
+  /** <b> DETAILED EXPLANATION </b> */
   public static int Explanation() {
     return 2;
   }

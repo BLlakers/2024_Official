@@ -223,13 +223,8 @@ public class SwerveModule extends SubsystemBase {
 
     builder.setSafeState(this::stop);
   }
-/** <b> DETAILED EXPLANATION </b>
-   * 
-   * 
-   * 
-   * 
-   * 
-   */
+
+  /** <b> DETAILED EXPLANATION </b> */
   public static int Explanation() {
     return 8;
   }

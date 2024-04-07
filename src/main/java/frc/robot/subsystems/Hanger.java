@@ -40,9 +40,9 @@ public class Hanger extends SubsystemBase {
    * <ul>
    *   <p>{@link #leftHangerModule()} for the Left Hanger
    *   <p>{@link #rightHangerModule()} for the Right hanger.
-   *</ul>
-   * Look At:
-   * {@link HangerModule}
+   * </ul>
+   *
+   * Look At: {@link HangerModule}
    */
   public Hanger() {
     setName("Hanger");
@@ -125,15 +125,7 @@ public class Hanger extends SubsystemBase {
     rightHangerModule().initSendable(builder);
   }
 
-
-
-  /** <b> DETAILED EXPLANATION </b>
-   * 
-   * 
-   * 
-   * 
-   * 
-   */
+  /** <b> DETAILED EXPLANATION </b> */
   public static int Explanation() {
     return 2;
   }
