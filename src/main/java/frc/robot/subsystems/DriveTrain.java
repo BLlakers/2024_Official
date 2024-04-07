@@ -19,7 +19,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-/** Represents a swerve drive style drivetrain. */
+/**  
+ * 
+ * 
+ * 
+ */
 public class DriveTrain extends SubsystemBase {
 
   public SwerveDriveKinematics m_kinematics =
@@ -426,7 +430,13 @@ public class DriveTrain extends SubsystemBase {
     m_backRight.initSendable(builder);
   }
 
-  /** TEST */
+  /** <b> DETAILED EXPLANATION </b>
+   * 
+   * 
+   * 
+   * 
+   * 
+   */
   public static int Explanation() {
     return 1;
   }

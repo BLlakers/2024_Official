@@ -90,6 +90,14 @@ public class AutoIntake extends Command {
   public boolean isFinished() {
     return m_CommandIsFinished;
   }
-
-  public interface AutoIntakeExplanation {}
+/** <b> DETAILED EXPLANATION </b>
+   * 
+   * 
+   * 
+   * 
+   * 
+   */
+  public static int Explanation() {
+    return 3;
+  }
 }

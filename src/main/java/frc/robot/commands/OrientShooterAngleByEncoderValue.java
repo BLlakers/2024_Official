@@ -61,6 +61,14 @@ public class OrientShooterAngleByEncoderValue extends ProfiledPIDCommand {
   public boolean isFinished() {
     return getController().atGoal();
   }
-
-  public interface OrientShooterAngleByEncoderValueExplanation {}
+/** <b> DETAILED EXPLANATION </b>
+   * 
+   * 
+   * 
+   * 
+   * 
+   */
+  public static int Explanation() {
+    return 6;
+  }
 }

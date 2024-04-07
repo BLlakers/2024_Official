@@ -155,5 +155,14 @@ public final class Constants {
 
   public static final RobotVersion defaultRobotVersion = RobotVersion.v2024;
 
-  public interface ConstantsExplanation {}
+  /** <b> DETAILED EXPLANATION </b>
+   * 
+   * 
+   * 
+   * 
+   * 
+   */
+  public static int Explanation() {
+    return 1;
+  }
 }

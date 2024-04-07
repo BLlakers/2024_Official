@@ -75,5 +75,14 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationPeriodic() {}
 
-  public interface RobotExplanation {}
+  /** <b> DETAILED EXPLANATION </b>
+   * 
+   * 
+   * 
+   * 
+   * 
+   */
+  public static int Explanation() {
+    return 2;
+  }
 }

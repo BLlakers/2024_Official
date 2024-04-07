@@ -105,6 +105,14 @@ public class IntakeWheels extends SubsystemBase {
     builder.addIntegerProperty("Color Sensor/Proximity", m_colorSensorV3::getProximity, null);
     builder.addBooleanProperty("Note/Is Loaded", this::NoteIsLoaded, null);
   }
-
-  public interface IntakeWheelsExplanation {}
+/** <b> DETAILED EXPLANATION </b>
+   * 
+   * 
+   * 
+   * 
+   * 
+   */
+  public static int Explanation() {
+    return 5;
+  }
 }

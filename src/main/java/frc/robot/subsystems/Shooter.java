@@ -334,6 +334,14 @@ public class Shooter extends SubsystemBase {
     builder.addBooleanProperty("Top Limit Switch/Tripped", this::TopLimitSwitchTripped, null);
     builder.addBooleanProperty("Bottom Limit Switch/Tripped", this::BottomLimitSwitchTripped, null);
   }
-
-  public interface ShooterExplanation {}
+/** <b> DETAILED EXPLANATION </b>
+   * 
+   * 
+   * 
+   * 
+   * 
+   */
+  public static int Explanation() {
+    return 7;
+  }
 }
