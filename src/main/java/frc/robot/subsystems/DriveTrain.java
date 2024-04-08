@@ -69,10 +69,12 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Our driveTrain Constructor.
    *
-   * <p>In here, we initialize our swerve modules (example -> {@link #m_frontLeft}), Get input from
-   * autonomous and initialize our odometry -> {@link #m_odometry}.
-   *
-   * <p>Various other DriveTrain Related thing are initalized here too.
+   * <p> In here, we: 
+   * <ul> <li> Initialize our swerve modules (EX: {@link #m_frontLeft})
+   * <li> Set up our autonomous builder (see below)
+   * <li> Initialize our odometry: {@link #m_odometry}.
+   * </ul>
+   * <p> Various other DriveTrain Related things are initalized here too.
    *
    * @param RobotVersion
    */
@@ -277,7 +279,7 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Tells the robot to drive based of off a given velocity.
    *
-   * <p>Used for Autonomous.
+   * <p> Used for Autonomous.
    *
    * @param chassisSpeed (ChassisSpeeds) - this is the desired velocity we would like to drive the
    *     robot.
@@ -292,7 +294,7 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Resets the Position of the Odometer, given our Current position.
    *
-   * @param Pose2d (pose2d) - The current position of the robot on the field. This is a {@link
+   * @param pose2d (pose2d) - The current position of the robot on the field. This is a {@link
    *     #resetOdometry(Pose2d)}
    */
   public void resetPose(Pose2d pose2d) {
