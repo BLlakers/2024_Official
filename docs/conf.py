@@ -5,8 +5,8 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Your FRC Java Project Name'
-author = 'Your Name'
+project = 'Offical_2024'
+author = 'Jared Forchheimer'
 
 # -- General configuration ---------------------------------------------------
 
