@@ -12,7 +12,7 @@ author = 'Your Name'
 
 # Add any Sphinx extension module names here
 #extensions = []
-
+master_doc = 'index'
 # Add any paths that contain templates here, relative to this directory.
 #templates_path = ['_templates']
 
