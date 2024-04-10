@@ -11,7 +11,6 @@ author = 'Jared Forchheimer'
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here
-extensions = []
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -19,6 +18,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and directories to ignore when looking for source files.
 exclude_patterns = []
 
+extensions = ["myst_parser"]
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.
