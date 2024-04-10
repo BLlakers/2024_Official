@@ -20,7 +20,7 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.
-html_theme = 'sphinx_rtd_theme'
+#html_theme = 'sphinx_rtd_theme'
 
 # -- Path configuration ------------------------------------------------------
 
