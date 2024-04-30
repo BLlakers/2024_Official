@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -113,33 +112,29 @@ public class AprilAlignToTransformCommand extends Command {
 
     Pose2d botToGoalPose =
         new Pose2d(
-        Bot2Tag_Translation.minus(m_tagToGoal.getTranslation()),
-        TagDirection.rotateBy(m_tagToGoal.getRotation()));
+            Bot2Tag_Translation.minus(m_tagToGoal.getTranslation()),
+            TagDirection.rotateBy(m_tagToGoal.getRotation()));
 
-SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/Bot2Tag/X", BotToTag.getX());
-      SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/Bot2Tag/Y", BotToTag.getY());
-      SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/Bot2Tag/Omega",
-          BotToTag.getRotation().getDegrees());
+    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/Bot2Tag/X", BotToTag.getX());
+    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/Bot2Tag/Y", BotToTag.getY());
     SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/botToGoal/X", botToGoalPose.getTranslation().getX());
-      SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/botToGoal/Y", botToGoalPose.getTranslation().getY());
-      SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/botToGoal/Omega",
-          botToGoalPose.getRotation().getDegrees());
+        m_drivetrain.getName() + "/Testing/Bot2Tag/Omega", BotToTag.getRotation().getDegrees());
+    SmartDashboard.putNumber(
+        m_drivetrain.getName() + "/Testing/botToGoal/X", botToGoalPose.getTranslation().getX());
+    SmartDashboard.putNumber(
+        m_drivetrain.getName() + "/Testing/botToGoal/Y", botToGoalPose.getTranslation().getY());
+    SmartDashboard.putNumber(
+        m_drivetrain.getName() + "/Testing/botToGoal/Omega",
+        botToGoalPose.getRotation().getDegrees());
     // m_goalPose = robotPose.transformBy(botToGoalPose);
     m_goalPose = botToGoalPose.transformBy(robotPose.minus(new Pose2d()));
 
     SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/goalPose/X", m_goalPose.getTranslation().getX());
-      SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/goalPose/Y", m_goalPose.getTranslation().getY());
-      SmartDashboard.putNumber(
-          m_drivetrain.getName() + "/Testing/goalPose/Omega",
-          m_goalPose.getRotation().getDegrees());
+        m_drivetrain.getName() + "/Testing/goalPose/X", m_goalPose.getTranslation().getX());
+    SmartDashboard.putNumber(
+        m_drivetrain.getName() + "/Testing/goalPose/Y", m_goalPose.getTranslation().getY());
+    SmartDashboard.putNumber(
+        m_drivetrain.getName() + "/Testing/goalPose/Omega", m_goalPose.getRotation().getDegrees());
 
     if (null != m_goalPose) {
       // Drive

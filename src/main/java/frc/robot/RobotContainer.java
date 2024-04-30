@@ -7,7 +7,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -216,9 +215,19 @@ public class RobotContainer {
 
     // Driver Controller commands
     // - DriveTrain commands (outside of actual driving)
-    driverController.y().whileTrue(new AprilAlignToTransformCommand(() -> m_Limelight.getCurrentAprilTag(), m_DriveTrain, new Pose2d(1, 0, new Rotation2d())));
-    driverController.x().whileTrue(new AprilAlignToSpeakerRadiallyCommand(() -> m_Limelight.getCurrentAprilTag(), m_DriveTrain));
-    
+    driverController
+        .y()
+        .whileTrue(
+            new AprilAlignToTransformCommand(
+                () -> m_Limelight.getCurrentAprilTag(),
+                m_DriveTrain,
+                new Pose2d(1, 0, new Rotation2d())));
+    driverController
+        .x()
+        .whileTrue(
+            new AprilAlignToSpeakerRadiallyCommand(
+                () -> m_Limelight.getCurrentAprilTag(), m_DriveTrain));
+
     driverController.a().onTrue(m_DriveTrain.toggleFieldRelativeEnable());
     driverController.b().onTrue(m_DriveTrain.ZeroGyro());
     driverController.start().onTrue(m_DriveTrain.resetPose2d()); // RESETING OUR POSE 2d/ odometry
