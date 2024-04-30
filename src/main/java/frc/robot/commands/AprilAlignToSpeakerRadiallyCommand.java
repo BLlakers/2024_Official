@@ -18,9 +18,9 @@ import frc.robot.subsystems.DriveTrain;
 
 public class AprilAlignToSpeakerRadiallyCommand extends Command {
   private static final TrapezoidProfile.Constraints X_CONSTRAINTS =
-      new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
+      new TrapezoidProfile.Constraints(3,15); // TODO DO 1 PID AT A TIME !!!!!
   private static final TrapezoidProfile.Constraints Y_CONSTRAINTS =
-      new TrapezoidProfile.Constraints(1, 2); // TODO DO 1 PID AT A TIME !!!!!
+      new TrapezoidProfile.Constraints(3, 15); // TODO DO 1 PID AT A TIME !!!!!
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS =
       new TrapezoidProfile.Constraints(
           Units.degreesToRadians(60), 8); // TODO DO 1 PID AT A TIME !!!!!
@@ -33,11 +33,11 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
   private final Supplier<AprilTag> m_aprilTagProvider;
 
   private final ProfiledPIDController xController =
-      new ProfiledPIDController(1.0, 0, 0.0, X_CONSTRAINTS);
+      new ProfiledPIDController(1.5, 0, 0.0, X_CONSTRAINTS);
   private final ProfiledPIDController yController =
-      new ProfiledPIDController(1.0, 0, 0.0, Y_CONSTRAINTS);
+      new ProfiledPIDController(1.5, 0, 0.0, Y_CONSTRAINTS);
   private final ProfiledPIDController omegaController =
-      new ProfiledPIDController(0.8, 0, 0.0, OMEGA_CONSTRAINTS);
+      new ProfiledPIDController(1.2, 0, 0.0, OMEGA_CONSTRAINTS);
 
   private Pose2d goalPose;
 
@@ -77,7 +77,8 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
     // Find the tag we want to chase
     Pose2d Bot2Tag = aprilTag.pose.toPose2d();
     Translation2d Bot2Tag_Translation = Bot2Tag.getTranslation();
-    Rotation2d targetDirection = Bot2Tag_Translation.getAngle().plus(Rotation2d.fromDegrees(180));
+    // Rotation2d targetDirection = Bot2Tag_Translation.getAngle().plus(Rotation2d.fromDegrees(180));
+     Rotation2d targetDirection = Bot2Tag_Translation.getAngle();
 
     // Transform the tag's pose to set our goal
     Pose2d botToGoal =
@@ -85,7 +86,35 @@ public class AprilAlignToSpeakerRadiallyCommand extends Command {
             Bot2Tag_Translation.times(1 - (OPTIMAL_RADIUS / Bot2Tag_Translation.getNorm())),
             targetDirection);
 
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/Bot2Tag/X", Bot2Tag.getX());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/Bot2Tag/Y", Bot2Tag.getY());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/Bot2Tag/Omega",
+          Bot2Tag.getRotation().getDegrees());
+
+     SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/bot2tag_translation/X", Bot2Tag_Translation.getX());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/bot2tag_translation/Y", Bot2Tag_Translation.getY());
+    SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/botToGoal/X", botToGoal.getX());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/botToGoal/Y", botToGoal.getY());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/botToGoal/Omega",
+          botToGoal.getRotation().getDegrees());
+
     goalPose = botToGoal.transformBy(robotPose.minus(new Pose2d()));
+
+    SmartDashboard.putNumber(
+      m_drivetrain.getName() + "/Testing/goalPose/X", goalPose.getTranslation().getX());
+  SmartDashboard.putNumber(
+      m_drivetrain.getName() + "/Testing/goalPose/Y", goalPose.getTranslation().getY());
+  SmartDashboard.putNumber(
+      m_drivetrain.getName() + "/Testing/goalPose/Omega",
+      goalPose.getRotation().getDegrees());
 
     if (null != goalPose) {
       // Drive

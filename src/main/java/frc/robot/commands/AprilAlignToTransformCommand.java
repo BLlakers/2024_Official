@@ -10,18 +10,20 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 
 public class AprilAlignToTransformCommand extends Command {
   private static final TrapezoidProfile.Constraints X_CONSTRAINTS =
-      new TrapezoidProfile.Constraints(1, 2);
+      new TrapezoidProfile.Constraints(3, 3);
   private static final TrapezoidProfile.Constraints Y_CONSTRAINTS =
-      new TrapezoidProfile.Constraints(1, 2);
+      new TrapezoidProfile.Constraints(3, 3);
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS =
       new TrapezoidProfile.Constraints(Units.degreesToRadians(60), 8);
 
@@ -30,7 +32,7 @@ public class AprilAlignToTransformCommand extends Command {
   private final ProfiledPIDController m_yController =
       new ProfiledPIDController(1, 0, 0.0, Y_CONSTRAINTS);
   private final ProfiledPIDController m_rotController =
-      new ProfiledPIDController(0.5, 0, 0.0, OMEGA_CONSTRAINTS);
+      new ProfiledPIDController(.5, 0, 0.0, OMEGA_CONSTRAINTS);
 
   public static final Transform2d TRANSFORM_HANGER_LEFT =
       new Transform2d(
@@ -60,12 +62,12 @@ public class AprilAlignToTransformCommand extends Command {
 
   // fields for tracking
   private Pose2d m_goalPose;
-  private Transform2d m_tagToGoal;
+  private Pose2d m_tagToGoal;
 
   public AprilAlignToTransformCommand(
       Supplier<AprilTag> aprilTagSupplier,
       DriveTrain drivetrainSubsystem,
-      Transform2d
+      Pose2d
           goalTransformRelativeToAprilTag) { // GoalTransformTo tag is where we want to stop. Should
     // be a negative number.
     this.m_drivetrain = drivetrainSubsystem;
@@ -101,12 +103,43 @@ public class AprilAlignToTransformCommand extends Command {
       return;
     }
     // Find the tag we want to chase
-    Pose3d botToTag = aprilTag.pose;
-    Transform2d botToTag2d = new Transform2d(new Pose2d(), botToTag.toPose2d());
+    // Pose3d botToTag = aprilTag.pose;
+    // Transform2d botToTag2d = new Transform2d(new Pose2d(), botToTag.toPose2d());
 
-    Transform2d botToGoalPose = botToTag2d.plus(m_tagToGoal);
+    // Transform2d botToGoalPose = botToTag2d.plus(m_tagToGoal);
+    Pose2d BotToTag = aprilTag.pose.toPose2d();
+    Translation2d Bot2Tag_Translation = BotToTag.getTranslation();
+    Rotation2d TagDirection = Bot2Tag_Translation.getAngle();
 
-    m_goalPose = robotPose.transformBy(botToGoalPose);
+    Pose2d botToGoalPose =
+        new Pose2d(
+        Bot2Tag_Translation.minus(m_tagToGoal.getTranslation()),
+        TagDirection.rotateBy(m_tagToGoal.getRotation()));
+
+SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/Bot2Tag/X", BotToTag.getX());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/Bot2Tag/Y", BotToTag.getY());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/Bot2Tag/Omega",
+          BotToTag.getRotation().getDegrees());
+    SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/botToGoal/X", botToGoalPose.getTranslation().getX());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/botToGoal/Y", botToGoalPose.getTranslation().getY());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/botToGoal/Omega",
+          botToGoalPose.getRotation().getDegrees());
+    // m_goalPose = robotPose.transformBy(botToGoalPose);
+    m_goalPose = botToGoalPose.transformBy(robotPose.minus(new Pose2d()));
+
+    SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/goalPose/X", m_goalPose.getTranslation().getX());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/goalPose/Y", m_goalPose.getTranslation().getY());
+      SmartDashboard.putNumber(
+          m_drivetrain.getName() + "/Testing/goalPose/Omega",
+          m_goalPose.getRotation().getDegrees());
 
     if (null != m_goalPose) {
       // Drive

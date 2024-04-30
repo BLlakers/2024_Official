@@ -469,6 +469,32 @@
                 }
               ]
             }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Hanger/Hang Pos",
+              "_title": "Hang Pos",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Hanger/Current",
+              "_title": "Current",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -760,12 +786,78 @@
           }
         }
       }
+    },
+    {
+      "title": "Limelight",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "9,0": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/AprilTag",
+              "_title": "SmartDashboard/AprilTag",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,4": {
+            "size": [
+              5,
+              4
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/Odometry/Pose",
+              "_title": "SmartDashboard/DriveTrain/Odometry/Pose",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,4": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/Testing/Bot2Tag",
+              "_title": "/SmartDashboard/DriveTrain/Testing/Bot2Tag",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,0": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/DriveTrain/Testing/botToGoal",
+              "_title": "/SmartDashboard/DriveTrain/Testing/botToGoal",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {
-    "x": 0.800000011920929,
-    "y": 0.800000011920929,
-    "width": 1534.4000244140625,
-    "height": 814.4000244140625
+    "x": 26.399999618530273,
+    "y": 3.200000047683716,
+    "width": 1510.4000244140625,
+    "height": 813.5999755859375
   }
 }
