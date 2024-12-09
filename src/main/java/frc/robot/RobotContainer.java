@@ -221,7 +221,7 @@ public class RobotContainer {
             new AprilAlignToTransformCommand(
                 () -> m_Limelight.getCurrentAprilTag(),
                 m_DriveTrain,
-                new Pose2d(1, 0, new Rotation2d())));
+                new Pose2d(-1, 0, new Rotation2d())));
     driverController
         .x()
         .whileTrue(

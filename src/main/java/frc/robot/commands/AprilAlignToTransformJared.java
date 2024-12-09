@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 
-public class AprilAlignToTransformCommand extends Command {
+public class AprilAlignToTransformJared extends Command {
   private static final TrapezoidProfile.Constraints X_CONSTRAINTS =
       new TrapezoidProfile.Constraints(3, 3);
   private static final TrapezoidProfile.Constraints Y_CONSTRAINTS =
@@ -63,7 +63,7 @@ public class AprilAlignToTransformCommand extends Command {
   private Pose2d m_goalPose;
   private Pose2d m_tagToGoal;
 
-  public AprilAlignToTransformCommand(
+  public AprilAlignToTransformJared(
       Supplier<AprilTag> aprilTagSupplier,
       DriveTrain drivetrainSubsystem,
       Pose2d
@@ -106,31 +106,17 @@ public class AprilAlignToTransformCommand extends Command {
 
     Translation2d Bot2Tag_Translation = BotToTag.getTranslation(); // get translation
     Rotation2d TagDirection = Bot2Tag_Translation.getAngle(); // get rot of translation
+
+
+
     Rotation2d TESTINGTagDir = BotToTag.getRotation();
-    Pose2d BotToTagReconfig = new Pose2d(Bot2Tag_Translation, TagDirection);
-    Transform2d BotToTagTransform = BotToTagReconfig.minus(m_tagToGoal);
-    Translation2d bot2GoalTranslation = Bot2Tag_Translation.plus(m_tagToGoal.getTranslation().rotateBy(m_tagToGoal.getRotation()));
-    Pose2d botGoal = new Pose2d(
-        bot2GoalTranslation
-        , bot2GoalTranslation.getAngle());
-    // Pose2d botToGoalTEST = m_tagToGoal.transformBy(BotToTagReconfig.minus(new Pose2d()));
-    Pose2d botToGoalTEST = botGoal.transformBy(BotToTagReconfig.minus(new Pose2d()));
-    Pose2d botToGoalPose = 
+    Pose2d botToGoalPose =
         new Pose2d(
             Bot2Tag_Translation.minus(m_tagToGoal.getTranslation()), // our bot to tag pose minus our transform pose 
             TagDirection.rotateBy(m_tagToGoal.getRotation())); //  our bot to tag rot plus our provided goal rotation
 
-
-    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/Bot2TagTransform/X", BotToTagTransform.getX());
-    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/Bot2TagTransform/Y", BotToTagTransform.getY());
-    SmartDashboard.putNumber(
-        m_drivetrain.getName() + "/Testing/Bot2TagTransform/Omega", BotToTagTransform.getRotation().getDegrees());
-    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/Bot2TagTEST/X", botToGoalTEST.getX());
-    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/Bot2TagTEST/Y", botToGoalTEST.getY());
-    SmartDashboard.putNumber(
-        m_drivetrain.getName() + "/Testing/BotGoal/Omega", botGoal.getRotation().getDegrees());
-    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/BotGoal/X", botGoal.getX());
-    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/BotGoal/Y", botGoal.getY());
+    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/Bot2Tag/X", BotToTag.getX());
+    SmartDashboard.putNumber(m_drivetrain.getName() + "/Testing/Bot2Tag/Y", BotToTag.getY());
     SmartDashboard.putNumber(
         m_drivetrain.getName() + "/Testing/Bot2Tag/Omega", BotToTag.getRotation().getDegrees());
     SmartDashboard.putNumber(
@@ -142,12 +128,9 @@ public class AprilAlignToTransformCommand extends Command {
         botToGoalPose.getRotation().getDegrees());
      SmartDashboard.putNumber(
         m_drivetrain.getName() + "/Testing/botToGoal/LimelightTagDir",
-        TESTINGTagDir.getDegrees());   
+        TagDirection.getDegrees());   
     // m_goalPose = robotPose.transformBy(botToGoalPose);
-    //m_goalPose = robotPose.transformBy(botToGoalPose.minus(new Pose2d())); // Bot to goal pose plus our robot pose 
-    //m_goalPose = robotPose.transformBy(botToGoalTEST.minus(new Pose2d()));
-    // m_goalPose = robotPose.transformBy(BotToTagTransform);
-    m_goalPose = botGoal.transformBy(robotPose.minus(new Pose2d()));
+    m_goalPose = robotPose.transformBy(botToGoalPose.minus(new Pose2d())); // Bot to goal pose plus our robot pose 
 
     SmartDashboard.putNumber(
         m_drivetrain.getName() + "/Testing/goalPose/X", m_goalPose.getTranslation().getX());
@@ -159,14 +142,14 @@ public class AprilAlignToTransformCommand extends Command {
     if (null != m_goalPose) {
       // Drive
       m_xController.setGoal(m_goalPose.getX());
-      m_yController.setGoal(m_goalPose.getY());
-      m_rotController.setGoal(m_goalPose.getRotation().getRadians());
+      m_yController.setGoal(0);
+      m_rotController.setGoal(0);
     }
 
-    double xSpeed = m_xController.calculate(robotPose.getX());
-    if (m_xController.atGoal()) {
-      xSpeed = 0;
-    }
+    //double xSpeed = m_xController.calculate(robotPose.getX());
+    //if (m_xController.atGoal()) {
+    //  xSpeed = 0;
+   // }
 
     double ySpeed = m_yController.calculate(robotPose.getY());
     if (m_yController.atGoal()) {
@@ -180,7 +163,7 @@ public class AprilAlignToTransformCommand extends Command {
     }
 
     m_drivetrain.driveChassisSpeeds(
-        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, robotPose.getRotation()));
+        ChassisSpeeds.fromFieldRelativeSpeeds(0, ySpeed, rotSpeed, robotPose.getRotation()));
   }
 
   @Override
@@ -192,4 +175,6 @@ public class AprilAlignToTransformCommand extends Command {
   public boolean isFinished() {
     return m_rotController.atGoal() && m_xController.atGoal() && m_yController.atGoal();
   }
+  
 }
+
