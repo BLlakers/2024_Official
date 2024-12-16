@@ -19,7 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-/** Represents a swerve drive style drivetrain. */
+/** */
 public class DriveTrain extends SubsystemBase {
 
   public SwerveDriveKinematics m_kinematics =
@@ -69,10 +69,15 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Our driveTrain Constructor.
    *
-   * <p>In here, we initialize our swerve modules (example -> {@link #m_frontLeft}), Get input from
-   * autonomous and initialize our odometry -> {@link #m_odometry}.
+   * <p>In here, we:
    *
-   * <p>Various other DriveTrain Related thing are initalized here too.
+   * <ul>
+   *   <li>Initialize our swerve modules (EX: {@link #m_frontLeft})
+   *   <li>Set up our autonomous builder (see below)
+   *   <li>Initialize our odometry: {@link #m_odometry}.
+   * </ul>
+   *
+   * <p>Various other DriveTrain Related things are initalized here too.
    *
    * @param RobotVersion
    */
@@ -292,7 +297,7 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Resets the Position of the Odometer, given our Current position.
    *
-   * @param Pose2d (pose2d) - The current position of the robot on the field. This is a {@link
+   * @param pose2d (pose2d) - The current position of the robot on the field. This is a {@link
    *     #resetOdometry(Pose2d)}
    */
   public void resetPose(Pose2d pose2d) {
@@ -424,5 +429,10 @@ public class DriveTrain extends SubsystemBase {
     m_frontRight.initSendable(builder);
     m_backLeft.initSendable(builder);
     m_backRight.initSendable(builder);
+  }
+
+  /** <b> DETAILED EXPLANATION </b> */
+  public static int Explanation() {
+    return 1;
   }
 }

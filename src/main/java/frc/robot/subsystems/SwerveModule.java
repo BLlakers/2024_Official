@@ -21,11 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-/**
- * This is the code to run a single swerve module <br>
- * <br>
- * It is called by the Drivetrain subsysem
- */
 public class SwerveModule extends SubsystemBase {
 
   private static final double kPositionConversionFactor =
@@ -222,5 +217,10 @@ public class SwerveModule extends SubsystemBase {
         "TurnMotor/Encoder/AbsolutePosition", this.m_turningEncoder::getAbsolutePosition, null);
 
     builder.setSafeState(this::stop);
+  }
+
+  /** <b> DETAILED EXPLANATION </b> */
+  public static int Explanation() {
+    return 8;
   }
 }

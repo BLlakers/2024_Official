@@ -320,4 +320,9 @@ public class RobotContainer {
     return autoCommand.beforeStarting(
         () -> m_DriveTrain.resetPose(new Pose2d(1.27, 5.55, new Rotation2d())));
   }
+
+  /** <b> DETAILED EXPLANATION </b> */
+  public static int Explanation() {
+    return 3;
+  }
 }
